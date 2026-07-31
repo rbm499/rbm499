@@ -27,6 +27,23 @@
   preload. Standing instruction recorded: log every session start/end to
   this memory bank.
 
+### Open Decisions
+
+- **2026-07-31** — Michael is considering a dedicated Google account just
+  for the Ajera survey app (survey data + client files only), separate
+  from personal (rbm499@gmail.com) and company (aaadnwinc@gmail.com)
+  accounts. Motivation: too many Google accounts involved; yesterday's
+  memory notes may be stranded in a different account's Drive. Claude's
+  recommendation: keep this GitHub repo as the memory source of truth;
+  a dedicated account (or dedicated shared Drive folder) is fine for
+  client files, but pick ONE and connect only that one. Not yet decided.
+
 ### Known Issues
+
+- **2026-07-31** — Google Drive connector erroring on all calls
+  ("operation not implemented/enabled"). Note the connected Gmail in this
+  session is aaadnwinc@gmail.com while the session profile email is
+  rbm499@gmail.com — account mismatch is the likely cause of both the
+  Drive errors and the missing memory from yesterday's session.
 
 _None recorded yet._
