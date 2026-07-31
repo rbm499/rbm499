@@ -27,6 +27,14 @@
   preload. Standing instruction recorded: log every session start/end to
   this memory bank.
 
+- **2026-07-31 (evening)** — Memory recovery from the prior session
+  (session_01PXFUHG9rX24QDRbbcDAtft) never arrived: after three checks
+  over ~40 minutes, no branch or commits were pushed by it. Recovery
+  abandoned as moot — Michael supplied the address directly
+  (6080 40th Ave NE, Seattle; house number still to be confirmed, see
+  job-26-6080.md) and the public-records preload is done to the extent
+  this environment's network allows.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
