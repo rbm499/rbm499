@@ -35,6 +35,22 @@
   job-26-6080.md) and the public-records preload is done to the extent
   this environment's network allows.
 
+- **2026-08-03** — FIELD DATA RECEIVED for job 26-6808. The app's
+  "upload to server" uploads to Google Drive → "Field Uploads" →
+  "26-6808" (folder https://drive.google.com/drive/folders/1NXaYamRn2iJeVi7GlQCJB3uyVtgdThI4).
+  Inspection was done on-site 2026-07-31 (GPS 47.677876,-122.284993).
+  Received: data.json manifest, generated AHERA report HTML, front photo
+  (20.6 MB), exterior spin video (24.5 MB). Job number confirmed
+  **26-6808** by the app itself.
+  BETA FINDINGS: (1) app says "download ZIP" but user can't locate the
+  ZIP on the phone; (2) upload succeeds but app gives no link/confirmation
+  of WHERE it went — Michael thought it failed; (3) two duplicate upload
+  batches (20:41 and 21:05 UTC) created duplicate files — no dedupe;
+  (4) Dining-room video is listed in the manifest but was NOT uploaded
+  (only exterior video arrived) — possible large-file upload failure;
+  (5) samples[] is empty (expected — beta run without samples);
+  report HTML shows placeholders for narrative and lab summary.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
