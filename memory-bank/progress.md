@@ -51,6 +51,13 @@
   (5) samples[] is empty (expected — beta run without samples);
   report HTML shows placeholders for narrative and lab summary.
 
+- **2026-08-03 (later)** — Full review of 26-6808 field data completed
+  (44 verified findings, see beta-findings-26-6808.md). Headline:
+  Dining-room video was recorded but lost by the upload pipeline —
+  recover from phone ASAP. Client/contact fields blank; interior
+  coverage 2 of ~11 rooms; app needs upload verification/receipts/
+  dedupe. Data that arrived is internally consistent and correct.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
