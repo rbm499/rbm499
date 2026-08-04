@@ -8,6 +8,8 @@ _Last updated: 2026-08-04_
   zeros — VINs never use the letter O; ISO check digit validates, position 10
   "E" = model year 2014).
 - Title: **SALVAGE** brand — disclosed in the bill of sale; sold AS-IS.
+- Seller: **AAAD Northwest Environmental Services, Inc.** (signs via
+  authorized representative; corporate signature block on the form).
 - Price: total **$3,500** = **$500** down at signing + **$3,000**
   seller-financed (seller holds lien, recorded as first lienholder on title).
 - Financing: **0% interest, principal only**, **$200/month** due the 1st of

@@ -12,12 +12,12 @@ Date of sale: ______________________________
 
 | SELLER | BUYER |
 |---|---|
-| Name: ______________________________ | Name: ______________________________ |
+| Name: **AAAD Northwest Environmental Services, Inc.** | Name: ______________________________ |
 | Address: ____________________________ | Address: ____________________________ |
 | City/State/ZIP: ______________________ | City/State/ZIP: ______________________ |
 | Phone: ______________________________ | Phone: ______________________________ |
 | Email: ______________________________ | Email: ______________________________ |
-| Driver's Lic. No.: ____________________ | Driver's Lic. No.: ____________________ |
+| Business ID (UBI / EIN): ______________ | Driver's Lic. No.: ____________________ |
 
 ## 2. Vehicle
 
@@ -43,7 +43,7 @@ Date of sale: ______________________________
 ## 4. Lien & Title
 
 1. **Security Interest.** Seller retains a lien on and security interest in the Vehicle until the balance is paid in full.
-2. **Lienholder of Record.** The certificate of title shall be assigned to Buyer with **Seller recorded as first lienholder**.
+2. **Lienholder of Record.** The certificate of title shall be assigned to Buyer with **Seller (AAAD Northwest Environmental Services, Inc.) recorded as first lienholder**.
 3. **No Transfer.** Buyer shall not sell, assign, or further encumber the Vehicle before the balance is paid in full.
 4. **Insurance.** Buyer shall keep the Vehicle insured as required by state law until the balance is paid and, if Seller requests, shall list Seller as lienholder / loss payee on the policy.
 5. **Lien Release.** Within ten (10) days of receiving the final payment, Seller shall sign and deliver a lien release and any title documents needed for Buyer to obtain title free of Seller's lien.
@@ -77,9 +77,11 @@ This document is the entire agreement between the parties, is binding on their h
 
 ## Signatures
 
-Seller signature: ____________________________  Date: ______________
+Seller: **AAAD Northwest Environmental Services, Inc.**
 
-Seller printed name: ____________________________
+By (authorized signature): ____________________________  Date: ______________
+
+Printed name & title: ____________________________
 
 Buyer signature: ____________________________  Date: ______________
 
@@ -92,6 +94,8 @@ Each party should keep a fully signed copy. Notarize below if your state require
 ---
 
 ## Payment Record
+
+Seller / lienholder: **AAAD Northwest Environmental Services, Inc.**
 
 Seller-financed balance **$3,000.00** · **$200.00/month** · **0% interest (principal only)** · first payment **September 1, 2026**
 
