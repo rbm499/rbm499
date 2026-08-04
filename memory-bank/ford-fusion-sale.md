@@ -15,7 +15,10 @@ _Last updated: 2026-08-04_
 - Financing: **0% interest, principal only**, **$200/month** due the 1st of
   each month, **first payment 2026-09-01**, 15 payments, **final payment
   2027-11-01**.
-- Buyer: TBD — form has fill-in blanks for parties, odometer, color, date.
+- Odometer: **177,560 miles** (provided 2026-08-04; disclosure checkbox —
+  normally "actual mileage" — left for the signer to mark).
+- Buyer: TBD — remaining blanks: buyer info, seller address/UBI, color,
+  title no./state, sale date, governing state.
 
 ## Documents
 

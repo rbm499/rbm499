@@ -25,7 +25,7 @@ Date of sale: ______________________________
 |---|---|
 | Year: **2014** | Make: **Ford** |
 | Model: **Fusion** | Color: ______________ |
-| VIN: **3FA6P0PU0ER317479** | Odometer: ______________ miles |
+| VIN: **3FA6P0PU0ER317479** | Odometer: **177,560** miles |
 | Title No.: ______________ | Title State: ______ |
 | **Title Brand: SALVAGE** | |
 
@@ -65,7 +65,7 @@ Buyer's initials: ________
 
 Federal law (49 U.S.C. § 32705) requires the seller to state the mileage upon transfer of ownership. Failure to complete an odometer statement, or providing a false statement, may result in fines and/or imprisonment.
 
-I, the Seller, certify that the odometer reads ______________ miles (no tenths) and (check one):
+I, the Seller, certify that the odometer reads **177,560** miles (no tenths) and (check one):
 
 - ☐ reflects the **actual mileage**;
 - ☐ exceeds the odometer's mechanical limits;
