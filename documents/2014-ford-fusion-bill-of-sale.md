@@ -13,8 +13,8 @@ Date of sale: ______________________________
 | SELLER | BUYER |
 |---|---|
 | Name: **AAAD Northwest Environmental Services, Inc.** | Name: ______________________________ |
-| Address: ____________________________ | Address: ____________________________ |
-| City/State/ZIP: ______________________ | City/State/ZIP: ______________________ |
+| Address: **3632 49th Ave NW** | Address: ____________________________ |
+| City/State/ZIP: **Seattle, WA** ________ | City/State/ZIP: ______________________ |
 | Phone: ______________________________ | Phone: ______________________________ |
 | Email: ______________________________ | Email: ______________________________ |
 | Business ID (UBI / EIN): ______________ | Driver's Lic. No.: ____________________ |
