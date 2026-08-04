@@ -58,6 +58,23 @@
   coverage 2 of ~11 rooms; app needs upload verification/receipts/
   dedupe. Data that arrived is internally consistent and correct.
 
+- **2026-08-04** — CORRECTIONS APPLIED (what was fixable remotely):
+  (1) `26-6808-data-CORRECTED.json` uploaded to Drive Field Uploads/
+  26-6808 — client/contact filled (SREG, Heidi Walsh, Adrian Chu),
+  address completed with ZIP 98115, inspector full name + AHERA cert
+  #NES-BIR-20260313-31 exp 03/13/2027, room names trimmed, per-file
+  upload status marked (dining video flagged missing). Originals kept.
+  (2) `26-6808-ahera-survey-CORRECTED-DRAFT.html` uploaded — full
+  house-style report draft with corrected cover, all boilerplate
+  sections restored, clear DRAFT banner and pending-work placeholders,
+  media table linking Drive files. (3) Gmail DRAFT (not sent) created
+  replying to the SREG thread with a status update — Michael must fill
+  the bracketed dates and 5525 35th status, then send.
+  NOT fixable remotely: recovering the dining-room video (on the
+  phone), the remaining interior survey/stills, sampling, narrative
+  dictation, in-app field values (app DB is on the phone), app code
+  fixes, Drive duplicate cleanup (no delete access — left in place).
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
