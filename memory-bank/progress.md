@@ -100,6 +100,15 @@
   for parentId/mimeType/date queries and file create/download; `title
   contains` and bare-modifiedTime queries still error.
 
+- **2026-08-07 (evening)** — 26-4509 bid CLOSED OUT: Michael sent the
+  finalized bid to Andrey Gidenko himself at 22:30 UTC (Sent folder, thread
+  19fde590209648e4, attachment AAAD_Bid_Proposal_264509_PrimeDevelopment.pdf,
+  $43,810 + tax). Confirmed by reading aaadnwinc@gmail.com Sent. Removed
+  "email bid to Andrey" from the tracking/watch loop. Only 4509 follow-up
+  left: signed acceptance page before the Aug 15 start. Also adopted
+  Michael's finalized bid design as controlling canon (see bid-documents.md
+  "CONTROLLING DESIGN") and recorded Andrey's phone (425) 737-6312.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
