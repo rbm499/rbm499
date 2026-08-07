@@ -201,6 +201,38 @@ Everything lives in Google Drive under the bids workspace folder
   bids; only scope/parties/price change. Vertically balanced, full
   justification, Times, single page.
 
+### CONTROLLING DESIGN — Michael's finalized 26-4509 bid (2026-08-07)
+
+Michael edited Claude's output and returned a finalized PDF that **controls
+all design decisions going forward** (supersedes any earlier layout). The
+canonical header and signature layout is now:
+
+- **Header contact block — two columns, four rows:**
+  - Left: `To:` <client> · `Attn:` <contact> · `Email:` <client email> ·
+    `Phone:` <client phone>
+  - Right: `From:` Michael Neureiter · `Email:` aaadnwinc@gmail.com ·
+    `Phone:` (253) 217-2537 · `Date:` <date>
+  - Labels bold, values roman. Right column begins at x≈322.
+- **RE row** (below the block): `RE:` <address only — NO scope descriptor /
+  parenthetical> at left; `Job Number:` <job> at the right column (x≈322),
+  same baseline. Both labels bold. (This replaced the old "Job:" left-column
+  cell and the old RE parenthetical tag — both removed by Michael.)
+- **Signature block:** `Signature: ____…____   Date: ______`; next line is
+  the bare name `<contact> (for <client>)` — **no "Printed Name:" label**;
+  closing line italic: **`Please sign, date, and return.`** (lowercase,
+  includes "date,", trailing period). Replaced the old "Printed Name: …" +
+  "Please Sign and Return".
+
+The reference builder reflecting this is `build_bid_FINAL.py` (scratchpad +
+26-4509 Prime Drive folder); apply the same header/RE/signature edits to the
+base `build_bid.py` template for all future jobs. Letterhead, footer, price
+lines, terms, and acceptance sentence are unchanged.
+
+Client `Phone:` field: the design carries a client-phone slot. Michael's
+finalized copy left it blank; Claude fills it when a verified number is on
+file (26-4509: Andrey Gidenko (425) 737-6312). If Michael wants client phone
+left blank as a standing rule, record that here.
+
 ### Bid page structure (exact order)
 
 1. Headline: date (left) + "BID PROPOSAL" (right, navy).
