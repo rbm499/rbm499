@@ -4,6 +4,42 @@ _Last updated: 2026-08-07. Source: all bid/proposal/invoice emails sent from
 aaadnwinc@gmail.com (Jun–Aug 2026) + prior memory bank. This is the reference
 for producing any future AAA & D NW bid, survey proposal, or invoice._
 
+## CANON — the two-layer rule (applies to bids, invoices, AND AHERA surveys)
+
+Every document has a FIXED layer and a VARIABLE layer. Get this distinction
+right — it is Michael's explicit standing instruction (2026-08-07).
+
+**FIXED / CANONICAL — never amend, never "improve":**
+- The way header information is filled in (the To/From/Attn/Email/Job/Date
+  block, RE: line format, credential lines).
+- The placement of every element on the page.
+- The canonized design: the LOCKED letterhead (letterhead.py), fonts,
+  colors, footer, no-rules surface. Always build through the letterhead
+  module + passing gate; never redraw or restyle.
+
+**VARIABLE — tailored per individual document:**
+- The narrative / scope-of-work paragraph(s). These change with each job.
+
+**Write the narrative the way Michael writes it — bare-bones, plain, exactly
+the substance on his source document (his handwritten bid sheet, his field
+notes). Do NOT pad it with background, regulatory citations, survey
+cross-references, or explanatory disclosure he did not put there.** Match his
+brevity and voice. When he hands over a handwritten scope + price, transcribe
+that scope and use that price verbatim — the narrative is his, not ours to
+expand. (Overstripping is also wrong: keep the canonical header/placement/
+design fully intact while trimming only the narrative to his level.)
+
+This same tone/brevity discipline governs the **narrative portions of the
+AHERA survey**, especially the description of the condition of the premises.
+
+### AHERA survey — premises-description narrative (REQUIRED fields)
+
+Whenever describing the premises in an AHERA survey narrative, ALWAYS state:
+1. Whether the premises is **occupied or vacant**.
+2. Whether it is intended to be **renovated or demolished**.
+
+Both go in the building/premises description narrative every time.
+
 ## Company identity block (use verbatim)
 
 - **AAA & D NW Environmental Services, Inc.**
