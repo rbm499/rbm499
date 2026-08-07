@@ -75,6 +75,16 @@
   dictation, in-app field values (app DB is on the phone), app code
   fixes, Drive duplicate cleanup (no delete access — left in place).
 
+- **2026-08-07** — Michael asked to memorize the protocol and exact
+  structure of the company's bid documents. Reconstructed from all sent
+  bid/proposal/invoice emails (Jun–Aug 2026) and recorded in
+  `memory-bank/bid-documents.md`: file naming, job numbering, abatement
+  bid structure & firm-bid pricing rules (incl. the Jabooda access-cost
+  clarification), survey-proposal pricing ($7/sample model), cover-email
+  template, and the bid→sign→L&I/PSCAA-notify→schedule→invoice→clearance
+  lifecycle. Gap: bid PDF internals not extractable this session (no
+  Gmail attachment download; Drive connector still disabled).
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just

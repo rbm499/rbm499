@@ -1,6 +1,13 @@
 # Active Context
 
-_Last updated: 2026-07-31_
+_Last updated: 2026-08-07_
+
+## Reference docs in this memory bank
+
+- `bid-documents.md` — protocol and exact structure of AAA & D NW bid
+  proposals, survey proposals, cover emails, and invoices (added
+  2026-08-07 at Michael's request). Consult it before drafting any bid,
+  proposal, or invoice.
 
 ## Current Focus
 
