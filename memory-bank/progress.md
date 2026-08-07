@@ -85,6 +85,21 @@
   lifecycle. Gap: bid PDF internals not extractable this session (no
   Gmail attachment download; Drive connector still disabled).
 
+- **2026-08-07 (later)** — 26-4509 (Prime Development): located Michael's
+  handwritten bid-terms notebook scan (`bid notes.pdf`, Drive 26-4509
+  Prime folder) and its transcription; full-building takeoff is 10,976 SF
+  vs the 4,710 SF in the un-sent 07/30 bid PDF ($22,500 — flagged DO NOT
+  SEND). Rebuilt corrected single-page bid DRAFTs on the locked letterhead
+  (gate PASS) at three candidate prices (A $40,253 / B $43,904 /
+  C $47,564 pre-tax) and delivered them to Michael in chat; regeneration
+  script `make_variants_full_takeoff_v2.py` uploaded to the job folder.
+  Also recovered the EXACT bid PDF template + letterhead-lock system from
+  Drive and recorded it verbatim in bid-documents.md (gap closed). Note:
+  L&I/PSCAA notifications for 4509 are already filed for Aug 15–22 with
+  no signed bid — see job-26-4509.md. Drive connector WORKS this session
+  for parentId/mimeType/date queries and file create/download; `title
+  contains` and bare-modifiedTime queries still error.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
