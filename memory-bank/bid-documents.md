@@ -228,10 +228,25 @@ The reference builder reflecting this is `build_bid_FINAL.py` (scratchpad +
 base `build_bid.py` template for all future jobs. Letterhead, footer, price
 lines, terms, and acceptance sentence are unchanged.
 
-Client `Phone:` field: the design carries a client-phone slot. Michael's
-finalized copy left it blank; Claude fills it when a verified number is on
-file (26-4509: Andrey Gidenko (425) 737-6312). If Michael wants client phone
-left blank as a standing rule, record that here.
+Client `Phone:` field: the design carries a client-phone slot but it is
+**LEFT BLANK** on the bid. (Corrected 2026-08-07 — Michael's finalized copy
+leaves it blank; do NOT fill it even when a number is on file. Andrey's
+(425) 737-6312 stays in the job memory, not on the bid.)
+
+**Title line: `BID PROPOSAL` ONLY — no date on the title row.** The date
+appears solely in the header block's `Date:` field. Do not use the
+date-at-left headline helper on bids.
+
+**Rendering exactness (learned 2026-08-07):** a regeneration that looked
+right but differed from Michael's V4 was rejected. Two builder bugs to keep
+fixed: (1) the title row must not carry the date; (2) full-justified body
+paragraphs must use REAL space characters + reportlab word spacing
+(`beginText`/`setWordSpace`), never per-word `drawString` with positional
+gaps — the latter collapses words ("Labor,Equipment,Supplies…"). Header
+labels likewise draw the value with a leading space so `To: value` renders
+and extracts correctly. The corrected reference builder is
+`build_bid_FINAL.py`; verify any regeneration by line-diffing the extracted
+text against Michael's approved PDF before delivering.
 
 ### Bid page structure (exact order)
 
