@@ -75,6 +75,40 @@
   dictation, in-app field values (app DB is on the phone), app code
   fixes, Drive duplicate cleanup (no delete access — left in place).
 
+- **2026-08-07** — Michael asked to memorize the protocol and exact
+  structure of the company's bid documents. Reconstructed from all sent
+  bid/proposal/invoice emails (Jun–Aug 2026) and recorded in
+  `memory-bank/bid-documents.md`: file naming, job numbering, abatement
+  bid structure & firm-bid pricing rules (incl. the Jabooda access-cost
+  clarification), survey-proposal pricing ($7/sample model), cover-email
+  template, and the bid→sign→L&I/PSCAA-notify→schedule→invoice→clearance
+  lifecycle. Gap: bid PDF internals not extractable this session (no
+  Gmail attachment download; Drive connector still disabled).
+
+- **2026-08-07 (later)** — 26-4509 (Prime Development): located Michael's
+  handwritten bid-terms notebook scan (`bid notes.pdf`, Drive 26-4509
+  Prime folder) and its transcription; full-building takeoff is 10,976 SF
+  vs the 4,710 SF in the un-sent 07/30 bid PDF ($22,500 — flagged DO NOT
+  SEND). Rebuilt corrected single-page bid DRAFTs on the locked letterhead
+  (gate PASS) at three candidate prices (A $40,253 / B $43,904 /
+  C $47,564 pre-tax) and delivered them to Michael in chat; regeneration
+  script `make_variants_full_takeoff_v2.py` uploaded to the job folder.
+  Also recovered the EXACT bid PDF template + letterhead-lock system from
+  Drive and recorded it verbatim in bid-documents.md (gap closed). Note:
+  L&I/PSCAA notifications for 4509 are already filed for Aug 15–22 with
+  no signed bid — see job-26-4509.md. Drive connector WORKS this session
+  for parentId/mimeType/date queries and file create/download; `title
+  contains` and bare-modifiedTime queries still error.
+
+- **2026-08-07 (evening)** — 26-4509 bid CLOSED OUT: Michael sent the
+  finalized bid to Andrey Gidenko himself at 22:30 UTC (Sent folder, thread
+  19fde590209648e4, attachment AAAD_Bid_Proposal_264509_PrimeDevelopment.pdf,
+  $43,810 + tax). Confirmed by reading aaadnwinc@gmail.com Sent. Removed
+  "email bid to Andrey" from the tracking/watch loop. Only 4509 follow-up
+  left: signed acceptance page before the Aug 15 start. Also adopted
+  Michael's finalized bid design as controlling canon (see bid-documents.md
+  "CONTROLLING DESIGN") and recorded Andrey's phone (425) 737-6312.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
