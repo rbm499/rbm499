@@ -7,7 +7,12 @@ _Last updated: 2026-08-07_
 - `bid-documents.md` — protocol and exact structure of AAA & D NW bid
   proposals, survey proposals, cover emails, and invoices (added
   2026-08-07 at Michael's request). Consult it before drafting any bid,
-  proposal, or invoice.
+  proposal, or invoice. Includes the EXACT V4 layout spec.
+- `pdf-fidelity-method.md` — MANDATORY method for any "match/copy this PDF"
+  task: render to PNG with PyMuPDF and LOOK, plus a per-word geometric diff.
+  Never validate a document match by plain text extraction. Follow it every
+  time, without being reminded.
+- `job-26-4509.md` — Prime Development bid job (bid sent 2026-08-07).
 
 ## Current Focus
 

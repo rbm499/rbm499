@@ -201,7 +201,44 @@ Everything lives in Google Drive under the bids workspace folder
   bids; only scope/parties/price change. Vertically balanced, full
   justification, Times, single page.
 
-### CONTROLLING DESIGN — Michael's finalized 26-4509 bid (2026-08-07)
+### VERIFY EVERY BID VISUALLY — not by text (MANDATORY)
+
+Before delivering ANY bid (or any "match this document" output), follow
+`memory-bank/pdf-fidelity-method.md`: render both PDFs to PNG with PyMuPDF,
+LOOK at them, and run a per-span/word geometric diff (position, size, bold,
+italic, alignment). Plain `extract_text()` is blind to design and must never
+be used as proof of a match. This is not optional and needs no reminder.
+
+## EXACT V4 LAYOUT SPEC (measured; the authoritative geometry)
+
+Approved reference: Michael's V4 PDF. All coordinates are top-down y on a
+612×792 page (reportlab y = 792 − y). Client `Phone:` is FILLED with the
+on-file number (Michael's later instruction 2026-08-08 overrode the earlier
+blank). Reproduced exactly by `build_bid_v4match.py`.
+
+- **Title** "BID PROPOSAL": **centered** at x=306, size **13**, bold, navy,
+  baseline y≈110. NO date on this line.
+- **Contact block** (size 10.5): left labels bold at x=**87.2**, left values
+  at x=**123.2**; right labels bold at x=**353.5**, values after label.
+  Baselines 139.3 / 151.8 / 164.3 / 176.8. Left col: To / Attn / Email /
+  Phone(client). Right col: From / Email / Phone / Date.
+- **RE line**: size **12**, **all bold**. "RE:  <addr>" at x=**51.5**;
+  "Job Number:  <job>" at x=**318.5**; baseline y≈215.9. (Two spaces after
+  each colon.)
+- **Intro** (Times-Roman 10.5, justified, leading 12) baseline start 239.5;
+  **Scope** (Times-Bold 10.5, leading 12) start 304.5; **Price** (Times-Bold
+  11, leading 13) 371.5/384.5; **Terms** (Times-Roman **10.0**, justified,
+  leading 11.2) start 404.5 (13 lines); **Acceptance** (Times-Bold 10.5) 558.1.
+  Body left x=53.6, justify right edge 573.4. Last line of each paragraph is
+  left/ragged (not justified).
+- **Signature** line size 10.5 at y≈609: "Signature: ___…___" at x=53.6,
+  "Date: ___" at x=341.6.
+- **Name line**: size **8**, **bold**, indented x=**105.4**, y≈625:
+  "<contact>   (for <client>)".
+- **Closing**: "Please sign, date, and return." — size 10.5, **italic**,
+  **centered** at x=306, y≈656.8.
+
+## CONTROLLING DESIGN — Michael's finalized 26-4509 bid (2026-08-07)
 
 Michael edited Claude's output and returned a finalized PDF that **controls
 all design decisions going forward** (supersedes any earlier layout). The
@@ -228,25 +265,26 @@ The reference builder reflecting this is `build_bid_FINAL.py` (scratchpad +
 base `build_bid.py` template for all future jobs. Letterhead, footer, price
 lines, terms, and acceptance sentence are unchanged.
 
-Client `Phone:` field: the design carries a client-phone slot but it is
-**LEFT BLANK** on the bid. (Corrected 2026-08-07 — Michael's finalized copy
-leaves it blank; do NOT fill it even when a number is on file. Andrey's
-(425) 737-6312 stays in the job memory, not on the bid.)
+Client `Phone:` field: **FILL IT** with the client's number when on file
+(26-4509: Andrey Gidenko (425) 737-6312). (Updated 2026-08-08 per Michael:
+"put in the phone number." This supersedes the earlier "leave blank" note.)
 
 **Title line: `BID PROPOSAL` ONLY — no date on the title row.** The date
 appears solely in the header block's `Date:` field. Do not use the
 date-at-left headline helper on bids.
 
-**Rendering exactness (learned 2026-08-07):** a regeneration that looked
-right but differed from Michael's V4 was rejected. Two builder bugs to keep
-fixed: (1) the title row must not carry the date; (2) full-justified body
-paragraphs must use REAL space characters + reportlab word spacing
-(`beginText`/`setWordSpace`), never per-word `drawString` with positional
-gaps — the latter collapses words ("Labor,Equipment,Supplies…"). Header
-labels likewise draw the value with a leading space so `To: value` renders
-and extracts correctly. The corrected reference builder is
-`build_bid_FINAL.py`; verify any regeneration by line-diffing the extracted
-text against Michael's approved PDF before delivering.
+**Rendering exactness (learned the hard way, 2026-08-07/08):** two
+regenerations that "looked right" to text extraction were rejected because
+the DESIGN differed (title centering, block indents, per-line font sizes,
+bold name line, centered closing) — none of which text extraction can see.
+The authoritative geometry is captured above ("EXACT V4 LAYOUT SPEC") and
+reproduced by `build_bid_v4match.py`. NEVER validate a bid by text diff
+alone — render + geometric diff per `pdf-fidelity-method.md`. Also: full-
+justified paragraphs must use real spaces + `beginText`/`setWordSpace` (not
+per-word `drawString`, which collapses words); the last line of each
+paragraph is left/ragged. A few points of end-of-line drift on long ragged
+lines is expected (base-14 Times vs the target's embedded Times New Roman)
+and is acceptable; alignment/size/weight/indent/position differences are not.
 
 ### Bid page structure (exact order)
 
