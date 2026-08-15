@@ -90,6 +90,28 @@
   work entries on **8/12 and 8/14**. The L&I extension needs to cover
   8/12–8/17, not just 8/15 forward.
 
+- **2026-08-14 (Fri evening PT)** — HOLD SCHEDULE from Michael:
+  - **26-3011** (3011 70th Ave SE): both the L&I and PSCAA notifications
+    **on hold Sat 8/15**. Work resumes Sun 8/16 and Mon 8/17. So the
+    pending extension should list work days 8/12, 8/13, 8/14, 8/16,
+    8/17 — **not** 8/15.
+  - **"The 4plex"**: on hold **Sat 8/15 and Sun 8/16**, comes **off hold
+    Mon 8/17**. ⚠️ Job not yet identified — Michael has not given a job
+    number or address for it, and no active job in Gmail/Calendar is
+    labeled "4plex". Candidates by active notification:
+    **26-1834** (1834 6th Ave W, Queen Anne reno — PSCAA 202603096-2,
+    L&I 249616#955666479, lab results still landing 8/12–8/15);
+    **26-5606** (5606 46th Ave SW — new PSCAA 202603460-1 approved
+    8/13, Poodle Dog Construction);
+    **25-4509** (4509 Eastern Ave N — PSCAA 202603370-1, L&I
+    250366#271950864, Prime Development).
+    ASKED Michael which one. Do not file a hold against a guess.
+  - Nothing filed — agency portals remain blocked from Claude sessions
+    (see Known Environment Limits). Michael files; Claude records.
+  - Timezone note: Michael speaks Pacific; session clocks read UTC and
+    can already be on the next date. "Tomorrow" said Fri evening 8/14
+    PT = **Sat 8/15**.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
