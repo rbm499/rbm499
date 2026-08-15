@@ -75,6 +75,21 @@
   dictation, in-app field values (app DB is on the phone), app code
   fixes, Drive duplicate cleanup (no delete access — left in place).
 
+- **2026-08-15** — Job **26-3011** (3011 70th Ave SE, Mercer Island):
+  Michael asked Claude to take over the desktop and extend both the L&I
+  and PSCAA notifications through **August 17**, work hours **11:00am to
+  8:00pm**. **NOT FILED** — no desktop/computer-use tool is connected,
+  and this environment's network policy denies both agency hosts at the
+  proxy (`secure.lni.wa.gov:443` and `secure.pscleanair.org:443` each
+  answered `403 to CONNECT`), so headless access is blocked too. All
+  identifiers, current filed values, and the exact fields to change are
+  written up in `job-26-3011.md` for Michael to enter himself.
+  **Flagged a live compliance gap**: the L&I notice (form
+  249615#452111284) still ends **8/11** — its last amendment was 8/4 —
+  while PSCAA went to revision **-5** on 8/12 and the calendar carries
+  work entries on **8/12 and 8/14**. The L&I extension needs to cover
+  8/12–8/17, not just 8/15 forward.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just

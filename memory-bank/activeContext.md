@@ -37,6 +37,27 @@ verifying that label printing works as part of the integrated field workflow.
   Gmail, Drive, or Calendar as of 2026-07-31. Google Drive connector was
   also erroring ("operation not enabled") this session.
 
+## Active Job: 26-3011 — 3011 70th Ave SE, Mercer Island (abatement/demo)
+
+See `job-26-3011.md` for the full record. As of 2026-08-15:
+
+- Michael asked for both the L&I and PSCAA notifications to be extended
+  through **Aug 17**, hours **11:00am–8:00pm**. Claude **could not file
+  them** — no desktop control, and the network policy blocks both agency
+  portals (403 at the proxy). Michael must submit both himself.
+- **Open compliance gap**: L&I form 249615#452111284 still ends 8/11
+  while work entries exist for 8/12 and 8/14. The L&I amendment should
+  list 8/12 through 8/17.
+
+## Known Environment Limits (recheck each session)
+
+- No computer-use / desktop-control tool is connected. Claude cannot
+  operate Michael's machine or browser. Requests to "take over the
+  desktop" cannot be fulfilled — Claude prepares the values instead.
+- Agency portals are blocked by network policy: `secure.lni.wa.gov` and
+  `secure.pscleanair.org` both return 403 at the agent proxy. Regulatory
+  filings therefore cannot be submitted from a Claude session at all.
+
 ## Standing Instructions from Michael (PERMANENT)
 
 - At the **end of every session** (and check at the **beginning** of every
