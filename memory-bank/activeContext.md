@@ -49,6 +49,15 @@ See `job-26-3011.md` for the full record. As of 2026-08-15:
   while work entries exist for 8/12 and 8/14. The L&I amendment should
   list 8/12 through 8/17.
 
+## Active Job: 25-4509 — 4509 Eastern Ave N, Seattle ("the 4plex")
+
+See `job-25-4509.md`. Prime Development / Andrey Gidenko, demolition
+abatement. PSCAA 202603370-1, L&I form 250366#271950864.
+
+- On hold **Sat 8/15 + Sun 8/16**, off hold **Mon 8/17**.
+- ⚠️ Filed notice runs **8/15–8/21**, so the noticed start is a held
+  day. Both filings need start moved **8/15 → 8/17**. Time-sensitive.
+
 ## Known Environment Limits (recheck each session)
 
 - No computer-use / desktop-control tool is connected. Claude cannot

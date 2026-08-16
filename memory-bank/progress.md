@@ -95,17 +95,16 @@
     **on hold Sat 8/15**. Work resumes Sun 8/16 and Mon 8/17. So the
     pending extension should list work days 8/12, 8/13, 8/14, 8/16,
     8/17 — **not** 8/15.
-  - **"The 4plex"**: on hold **Sat 8/15 and Sun 8/16**, comes **off hold
-    Mon 8/17**. ⚠️ Job not yet identified — Michael has not given a job
-    number or address for it, and no active job in Gmail/Calendar is
-    labeled "4plex". Candidates by active notification:
-    **26-1834** (1834 6th Ave W, Queen Anne reno — PSCAA 202603096-2,
-    L&I 249616#955666479, lab results still landing 8/12–8/15);
-    **26-5606** (5606 46th Ave SW — new PSCAA 202603460-1 approved
-    8/13, Poodle Dog Construction);
-    **25-4509** (4509 Eastern Ave N — PSCAA 202603370-1, L&I
-    250366#271950864, Prime Development).
-    ASKED Michael which one. Do not file a hold against a guess.
+  - **"The 4plex" = job 25-4509**, 4509 Eastern Ave N, Seattle 98103
+    (confirmed by Michael; the L&I notice records prior use as
+    "Residential - fourplex (4 units)"). On hold **Sat 8/15 and Sun
+    8/16**, **off hold Mon 8/17**. ⚠️ Its filed notice runs **8/15 to
+    8/21** — work was noticed to START 8/15, the first held day — so
+    both filings need the start moved **8/15 → 8/17** (end 8/21 and
+    hours 11:00am–8:00pm unchanged), leaving work days 8/17–8/21.
+    Time-sensitive: a delayed start is normally reported before the
+    noticed start date, so this wanted filing 8/14 evening, not after
+    the weekend. See `job-25-4509.md`.
   - Nothing filed — agency portals remain blocked from Claude sessions
     (see Known Environment Limits). Michael files; Claude records.
   - Timezone note: Michael speaks Pacific; session clocks read UTC and
