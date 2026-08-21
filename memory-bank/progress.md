@@ -75,8 +75,9 @@
   dictation, in-app field values (app DB is on the phone), app code
   fixes, Drive duplicate cleanup (no delete access — left in place).
 
-- **2026-08-15** — Job **26-3011** (3011 70th Ave SE, Mercer Island):
-  Michael asked Claude to take over the desktop and extend both the L&I
+- **2026-08-14 (Fri, PT)** — Job **26-3011** (3011 70th Ave SE, Mercer
+  Island). _[Superseded — Michael filed everything himself that night;
+  see the 2026-08-21 entry.]_ Michael asked Claude to take over the desktop and extend both the L&I
   and PSCAA notifications through **August 17**, work hours **11:00am to
   8:00pm**. **NOT FILED** — no desktop/computer-use tool is connected,
   and this environment's network policy denies both agency hosts at the
@@ -110,6 +111,26 @@
   - Timezone note: Michael speaks Pacific; session clocks read UTC and
     can already be on the next date. "Tomorrow" said Fri evening 8/14
     PT = **Sat 8/15**.
+
+- **2026-08-21** — 26-3011 CLOSED OUT. Michael sent the **Letter of
+  Completion (clearance letter)** and the **invoice** to Sam Ardekani on
+  **8/20**; invoice `Invoice_26-3011_TrendNW.pdf`, **$7,198.45** (ACM
+  removal + WA sales tax + PSCAA notification fee passed through).
+  Verified against Gmail. All four filings from the 8/14 request went
+  through: L&I 249615#452111284 amended 8/16 to **7/27–8/17, 11am–8pm,
+  except 8/2, 8/3, 8/10, 8/13, 8/15** (Saturday hold correctly
+  excluded), and PSCAA **202603095-6** approved 8/16. The 8/11-vs-8/12
+  coverage gap flagged on 8/14 is resolved.
+  ⚠️ **OPEN — invoice re-issue**: Sam replied 8/20 10:37 PM PT asking
+  for the bill to be re-written to **Manni Batra, mannibatra@gmail.com**
+  (homeowner, same address) — he writes the check. Same amount. Reply
+  was still unread and no re-issued invoice sent as of this update.
+  ⚠️ **OPEN — 25-4509 (4plex) end date**: its 8/14 L&I amendment left
+  the dates at **8/15–8/21** — the start was never moved to 8/17 and no
+  exception list was recorded for the 8/15–8/16 hold. The unrecorded
+  hold is harmless (noticed-but-not-worked), but the notice **expires
+  today, 8/21**. If the hold pushed work later, an amendment is needed
+  before any work on 8/22+. Completion status unconfirmed.
 
 ### Open Decisions
 

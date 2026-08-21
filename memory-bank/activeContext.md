@@ -1,6 +1,6 @@
 # Active Context
 
-_Last updated: 2026-07-31_
+_Last updated: 2026-08-21_
 
 ## Current Focus
 
@@ -37,26 +37,25 @@ verifying that label printing works as part of the integrated field workflow.
   Gmail, Drive, or Calendar as of 2026-07-31. Google Drive connector was
   also erroring ("operation not enabled") this session.
 
-## Active Job: 26-3011 — 3011 70th Ave SE, Mercer Island (abatement/demo)
+## Job 26-3011 — 3011 70th Ave SE, Mercer Island — **COMPLETE**
 
-See `job-26-3011.md` for the full record. As of 2026-08-15:
+Closed out 2026-08-20: Letter of Completion + invoice ($7,198.45) sent to
+Sam Ardekani. Notifications finished clean (L&I 7/27–8/17; PSCAA
+202603095-6). See `job-26-3011.md`.
 
-- Michael asked for both the L&I and PSCAA notifications to be extended
-  through **Aug 17**, hours **11:00am–8:00pm**. Claude **could not file
-  them** — no desktop control, and the network policy blocks both agency
-  portals (403 at the proxy). Michael must submit both himself.
-- **Open compliance gap**: L&I form 249615#452111284 still ends 8/11
-  while work entries exist for 8/12 and 8/14. The L&I amendment should
-  list 8/12 through 8/17.
+- ⚠️ **Open**: Sam wants the invoice re-issued to the homeowner,
+  **Manni Batra, mannibatra@gmail.com**, same amount. Not yet sent.
 
 ## Active Job: 25-4509 — 4509 Eastern Ave N, Seattle ("the 4plex")
 
 See `job-25-4509.md`. Prime Development / Andrey Gidenko, demolition
 abatement. PSCAA 202603370-1, L&I form 250366#271950864.
 
-- On hold **Sat 8/15 + Sun 8/16**, off hold **Mon 8/17**.
-- ⚠️ Filed notice runs **8/15–8/21**, so the noticed start is a held
-  day. Both filings need start moved **8/15 → 8/17**. Time-sensitive.
+- Was on hold 8/15–8/16, back on 8/17. PSCAA went to **-2** and L&I was
+  amended 8/14, but the **dates were left at 8/15–8/21** — the start
+  never moved and the hold was never recorded as an exception.
+- ⚠️ **The notice expires 8/21.** Any work on 8/22+ needs an amendment
+  filed first. Completion status unconfirmed — ask Michael.
 
 ## Known Environment Limits (recheck each session)
 
