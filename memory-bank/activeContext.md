@@ -68,6 +68,13 @@ abatement. PSCAA 202603370-1, L&I form 250366#271950864.
 
 ## Standing Instructions from Michael (PERMANENT)
 
+- **No invoice numbers (set 2026-08-21).** The **job number** is the single
+  controlling identifier for a job — site, notifications, invoice, payment,
+  and the ACH auto-responder all key off it. A separate invoice number is a
+  confusing second identifier for the same thing and is no longer used.
+  Invoices carry the job number only. Do not reintroduce one, and do not go
+  looking for historical invoice numbers when re-issuing.
+
 - At the **end of every session** (and check at the **beginning** of every
   session), log everything we did into this memory bank and push it to the
   `rbm499/rbm499` repo so nothing is lost between sessions. A copy may
