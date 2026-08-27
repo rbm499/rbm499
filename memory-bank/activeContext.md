@@ -57,6 +57,27 @@ abatement. PSCAA 202603370-1, L&I form 250366#271950864.
 - ⚠️ **The notice expires 8/21.** Any work on 8/22+ needs an amendment
   filed first. Completion status unconfirmed — ask Michael.
 
+## ⚠️ THIS REPO IS PUBLIC (flagged 2026-08-27, unresolved)
+
+`github.com/rbm499/rbm499` has `private: false` — world-readable, no login
+needed. It is GitHub's special *profile repo* (same name as the username,
+"Config files for my GitHub profile"), which is public by design so the README
+renders on the profile page; it was later adopted as this memory bank and the
+visibility came along unnoticed.
+
+Readable by anyone today: client names, home addresses, emails and phones;
+what asbestos work was done at which address; invoice amounts; Google Drive
+file and folder IDs (an access risk for anything shared "anyone with link").
+NOT a concern: UBI, contractor reg and asbestos cert are already public record.
+
+Deleting files does NOT undo this — all commits stay in history. Making the
+repo private is the actual fix. Options given to Ryan: (1) flip to private,
+one click, costs the profile README; (2) move the memory bank to a new private
+repo and let this one go back to being a profile repo. Awaiting his decision.
+
+**Until it is resolved, keep new client PII and anything financial out of new
+commits.** Bank details have been kept out throughout and must stay out.
+
 ## Known Environment Limits (recheck each session)
 
 - No computer-use / desktop-control tool is connected. Claude cannot
