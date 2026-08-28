@@ -1,6 +1,6 @@
 # Active Context
 
-_Last updated: 2026-07-31_
+_Last updated: 2026-08-21_
 
 ## Current Focus
 
@@ -37,7 +37,64 @@ verifying that label printing works as part of the integrated field workflow.
   Gmail, Drive, or Calendar as of 2026-07-31. Google Drive connector was
   also erroring ("operation not enabled") this session.
 
+## Job 26-3011 — 3011 70th Ave SE, Mercer Island — **COMPLETE**
+
+Closed out 2026-08-20: Letter of Completion + invoice ($7,198.45) sent to
+Sam Ardekani. Notifications finished clean (L&I 7/27–8/17; PSCAA
+202603095-6). See `job-26-3011.md`.
+
+- ⚠️ **Open**: Sam wants the invoice re-issued to the homeowner,
+  **Manni Batra, mannibatra@gmail.com**, same amount. Not yet sent.
+
+## Active Job: 25-4509 — 4509 Eastern Ave N, Seattle ("the 4plex")
+
+See `job-25-4509.md`. Prime Development / Andrey Gidenko, demolition
+abatement. PSCAA 202603370-1, L&I form 250366#271950864.
+
+- Was on hold 8/15–8/16, back on 8/17. PSCAA went to **-2** and L&I was
+  amended 8/14, but the **dates were left at 8/15–8/21** — the start
+  never moved and the hold was never recorded as an exception.
+- ⚠️ **The notice expires 8/21.** Any work on 8/22+ needs an amendment
+  filed first. Completion status unconfirmed — ask Michael.
+
+## ⚠️ THIS REPO IS PUBLIC (flagged 2026-08-27, unresolved)
+
+`github.com/rbm499/rbm499` has `private: false` — world-readable, no login
+needed. It is GitHub's special *profile repo* (same name as the username,
+"Config files for my GitHub profile"), which is public by design so the README
+renders on the profile page; it was later adopted as this memory bank and the
+visibility came along unnoticed.
+
+Readable by anyone today: client names, home addresses, emails and phones;
+what asbestos work was done at which address; invoice amounts; Google Drive
+file and folder IDs (an access risk for anything shared "anyone with link").
+NOT a concern: UBI, contractor reg and asbestos cert are already public record.
+
+Deleting files does NOT undo this — all commits stay in history. Making the
+repo private is the actual fix. Options given to Ryan: (1) flip to private,
+one click, costs the profile README; (2) move the memory bank to a new private
+repo and let this one go back to being a profile repo. Awaiting his decision.
+
+**Until it is resolved, keep new client PII and anything financial out of new
+commits.** Bank details have been kept out throughout and must stay out.
+
+## Known Environment Limits (recheck each session)
+
+- No computer-use / desktop-control tool is connected. Claude cannot
+  operate Michael's machine or browser. Requests to "take over the
+  desktop" cannot be fulfilled — Claude prepares the values instead.
+- Agency portals are blocked by network policy: `secure.lni.wa.gov` and
+  `secure.pscleanair.org` both return 403 at the agent proxy. Regulatory
+  filings therefore cannot be submitted from a Claude session at all.
+
 ## Standing Instructions from Michael (PERMANENT)
+
+- **No invoice numbers (set 2026-08-21).** The **job number** is the single
+  controlling identifier for a job — site, notifications, invoice, payment,
+  and the ACH auto-responder all key off it. A separate invoice number is a
+  confusing second identifier for the same thing and is no longer used.
+  Invoices carry the job number only. Do not reintroduce one, and do not go
+  looking for historical invoice numbers when re-issuing.
 
 - At the **end of every session** (and check at the **beginning** of every
   session), log everything we did into this memory bank and push it to the
