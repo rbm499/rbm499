@@ -1,0 +1,835 @@
+<title>AHERA Field Survey</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ink: #182229;
+    --ink-soft: #4A5960;
+    --ground: #EFF2F3;
+    --surface: #FFFFFF;
+    --surface-2: #E3E8EA;
+    --line: #C9D2D6;
+    --action: #0F6E8C;
+    --action-ink: #FFFFFF;
+    --good: #2E7D4F;
+    --warn: #B07A00;
+    --bad: #B3392E;
+    --good-bg: #E2F0E8;
+    --warn-bg: #F5EBD2;
+    --bad-bg: #F6E1DE;
+    --chip-bg: #DDE4E7;
+    --focus: #0F6E8C;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #E6ECEF;
+      --ink-soft: #9FAFB7;
+      --ground: #131A1E;
+      --surface: #1C2529;
+      --surface-2: #242F35;
+      --line: #37444B;
+      --action: #4FB3D4;
+      --action-ink: #0E191E;
+      --good: #6CC493;
+      --warn: #E0B24A;
+      --bad: #E58A7E;
+      --good-bg: #1C3327;
+      --warn-bg: #38301A;
+      --bad-bg: #3B2320;
+      --chip-bg: #2B373D;
+      --focus: #4FB3D4;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #E6ECEF;
+    --ink-soft: #9FAFB7;
+    --ground: #131A1E;
+    --surface: #1C2529;
+    --surface-2: #242F35;
+    --line: #37444B;
+    --action: #4FB3D4;
+    --action-ink: #0E191E;
+    --good: #6CC493;
+    --warn: #E0B24A;
+    --bad: #E58A7E;
+    --good-bg: #1C3327;
+    --warn-bg: #38301A;
+    --bad-bg: #3B2320;
+    --chip-bg: #2B373D;
+    --focus: #4FB3D4;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Barlow", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+    margin: 0;
+    padding-bottom: 84px;
+  }
+  h1, h2, h3, .tab, .btn, .seg button, .label {
+    font-family: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
+  }
+  h1 { font-size: 19px; font-weight: 700; margin: 0; letter-spacing: .01em; }
+  h2 { font-size: 22px; font-weight: 700; margin: 0 0 4px; text-wrap: balance; }
+  h3 { font-size: 17px; font-weight: 600; margin: 0; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  header .who { flex: 1; min-width: 0; }
+  header .sub { font-size: 13px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  main { max-width: 720px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+
+  .tabs {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .tab {
+    appearance: none; background: none; border: 0;
+    padding: 14px 4px 16px;
+    font-size: 15px; font-weight: 600; letter-spacing: .02em;
+    color: var(--ink-soft); cursor: pointer;
+    border-top: 3px solid transparent;
+  }
+  .tab[aria-selected="true"] { color: var(--action); border-top-color: var(--action); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .rowline { display: flex; align-items: center; gap: 10px; }
+  .rowline .grow { flex: 1; min-width: 0; }
+
+  .label {
+    display: block; font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--ink-soft); margin-bottom: 4px;
+  }
+  input[type="text"], input[type="date"], input[type="number"], textarea, select {
+    width: 100%;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px;
+    font: inherit;
+  }
+  textarea { min-height: 72px; resize: vertical; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 420px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .btn {
+    appearance: none; border: 1px solid var(--line);
+    background: var(--surface); color: var(--ink);
+    border-radius: 9px;
+    padding: 12px 16px;
+    font-size: 16px; font-weight: 600; letter-spacing: .01em;
+    cursor: pointer;
+    min-height: 46px;
+  }
+  .btn.primary { background: var(--action); border-color: var(--action); color: var(--action-ink); }
+  .btn.danger { color: var(--bad); border-color: var(--bad); background: var(--surface); }
+  .btn.small { padding: 8px 12px; min-height: 38px; font-size: 14px; }
+  .btn:active { transform: translateY(1px); }
+  .btnrow { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+  .seg button {
+    flex: 1; appearance: none; border: 0; background: var(--surface);
+    color: var(--ink-soft); padding: 12px 6px; font-size: 14px; font-weight: 600;
+    cursor: pointer; border-left: 1px solid var(--line);
+  }
+  .seg button:first-child { border-left: 0; }
+  .seg button[aria-pressed="true"] { background: var(--action); color: var(--action-ink); }
+  .seg.cond button[aria-pressed="true"][data-v="Good"] { background: var(--good); color: #fff; }
+  .seg.cond button[aria-pressed="true"][data-v="Damaged"] { background: var(--warn); color: #fff; }
+  .seg.cond button[aria-pressed="true"][data-v="Significantly Damaged"] { background: var(--bad); color: #fff; }
+
+  .chip {
+    display: inline-block; padding: 3px 9px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; background: var(--chip-bg); color: var(--ink-soft);
+  }
+  .chip.good { background: var(--good-bg); color: var(--good); }
+  .chip.warn { background: var(--warn-bg); color: var(--warn); }
+  .chip.bad { background: var(--bad-bg); color: var(--bad); }
+
+  .item { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; background: var(--surface); }
+  .item .meta { font-size: 14px; color: var(--ink-soft); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .photos { display: flex; flex-wrap: wrap; gap: 8px; }
+  .photos .ph { position: relative; }
+  .photos img { width: 88px; height: 88px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); display: block; }
+  .photos .del {
+    position: absolute; top: -6px; right: -6px;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 0; background: var(--bad); color: #fff; font-size: 15px; line-height: 1;
+    cursor: pointer;
+  }
+
+  .sheet {
+    position: fixed; inset: 0; z-index: 30;
+    background: var(--ground);
+    overflow-y: auto;
+  }
+  .sheet .inner { max-width: 720px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+  .sheet header { position: sticky; top: 0; }
+
+  .empty { text-align: center; color: var(--ink-soft); padding: 24px 12px; }
+  .notice {
+    border: 1px solid var(--warn); background: var(--warn-bg); color: var(--ink);
+    border-radius: 10px; padding: 12px 14px; font-size: 15px;
+  }
+  .sessionrow { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .sessionrow:last-child { border-bottom: 0; }
+  .exportbox { width: 100%; min-height: 140px; font-family: "IBM Plex Mono", monospace; font-size: 12px; }
+  .report { font-size: 15px; }
+  .report table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .report th, .report td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  .report th { background: var(--surface-2); font-family: "Barlow Semi Condensed", sans-serif; }
+  .tablewrap { overflow-x: auto; }
+  .hint { font-size: 13px; color: var(--ink-soft); }
+  #toast {
+    position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--ground);
+    padding: 10px 18px; border-radius: 999px; font-size: 15px; font-weight: 600;
+    z-index: 50; transition: opacity .3s;
+  }
+</style>
+
+<header>
+  <div class="who">
+    <h1>AHERA Field Survey</h1>
+    <div class="sub"><span id="hdrSession">—</span> · <span id="hdrDate" class="mono"></span></div>
+  </div>
+  <button class="btn primary small" id="btnNewSession">New Session</button>
+</header>
+
+<main id="main"></main>
+
+<nav class="tabs" role="tablist" aria-label="Sections">
+  <button class="tab" role="tab" data-tab="site" aria-selected="true">Site</button>
+  <button class="tab" role="tab" data-tab="rooms" aria-selected="false">Rooms</button>
+  <button class="tab" role="tab" data-tab="survey" aria-selected="false">Survey</button>
+  <button class="tab" role="tab" data-tab="sessions" aria-selected="false">Sessions</button>
+</nav>
+
+<div id="sheetHost"></div>
+<div id="toast" hidden></div>
+
+<script>
+"use strict";
+
+/* ---------- storage ---------- */
+const LS_ACTIVE = "ahera.active";
+const LS_ARCHIVE = "ahera.archive";
+
+function loadJSON(key, fallback) {
+  try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
+  catch (e) { return fallback; }
+}
+function saveJSON(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); return true; }
+  catch (e) { toast("Storage full — remove some photos or archive sessions"); return false; }
+}
+
+/* ---------- model ---------- */
+const uid = () => Math.random().toString(36).slice(2, 9);
+const today = () => new Date().toISOString().slice(0, 10);
+
+function newSession(name) {
+  return {
+    id: uid(),
+    name: name || "Session " + today(),
+    startedAt: new Date().toISOString(),
+    example: false,
+    site: { facility: "", address: "", inspector: "", license: "", date: today(), notes: "" },
+    rooms: [],
+    obs: []
+  };
+}
+
+function exampleSession() {
+  const s = newSession("Example — Lincoln Elementary");
+  s.example = true;
+  s.site = {
+    facility: "Lincoln Elementary School",
+    address: "410 Oak St, Springfield",
+    inspector: "Your name here",
+    license: "AHERA insp. #00000",
+    date: today(),
+    notes: "Example data so you can see how the app works. Tap New Session (top right) to archive this and start your own survey."
+  };
+  s.rooms = [{
+    id: uid(), name: "Boiler Room", number: "B-04", floor: "Basement", use: "Mechanical",
+    notes: "Access via east stairwell.",
+    photos: [],
+    materials: [
+      { id: uid(), category: "TSI", desc: "Pipe insulation, aircell", qty: "120", unit: "LF",
+        condition: "Damaged", friable: "Friable", sampled: true, sampleId: "LE-TSI-01", notes: "Exposed at elbows near boiler #2." },
+      { id: uid(), category: "Surfacing", desc: "Troweled ceiling plaster", qty: "800", unit: "SF",
+        condition: "Good", friable: "Non-friable", sampled: true, sampleId: "LE-SUR-01", notes: "" }
+    ]
+  }];
+  s.obs = [{
+    id: uid(), location: "Roof, NE corner", category: "General condition",
+    condition: "Damaged", notes: "Ponding water near HVAC curb; membrane blistered.", photos: []
+  }];
+  return s;
+}
+
+let active = loadJSON(LS_ACTIVE, null);
+let archive = loadJSON(LS_ARCHIVE, []);
+if (!active) { active = exampleSession(); saveJSON(LS_ACTIVE, active); }
+
+function persist() { saveJSON(LS_ACTIVE, active); saveJSON(LS_ARCHIVE, archive); }
+
+/* ---------- helpers ---------- */
+const $ = (sel, el) => (el || document).querySelector(sel);
+const esc = s => String(s == null ? "" : s)
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg; t.hidden = false; t.style.opacity = 1;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.style.opacity = 0; setTimeout(() => { t.hidden = true; }, 350); }, 2200);
+}
+
+function condChip(c) {
+  const cls = c === "Good" ? "good" : c === "Damaged" ? "warn" : c === "Significantly Damaged" ? "bad" : "";
+  return '<span class="chip ' + cls + '">' + esc(c || "Not rated") + "</span>";
+}
+
+/* Compress a captured photo to ~1000px JPEG so localStorage holds a full day of rooms. */
+function readPhoto(file, cb) {
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = () => {
+    const max = 1000;
+    const scale = Math.min(1, max / Math.max(img.width, img.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(img.width * scale);
+    c.height = Math.round(img.height * scale);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    URL.revokeObjectURL(url);
+    cb(c.toDataURL("image/jpeg", 0.6));
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); toast("Couldn't read that photo"); };
+  img.src = url;
+}
+
+function photoStrip(photos, onAdd, onDel) {
+  const wrap = document.createElement("div");
+  wrap.className = "photos";
+  photos.forEach((p, i) => {
+    const d = document.createElement("div");
+    d.className = "ph";
+    d.innerHTML = '<img alt="Survey photo ' + (i + 1) + '"><button class="del" aria-label="Delete photo">×</button>';
+    d.querySelector("img").src = p;
+    d.querySelector(".del").onclick = () => onDel(i);
+    wrap.appendChild(d);
+  });
+  const add = document.createElement("button");
+  add.className = "btn small";
+  add.textContent = "📷 Add photo";
+  add.onclick = () => {
+    const inp = document.createElement("input");
+    inp.type = "file"; inp.accept = "image/*"; inp.capture = "environment";
+    inp.onchange = () => { if (inp.files[0]) readPhoto(inp.files[0], onAdd); };
+    inp.click();
+  };
+  wrap.appendChild(add);
+  return wrap;
+}
+
+function segControl(options, value, onPick, extraClass) {
+  const seg = document.createElement("div");
+  seg.className = "seg" + (extraClass ? " " + extraClass : "");
+  options.forEach(o => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = o; b.dataset.v = o;
+    b.setAttribute("aria-pressed", String(o === value));
+    b.onclick = () => {
+      seg.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", "false"));
+      b.setAttribute("aria-pressed", "true");
+      onPick(o);
+    };
+    seg.appendChild(b);
+  });
+  return seg;
+}
+
+function field(labelText, inputEl) {
+  const w = document.createElement("div");
+  const l = document.createElement("span");
+  l.className = "label"; l.textContent = labelText;
+  w.appendChild(l); w.appendChild(inputEl);
+  return w;
+}
+function textInput(value, onChange, placeholder) {
+  const i = document.createElement("input");
+  i.type = "text"; i.value = value || ""; i.placeholder = placeholder || "";
+  i.oninput = () => { onChange(i.value); persist(); };
+  return i;
+}
+function areaInput(value, onChange, placeholder) {
+  const i = document.createElement("textarea");
+  i.value = value || ""; i.placeholder = placeholder || "";
+  i.oninput = () => { onChange(i.value); persist(); };
+  return i;
+}
+
+/* ---------- header ---------- */
+function renderHeader() {
+  $("#hdrSession").textContent = active.name;
+  $("#hdrDate").textContent = active.site.date || today();
+}
+
+/* ---------- tabs ---------- */
+let currentTab = "site";
+document.querySelectorAll(".tab").forEach(t => {
+  t.onclick = () => {
+    currentTab = t.dataset.tab;
+    document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", String(x === t)));
+    render();
+  };
+});
+
+/* ---------- site tab ---------- */
+function renderSite(main) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = "<h2>Site information</h2>";
+  if (active.example) {
+    const n = document.createElement("div");
+    n.className = "notice";
+    n.textContent = "This is example data. Tap New Session (top right) to archive it and start your own survey.";
+    card.appendChild(n);
+  }
+  const g = document.createElement("div");
+  g.className = "grid2";
+  g.appendChild(field("Facility / building", textInput(active.site.facility, v => active.site.facility = v, "e.g. Lincoln Elementary")));
+  g.appendChild(field("Address", textInput(active.site.address, v => active.site.address = v)));
+  g.appendChild(field("Inspector", textInput(active.site.inspector, v => active.site.inspector = v)));
+  g.appendChild(field("Accreditation / license #", textInput(active.site.license, v => active.site.license = v)));
+  const d = document.createElement("input");
+  d.type = "date"; d.value = active.site.date || today();
+  d.onchange = () => { active.site.date = d.value; persist(); renderHeader(); };
+  g.appendChild(field("Survey date", d));
+  card.appendChild(g);
+  card.appendChild(field("Site notes", areaInput(active.site.notes, v => active.site.notes = v, "Access, contacts, scope…")));
+
+  const name = document.createElement("div");
+  name.className = "card";
+  name.innerHTML = "<h3>Session name</h3>";
+  name.appendChild(textInput(active.name, v => { active.name = v; renderHeader(); }));
+  const hint = document.createElement("div");
+  hint.className = "hint";
+  hint.textContent = "Everything you enter saves automatically on this device — no signal needed. Use the Sessions tab to export or review past surveys.";
+  name.appendChild(hint);
+
+  main.appendChild(card);
+  main.appendChild(name);
+}
+
+/* ---------- rooms tab (AHERA capture) ---------- */
+function matSummary(m) {
+  const bits = [];
+  if (m.category) bits.push(m.category);
+  if (m.desc) bits.push(m.desc);
+  if (m.qty) bits.push(m.qty + " " + (m.unit || ""));
+  return bits.join(" · ");
+}
+
+function renderRooms(main) {
+  const head = document.createElement("div");
+  head.className = "rowline";
+  head.innerHTML = '<div class="grow"><h2>Rooms &amp; homogeneous areas</h2>' +
+    '<div class="hint">One entry per functional space; add each suspect material (surfacing, TSI, miscellaneous) inside it.</div></div>';
+  const add = document.createElement("button");
+  add.className = "btn primary";
+  add.textContent = "+ Room";
+  add.onclick = () => {
+    const r = { id: uid(), name: "", number: "", floor: "", use: "", notes: "", photos: [], materials: [] };
+    active.rooms.push(r); persist();
+    openRoomSheet(r);
+  };
+  head.appendChild(add);
+  main.appendChild(head);
+
+  if (!active.rooms.length) {
+    const e = document.createElement("div");
+    e.className = "card empty";
+    e.textContent = "No rooms yet. Tap + Room to capture the first space.";
+    main.appendChild(e);
+    return;
+  }
+
+  active.rooms.forEach(r => {
+    const it = document.createElement("div");
+    it.className = "item";
+    const title = [r.name || "Unnamed room", r.number].filter(Boolean).join(" · ");
+    const worst = r.materials.some(m => m.condition === "Significantly Damaged") ? "Significantly Damaged"
+      : r.materials.some(m => m.condition === "Damaged") ? "Damaged"
+      : r.materials.length ? "Good" : "";
+    it.innerHTML =
+      '<div class="rowline"><h3 class="grow">' + esc(title) + "</h3>" + (worst ? condChip(worst) : "") + "</div>" +
+      '<div class="meta">' + esc([r.floor, r.use].filter(Boolean).join(" · ")) + "</div>" +
+      '<div class="meta">' + r.materials.length + " material" + (r.materials.length === 1 ? "" : "s") +
+      (r.materials.some(m => m.sampled) ? ' · <span class="mono">' + r.materials.filter(m => m.sampled).map(m => esc(m.sampleId || "sample")).join(", ") + "</span>" : "") +
+      "</div>";
+    const open = document.createElement("button");
+    open.className = "btn small";
+    open.textContent = "Open";
+    open.onclick = () => openRoomSheet(r);
+    it.appendChild(open);
+    main.appendChild(it);
+  });
+}
+
+function openRoomSheet(room) {
+  const host = $("#sheetHost");
+  const sheet = document.createElement("div");
+  sheet.className = "sheet";
+  sheet.innerHTML =
+    '<header><div class="who"><h1>Room</h1><div class="sub">' + esc(active.name) + '</div></div>' +
+    '<button class="btn small" id="shDone">Done</button></header>' +
+    '<div class="inner" id="shBody"></div>';
+  host.innerHTML = "";
+  host.appendChild(sheet);
+  $("#shDone", sheet).onclick = () => { host.innerHTML = ""; render(); };
+
+  const body = $("#shBody", sheet);
+
+  const info = document.createElement("div");
+  info.className = "card";
+  const g = document.createElement("div");
+  g.className = "grid2";
+  g.appendChild(field("Room / space name", textInput(room.name, v => room.name = v, "e.g. Boiler Room")));
+  g.appendChild(field("Room number", textInput(room.number, v => room.number = v, "e.g. B-04")));
+  g.appendChild(field("Floor / level", textInput(room.floor, v => room.floor = v)));
+  g.appendChild(field("Use", textInput(room.use, v => room.use = v, "Classroom, mechanical…")));
+  info.appendChild(g);
+  info.appendChild(field("Room notes", areaInput(room.notes, v => room.notes = v)));
+  const phLabel = document.createElement("span");
+  phLabel.className = "label"; phLabel.textContent = "Room photos";
+  info.appendChild(phLabel);
+  info.appendChild(photoStrip(room.photos,
+    data => { room.photos.push(data); persist(); openRoomSheet(room); },
+    i => { room.photos.splice(i, 1); persist(); openRoomSheet(room); }));
+  body.appendChild(info);
+
+  const mh = document.createElement("div");
+  mh.className = "rowline";
+  mh.innerHTML = '<h3 class="grow">Suspect materials</h3>';
+  const addM = document.createElement("button");
+  addM.className = "btn primary small";
+  addM.textContent = "+ Material";
+  addM.onclick = () => {
+    room.materials.push({ id: uid(), category: "Miscellaneous", desc: "", qty: "", unit: "SF",
+      condition: "Good", friable: "Non-friable", sampled: false, sampleId: "", notes: "" });
+    persist(); openRoomSheet(room);
+  };
+  mh.appendChild(addM);
+  body.appendChild(mh);
+
+  room.materials.forEach((m, idx) => {
+    const c = document.createElement("div");
+    c.className = "card";
+    c.appendChild(field("Material category", segControl(["Surfacing", "TSI", "Miscellaneous"], m.category, v => { m.category = v; persist(); })));
+    const g2 = document.createElement("div");
+    g2.className = "grid2";
+    g2.appendChild(field("Material description", textInput(m.desc, v => m.desc = v, "e.g. 9×9 floor tile & mastic")));
+    const qtyWrap = document.createElement("div");
+    qtyWrap.className = "rowline";
+    const qty = textInput(m.qty, v => m.qty = v, "Qty");
+    qty.inputMode = "decimal";
+    const unit = document.createElement("select");
+    ["SF", "LF", "EA"].forEach(u => {
+      const o = document.createElement("option");
+      o.value = u; o.textContent = u; o.selected = m.unit === u;
+      unit.appendChild(o);
+    });
+    unit.onchange = () => { m.unit = unit.value; persist(); };
+    unit.style.width = "84px";
+    qtyWrap.appendChild(qty); qtyWrap.appendChild(unit);
+    g2.appendChild(field("Approx. quantity", qtyWrap));
+    c.appendChild(g2);
+    c.appendChild(field("Condition", segControl(["Good", "Damaged", "Significantly Damaged"], m.condition, v => { m.condition = v; persist(); }, "cond")));
+    c.appendChild(field("Friability", segControl(["Friable", "Non-friable"], m.friable, v => { m.friable = v; persist(); })));
+
+    const sampRow = document.createElement("div");
+    sampRow.className = "grid2";
+    sampRow.appendChild(field("Sample collected?", segControl(["Yes", "No"], m.sampled ? "Yes" : "No", v => { m.sampled = v === "Yes"; persist(); openRoomSheet(room); })));
+    if (m.sampled) {
+      const sid = textInput(m.sampleId, v => m.sampleId = v, "e.g. LE-TSI-01");
+      sid.classList.add("mono");
+      sampRow.appendChild(field("Sample ID", sid));
+    }
+    c.appendChild(sampRow);
+    c.appendChild(field("Material notes", areaInput(m.notes, v => m.notes = v)));
+
+    const del = document.createElement("button");
+    del.className = "btn danger small";
+    del.textContent = "Delete material";
+    del.onclick = () => {
+      if (confirm("Delete this material entry?")) {
+        room.materials.splice(idx, 1); persist(); openRoomSheet(room);
+      }
+    };
+    c.appendChild(del);
+    body.appendChild(c);
+  });
+
+  const delRoom = document.createElement("button");
+  delRoom.className = "btn danger";
+  delRoom.textContent = "Delete this room";
+  delRoom.onclick = () => {
+    if (confirm("Delete this room and everything in it?")) {
+      active.rooms = active.rooms.filter(r => r.id !== room.id);
+      persist(); host.innerHTML = ""; render();
+    }
+  };
+  body.appendChild(delRoom);
+}
+
+/* ---------- general survey tab ---------- */
+function renderSurvey(main) {
+  const head = document.createElement("div");
+  head.className = "rowline";
+  head.innerHTML = '<div class="grow"><h2>General survey</h2>' +
+    '<div class="hint">Everything beyond the asbestos capture — conditions, hazards, anything worth a note and a photo.</div></div>';
+  const add = document.createElement("button");
+  add.className = "btn primary";
+  add.textContent = "+ Item";
+  add.onclick = () => {
+    active.obs.unshift({ id: uid(), location: "", category: "General condition", condition: "Good", notes: "", photos: [] });
+    persist(); render();
+  };
+  head.appendChild(add);
+  main.appendChild(head);
+
+  if (!active.obs.length) {
+    const e = document.createElement("div");
+    e.className = "card empty";
+    e.textContent = "No survey items yet. Tap + Item to record the first observation.";
+    main.appendChild(e);
+    return;
+  }
+
+  active.obs.forEach((o, idx) => {
+    const c = document.createElement("div");
+    c.className = "card";
+    const g = document.createElement("div");
+    g.className = "grid2";
+    g.appendChild(field("Location", textInput(o.location, v => o.location = v, "e.g. Roof, NE corner")));
+    const cat = document.createElement("select");
+    ["General condition", "Water damage", "Mold suspect", "Lead paint suspect", "Structural", "Mechanical / HVAC", "Electrical", "Safety hazard", "Other"].forEach(x => {
+      const opt = document.createElement("option");
+      opt.value = x; opt.textContent = x; opt.selected = o.category === x;
+      cat.appendChild(opt);
+    });
+    cat.onchange = () => { o.category = cat.value; persist(); };
+    g.appendChild(field("Category", cat));
+    c.appendChild(g);
+    c.appendChild(field("Condition", segControl(["Good", "Damaged", "Significantly Damaged"], o.condition, v => { o.condition = v; persist(); }, "cond")));
+    c.appendChild(field("Notes", areaInput(o.notes, v => o.notes = v)));
+    const phLabel = document.createElement("span");
+    phLabel.className = "label"; phLabel.textContent = "Photos";
+    c.appendChild(phLabel);
+    c.appendChild(photoStrip(o.photos,
+      data => { o.photos.push(data); persist(); render(); },
+      i => { o.photos.splice(i, 1); persist(); render(); }));
+    const del = document.createElement("button");
+    del.className = "btn danger small";
+    del.textContent = "Delete item";
+    del.onclick = () => {
+      if (confirm("Delete this survey item?")) { active.obs.splice(idx, 1); persist(); render(); }
+    };
+    c.appendChild(del);
+    main.appendChild(c);
+  });
+}
+
+/* ---------- sessions tab ---------- */
+function sessionSummary(s) {
+  const mats = s.rooms.reduce((n, r) => n + r.materials.length, 0);
+  return s.rooms.length + " rooms · " + mats + " materials · " + s.obs.length + " survey items";
+}
+
+function toCSV(s) {
+  const q = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const rows = [["Facility", "Survey date", "Room", "Room #", "Floor", "Category", "Material", "Qty", "Unit", "Condition", "Friability", "Sample ID", "Notes"].map(q).join(",")];
+  s.rooms.forEach(r => {
+    if (!r.materials.length) {
+      rows.push([s.site.facility, s.site.date, r.name, r.number, r.floor, "", "", "", "", "", "", "", r.notes].map(q).join(","));
+    }
+    r.materials.forEach(m => {
+      rows.push([s.site.facility, s.site.date, r.name, r.number, r.floor, m.category, m.desc, m.qty, m.unit, m.condition, m.friable, m.sampled ? m.sampleId : "", m.notes].map(q).join(","));
+    });
+  });
+  s.obs.forEach(o => {
+    rows.push([s.site.facility, s.site.date, o.location, "", "", "General survey: " + o.category, "", "", "", o.condition, "", "", o.notes].map(q).join(","));
+  });
+  return rows.join("\n");
+}
+
+function copyText(text, what) {
+  const done = () => toast(what + " copied — paste into email, Sheets, or Excel");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, () => showExportBox(text, what));
+  } else showExportBox(text, what);
+}
+function showExportBox(text, what) {
+  const host = $("#sheetHost");
+  const sheet = document.createElement("div");
+  sheet.className = "sheet";
+  sheet.innerHTML =
+    '<header><div class="who"><h1>' + esc(what) + '</h1><div class="sub">Select all and copy</div></div>' +
+    '<button class="btn small" id="shDone">Done</button></header>' +
+    '<div class="inner"><textarea class="exportbox" readonly></textarea></div>';
+  sheet.querySelector(".exportbox").value = text;
+  host.innerHTML = "";
+  host.appendChild(sheet);
+  $("#shDone", sheet).onclick = () => { host.innerHTML = ""; };
+}
+
+function openReport(s) {
+  const host = $("#sheetHost");
+  const sheet = document.createElement("div");
+  sheet.className = "sheet";
+  const matRows = s.rooms.flatMap(r => r.materials.map(m =>
+    "<tr><td>" + esc([r.name, r.number].filter(Boolean).join(" ")) + "</td><td>" + esc(m.category) + "</td><td>" + esc(m.desc) +
+    "</td><td class='mono'>" + esc(m.qty ? m.qty + " " + m.unit : "") + "</td><td>" + condChip(m.condition) +
+    "</td><td>" + esc(m.friable) + "</td><td class='mono'>" + esc(m.sampled ? m.sampleId : "—") + "</td></tr>"
+  )).join("");
+  const obsRows = s.obs.map(o =>
+    "<tr><td>" + esc(o.location) + "</td><td>" + esc(o.category) + "</td><td>" + condChip(o.condition) + "</td><td>" + esc(o.notes) + "</td></tr>"
+  ).join("");
+  sheet.innerHTML =
+    '<header><div class="who"><h1>Report preview</h1><div class="sub">' + esc(s.name) + '</div></div>' +
+    '<button class="btn small" id="shDone">Done</button></header>' +
+    '<div class="inner report">' +
+      '<div class="card"><h2>' + esc(s.site.facility || s.name) + "</h2>" +
+      '<div class="meta">' + esc(s.site.address) + '</div>' +
+      '<div class="meta">Inspector: ' + esc(s.site.inspector) + (s.site.license ? " (" + esc(s.site.license) + ")" : "") +
+      ' · Date: <span class="mono">' + esc(s.site.date) + "</span></div>" +
+      (s.site.notes ? "<div>" + esc(s.site.notes) + "</div>" : "") + "</div>" +
+      '<div class="card"><h3>AHERA materials (' + s.rooms.reduce((n, r) => n + r.materials.length, 0) + ")</h3>" +
+      '<div class="tablewrap"><table><tr><th>Room</th><th>Category</th><th>Material</th><th>Qty</th><th>Condition</th><th>Friability</th><th>Sample</th></tr>' +
+      (matRows || "<tr><td colspan='7'>No materials recorded</td></tr>") + "</table></div></div>" +
+      '<div class="card"><h3>General survey (' + s.obs.length + ")</h3>" +
+      '<div class="tablewrap"><table><tr><th>Location</th><th>Category</th><th>Condition</th><th>Notes</th></tr>' +
+      (obsRows || "<tr><td colspan='4'>No survey items recorded</td></tr>") + "</table></div></div>" +
+      '<div class="hint">Screenshot this page, or use Copy CSV / Copy JSON on the Sessions tab to move the data into Excel or your report template.</div>' +
+    "</div>";
+  host.innerHTML = "";
+  host.appendChild(sheet);
+  $("#shDone", sheet).onclick = () => { host.innerHTML = ""; };
+}
+
+function renderSessions(main) {
+  const cur = document.createElement("div");
+  cur.className = "card";
+  cur.innerHTML = "<h2>Current session</h2><div class='meta'>" + esc(active.name) + " — " + sessionSummary(active) + "</div>";
+  const row = document.createElement("div");
+  row.className = "btnrow";
+  const rep = document.createElement("button");
+  rep.className = "btn"; rep.textContent = "View report";
+  rep.onclick = () => openReport(active);
+  const csv = document.createElement("button");
+  csv.className = "btn"; csv.textContent = "Copy CSV";
+  csv.onclick = () => copyText(toCSV(active), "CSV");
+  const json = document.createElement("button");
+  json.className = "btn"; json.textContent = "Copy JSON";
+  json.onclick = () => copyText(JSON.stringify(active, (k, v) => k === "photos" ? "(" + v.length + " photos omitted)" : v, 2), "JSON");
+  row.appendChild(rep); row.appendChild(csv); row.appendChild(json);
+  cur.appendChild(row);
+  const hint = document.createElement("div");
+  hint.className = "hint";
+  hint.textContent = "CSV pastes straight into Excel or Google Sheets. Photos stay on this device — attach them from the room screens.";
+  cur.appendChild(hint);
+  main.appendChild(cur);
+
+  const arch = document.createElement("div");
+  arch.className = "card";
+  arch.innerHTML = "<h2>Past sessions</h2>";
+  if (!archive.length) {
+    const e = document.createElement("div");
+    e.className = "empty";
+    e.textContent = "No archived sessions yet. New Session moves the current survey here.";
+    arch.appendChild(e);
+  }
+  archive.slice().reverse().forEach(s => {
+    const r = document.createElement("div");
+    r.className = "sessionrow";
+    r.innerHTML = '<div class="grow"><strong>' + esc(s.name) + "</strong><div class='meta'><span class='mono'>" +
+      esc(s.site.date || s.startedAt.slice(0, 10)) + "</span> · " + sessionSummary(s) + "</div></div>";
+    const btns = document.createElement("div");
+    btns.className = "btnrow";
+    const v = document.createElement("button");
+    v.className = "btn small"; v.textContent = "Report";
+    v.onclick = () => openReport(s);
+    const cp = document.createElement("button");
+    cp.className = "btn small"; cp.textContent = "CSV";
+    cp.onclick = () => copyText(toCSV(s), "CSV");
+    const del = document.createElement("button");
+    del.className = "btn danger small"; del.textContent = "Delete";
+    del.onclick = () => {
+      if (confirm('Permanently delete "' + s.name + '"? Copy its CSV first if you need the data.')) {
+        archive = archive.filter(x => x.id !== s.id); persist(); render();
+      }
+    };
+    btns.appendChild(v); btns.appendChild(cp); btns.appendChild(del);
+    r.appendChild(btns);
+    arch.appendChild(r);
+  });
+  main.appendChild(arch);
+}
+
+/* ---------- new session ---------- */
+$("#btnNewSession").onclick = () => {
+  const hasData = active.rooms.length || active.obs.length || active.site.facility;
+  let keep = false;
+  if (hasData && !active.example) {
+    keep = confirm('Archive "' + active.name + '" before starting fresh?\n\nOK = archive it (find it later under Sessions)\nCancel = throw it away');
+  }
+  if (hasData && !active.example && keep) archive.push(active);
+  const name = prompt("Name for the new session:", "Survey " + today());
+  if (name === null && !keep && hasData && !active.example) return; // user backed out entirely
+  active = newSession(name || undefined);
+  persist();
+  currentTab = "site";
+  document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", String(x.dataset.tab === "site")));
+  render();
+  toast("New session started");
+};
+
+/* ---------- render ---------- */
+function render() {
+  renderHeader();
+  const main = $("#main");
+  main.innerHTML = "";
+  if (currentTab === "site") renderSite(main);
+  else if (currentTab === "rooms") renderRooms(main);
+  else if (currentTab === "survey") renderSurvey(main);
+  else renderSessions(main);
+}
+render();
+</script>
