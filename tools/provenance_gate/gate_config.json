@@ -1,0 +1,38 @@
+{
+  "_comment": [
+    "Patterns are deliberately over-inclusive. A false positive costs one retrieval;",
+    "a false negative costs a wrong number in front of a regulator, a client or a crew.",
+    "Tune here, not in the code."
+  ],
+  "fail_closed": true,
+  "ignore_keys": [
+    "threadId",
+    "threadIds",
+    "messageId",
+    "messageIds",
+    "draftId",
+    "attachmentId",
+    "labelId",
+    "labelIds",
+    "sessionId",
+    "fileId",
+    "parentId",
+    "id",
+    "file_path",
+    "url",
+    "uri"
+  ],
+  "patterns": {
+    "money": "\\$\\s?\\d[\\d,]*(?:\\.\\d{2})?",
+    "wac_rcw": "\\b(?:WAC|RCW)\\s?\\d{3}-\\d{2,3}[-\\d]*",
+    "cfr": "\\b\\d{1,2}\\s?CFR\\s?(?:Part\\s?)?\\d+(?:\\.\\d+)?",
+    "subpart": "\\bSubpart\\s+[A-Z]\\b",
+    "date_numeric": "\\b\\d{1,2}/\\d{1,2}/\\d{2,4}\\b",
+    "date_written": "\\b(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept?|Oct|Nov|Dec)\\.?\\s+\\d{1,2}(?:st|nd|rd|th)?,?\\s+\\d{4}\\b",
+    "job_number": "\\b26-\\d{3,5}\\b",
+    "pscaa_case": "\\b2026\\d{5}\\b",
+    "lni_notice": "\\b25\\d{4}\\b",
+    "phone": "\\(?\\b\\d{3}\\)?[\\s.\\-]\\d{3}[\\s.\\-]\\d{4}\\b",
+    "quantity": "\\b\\d+(?:\\.\\d+)?\\s?(?:sq\\.?\\s?ft\\.?|square\\s+feet|lin\\.?\\s?ft\\.?|linear\\s+feet|sf|lf|f/cc|fibers?/cc|f/ml)\\b"
+  }
+}

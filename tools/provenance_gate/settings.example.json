@@ -1,0 +1,25 @@
+{
+  "_comment": [
+    "Merge the hooks block into ~/.claude/settings.json — do not replace an existing one.",
+    "Replace the args path with the real location of provenance_gate.py on this machine.",
+    "Windows: command 'python', path 'C:\\\\Users\\\\YOU\\\\.claude\\\\hooks\\\\provenance_gate\\\\provenance_gate.py'.",
+    "The exec form (args) is used on purpose: it spawns the executable directly, so paths with",
+    "spaces and backslashes never reach a shell parser."
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__Gmail__send_message|mcp__Gmail__reply|mcp__Gmail__forward",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3",
+            "args": ["/ABSOLUTE/PATH/TO/provenance_gate.py"],
+            "timeout": 20,
+            "statusMessage": "Provenance gate"
+          }
+        ]
+      }
+    ]
+  }
+}
