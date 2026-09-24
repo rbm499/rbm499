@@ -19,7 +19,7 @@ marker file, **never by folder name**. Canonical id **`1qOv3a-Qk02NkK4wkUybs8QEz
 | `STANDING_INSTRUCTIONS.md` | `1MoOprxjFcxMUf1bFWcSBLufF5I_Uua2l` | Rules 1–11. Binding. |
 | `STATEMENT_OF_UNDERSTANDING.md` | `1vrLlI-MhpfySDLOcd9cgzol7F0-8Dw_E` | How this agent knows what it knows, and where it fails. |
 | `SETTLED_CONCLUSIONS.md` | `143M4X-ZqPfKV-rY43-XiUyev8G6g6enS` | Closed questions. Premises, not open topics. |
-| `VERIFICATION_DECISION_TREE.md` | in this repo | The routing procedure for any value or claim. |
+| `VERIFICATION_DECISION_TREE.md` | `1-03elDVblSagqx-NxCHgDaquv-HtINbX` | The routing procedure for any value or claim. Also at the repo root — keep the two in step. |
 | `AGENCY_FILINGS_TIMELINE.md` | `12iUuYOK27ySs6WV4wGp0ePjzR_KvYXlc` | Per-job L&I and PSCAA chronology. Read before any amendment. |
 | newest `TASK_LOG_ADDENDUM_*` | — | Current state. Point-in-time, goes stale. |
 
