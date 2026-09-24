@@ -16,7 +16,7 @@ marker file, **never by folder name**. Canonical id **`1qOv3a-Qk02NkK4wkUybs8QEz
 
 | Document | id | What it is |
 |---|---|---|
-| `STANDING_INSTRUCTIONS.md` | `1MoOprxjFcxMUf1bFWcSBLufF5I_Uua2l` | Rules 1–11. Binding. |
+| `STANDING_INSTRUCTIONS.md` | `1MoOprxjFcxMUf1bFWcSBLufF5I_Uua2l` | Rules 1–13. Binding. Rule 12 is the reliability discipline and trust classes; rule 13 is below. |
 | `STATEMENT_OF_UNDERSTANDING.md` | `1vrLlI-MhpfySDLOcd9cgzol7F0-8Dw_E` | How this agent knows what it knows, and where it fails. |
 | `SETTLED_CONCLUSIONS.md` | `143M4X-ZqPfKV-rY43-XiUyev8G6g6enS` | Closed questions. Premises, not open topics. |
 | `VERIFICATION_DECISION_TREE.md` | `1-03elDVblSagqx-NxCHgDaquv-HtINbX` | The routing procedure for any value or claim. Also at the repo root — keep the two in step. |
@@ -83,6 +83,9 @@ contradicting evidence is a rule 9 conflict to surface, never a quiet reopening.
   say only that the document is attached — never restate its contents.
 - **Lab fees pass through at actual** per the paid lab invoice, never per-layer arithmetic, for jobs
   from 2026-07-01 onward.
+- **ClockShark unscheduled-time alerts are not a compliance signal** (rule 13). The crew works on
+  things other than noticed jobs. Clocked time on a day with no PSCAA or L&I window is not evidence
+  of a missed or skipped notice, and is never paired with a job's removal window or a completion date.
 
 ## Provenance gate
 
