@@ -1,0 +1,4 @@
+# Machine-specific hook wiring: the gate command carries an absolute path that
+# differs per machine. Install from tools/provenance_gate/settings.example.json.
+.claude/settings.json
+.claude/settings.local.json
