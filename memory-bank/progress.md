@@ -75,6 +75,16 @@
   dictation, in-app field values (app DB is on the phone), app code
   fixes, Drive duplicate cleanup (no delete access — left in place).
 
+- **2026-09-27** — Personal project, not Ajera: plan set for a barrel rocket
+  mass heater (8-inch J-tube, 55-gal drum bell, sand-and-pebble sleeping
+  bench) for the outbuilding Ryan will stay in. Published as a private
+  artifact (https://claude.ai/artifact/8E3KdMG3iJ64qTJm3UmEfz); source and
+  generator in `projects/outbuilding-heater/`. Headline Class 3 item: WA
+  Ecology and PSCAA both state installing an uncertified wood stove is
+  illegal in WA; ORCAA lists it as a violation. Open inputs: outbuilding
+  county, size, floor, pipe diameter/coating, drum contents. Session log
+  also written to the Drive memory bank as a TASK_LOG_ADDENDUM.
+
 ### Open Decisions
 
 - **2026-07-31** — Michael is considering a dedicated Google account just
