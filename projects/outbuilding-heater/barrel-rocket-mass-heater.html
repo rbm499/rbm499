@@ -1,0 +1,637 @@
+<title>Barrel Rocket Mass Heater</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --paper: #eceff1;
+  --sheet: #f8f9fa;
+  --ink: #1a262f;
+  --ink-2: #4b5b67;
+  --ink-3: #6f7f8a;
+  --rule: #c3ccd3;
+  --rule-2: #dde3e7;
+  --fire: #c4471b;
+  --warm: #c98118;
+  --cool: #2c6c9f;
+  --warn: #a3261d;
+  --warn-bg: #f7e3e0;
+  --caution: #845600;
+  --caution-bg: #f6ecd6;
+  --ok: #2d6a40;
+  --ok-bg: #e0efe4;
+  --m-brick: #e5c4a8;
+  --m-ins: #f0e6c2;
+  --m-conc: #d3d8db;
+  --m-sand: #e8dcba;
+  --m-grav: #cfd3cc;
+  --m-cob: #d8bb90;
+  --m-far: #e4e8eb;
+  --m-line: #6b5a4b;
+  --steel: #2c3740;
+  --focus: #2c6c9f;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f161b;
+    --sheet: #151e24;
+    --ink: #dbe3e8;
+    --ink-2: #a3b2bc;
+    --ink-3: #82939e;
+    --rule: #33424c;
+    --rule-2: #24313a;
+    --fire: #ff7a45;
+    --warm: #f0ad3c;
+    --cool: #66b2f0;
+    --warn: #ff8a7a;
+    --warn-bg: #3a1c19;
+    --caution: #f0c060;
+    --caution-bg: #33290f;
+    --ok: #7fd197;
+    --ok-bg: #16301f;
+    --m-brick: #6a4631;
+    --m-ins: #4d4630;
+    --m-conc: #3b454c;
+    --m-sand: #4e4632;
+    --m-grav: #3a3f39;
+    --m-cob: #5e4a30;
+    --m-far: #1d2830;
+    --m-line: #b8a58f;
+    --steel: #c9d4db;
+    --focus: #66b2f0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f161b;
+  --sheet: #151e24;
+  --ink: #dbe3e8;
+  --ink-2: #a3b2bc;
+  --ink-3: #82939e;
+  --rule: #33424c;
+  --rule-2: #24313a;
+  --fire: #ff7a45;
+  --warm: #f0ad3c;
+  --cool: #66b2f0;
+  --warn: #ff8a7a;
+  --warn-bg: #3a1c19;
+  --caution: #f0c060;
+  --caution-bg: #33290f;
+  --ok: #7fd197;
+  --ok-bg: #16301f;
+  --m-brick: #6a4631;
+  --m-ins: #4d4630;
+  --m-conc: #3b454c;
+  --m-sand: #4e4632;
+  --m-grav: #3a3f39;
+  --m-cob: #5e4a30;
+  --m-far: #1d2830;
+  --m-line: #b8a58f;
+  --steel: #c9d4db;
+  --focus: #66b2f0;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 16px/1.55 "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding-inline: 16px;
+  padding-block: 0 48px;
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+.prose { max-width: 68ch; }
+h1, h2, h3 {
+  font-family: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  font-weight: 600;
+  line-height: 1.1;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: clamp(2.3rem, 7vw, 3.6rem); letter-spacing: .005em; }
+h2 { font-size: 1.9rem; }
+h3 { font-size: 1.3rem; }
+p { margin: 0; }
+a { color: var(--cool); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.mono, .num { font-family: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace; }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow {
+  font: 500 .76rem/1.2 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ---------- title block ---------- */
+.titleblock {
+  margin-top: 20px;
+  border: 1.5px solid var(--ink);
+  background: var(--sheet);
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.tb-main { padding: 22px 20px 20px; display: grid; gap: 12px; }
+.tb-main .lede { color: var(--ink-2); font-size: 1.06rem; max-width: 60ch; }
+.tb-cells {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  border-top: 1.5px solid var(--ink);
+}
+.tb-cell { padding: 10px 14px 12px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.tb-cell b {
+  display: block;
+  font: 600 1.15rem/1.25 "Barlow Condensed", "Arial Narrow", sans-serif;
+  margin-top: 3px;
+}
+.tb-cell span.sub { color: var(--ink-2); font-size: .88rem; }
+
+/* size switch */
+.sizebar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+  padding: 12px 20px; border-top: 1.5px solid var(--ink);
+}
+.seg { display: inline-flex; border: 1.5px solid var(--ink); }
+.seg button {
+  font: 600 1rem/1 "Barlow Condensed", "Arial Narrow", sans-serif;
+  letter-spacing: .03em;
+  padding: 9px 16px;
+  background: transparent; color: var(--ink);
+  border: 0; cursor: pointer;
+}
+.seg button + button { border-left: 1.5px solid var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); }
+.sizebar .hint { color: var(--ink-2); font-size: .9rem; }
+
+/* ---------- nav ---------- */
+nav.toc {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  margin: 0 -16px; padding: 8px 16px;
+  overflow-x: auto; white-space: nowrap;
+}
+nav.toc a {
+  display: inline-block; margin-right: 16px;
+  font: 500 .8rem/1.8 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-2); text-decoration: none;
+}
+nav.toc a:hover { color: var(--ink); text-decoration: underline; }
+
+/* ---------- sections ---------- */
+section { margin-top: 44px; display: grid; gap: 16px; }
+.sec-head { display: grid; gap: 6px; border-top: 1.5px solid var(--ink); padding-top: 12px; }
+.sec-head .eyebrow { color: var(--ink-3); }
+
+/* labels for source class */
+.lbl {
+  display: inline-block;
+  font: 600 .66rem/1 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 5px 2px; border: 1px solid currentColor; border-radius: 2px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.lbl.inf { color: var(--caution); }
+.lbl.rec { color: var(--ok); }
+.lbl.nir { color: var(--warn); }
+.lbl.c3 { color: var(--warn); background: var(--warn-bg); }
+
+/* ---------- checks ---------- */
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.check {
+  display: grid; grid-template-columns: 28px 1fr; gap: 4px 10px;
+  padding: 12px 14px; background: var(--sheet); border: 1px solid var(--rule);
+  border-left: 4px solid var(--warn);
+}
+.check.done { border-left-color: var(--ok); }
+.check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--ok); }
+.check label { font-weight: 600; cursor: pointer; }
+.check .why { grid-column: 2; color: var(--ink-2); font-size: .94rem; }
+.check .why p + p { margin-top: 6px; }
+
+/* ---------- tables ---------- */
+.tscroll { overflow-x: auto; border: 1px solid var(--rule); background: var(--sheet); }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--rule-2); }
+thead th {
+  font: 600 .74rem/1.3 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2);
+  border-bottom: 1.5px solid var(--ink);
+}
+tbody tr:last-child td { border-bottom: 0; }
+td.key { font: 600 1rem/1.2 "Barlow Condensed", sans-serif; }
+td .k {
+  display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  border: 1.5px solid var(--ink); font: 600 .8rem/1 "IBM Plex Mono", monospace; margin-right: 6px;
+}
+td.v { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.v.on { background: color-mix(in srgb, var(--cool) 12%, transparent); font-weight: 600; }
+td.no { color: var(--warn); }
+td .note { display: block; color: var(--ink-2); font-size: .86rem; margin-top: 3px; }
+
+/* ---------- drawings ---------- */
+figure { margin: 0; display: grid; gap: 8px; }
+.sheet {
+  border: 1.5px solid var(--ink); background: var(--sheet);
+}
+.sheet-head {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px;
+  padding: 8px 12px; border-bottom: 1px solid var(--rule);
+}
+.sheet-head .no { font: 600 .8rem/1.4 "IBM Plex Mono", monospace; letter-spacing: .08em; }
+.sheet-head .ttl { font: 600 1.15rem/1.3 "Barlow Condensed", sans-serif; }
+.sheet-head .scale { font: 500 .78rem/1.4 "IBM Plex Mono", monospace; color: var(--ink-3); }
+.dscroll { overflow-x: auto; }
+svg.dwg { display: block; width: 100%; min-width: 700px; height: auto; color: var(--ink); }
+figcaption { color: var(--ink-2); font-size: .92rem; max-width: 76ch; }
+.notes { margin: 0; padding: 10px 14px 12px 32px; border-top: 1px solid var(--rule); font-size: .92rem; display: grid; gap: 6px; }
+.notes li::marker { font-family: "IBM Plex Mono", monospace; color: var(--ink-3); }
+
+/* svg classes */
+.dwg .edge { stroke: var(--ink); stroke-width: 1.1; }
+.dwg .edge-lt { stroke: var(--ink-3); stroke-width: .7; }
+.dwg rect.edge:not([fill]), .dwg polygon.edge:not([fill]) { fill: none; }
+.dwg .pf-brick { fill: var(--m-brick); }
+.dwg .pf-ins { fill: var(--m-ins); }
+.dwg .pf-conc { fill: var(--m-conc); }
+.dwg .pf-sand { fill: var(--m-sand); }
+.dwg .pf-grav { fill: var(--m-grav); }
+.dwg .pf-cob { fill: var(--m-cob); }
+.dwg .pf-far { fill: var(--m-far); }
+.dwg .pl { stroke: var(--m-line); stroke-width: .55; fill: none; opacity: .75; }
+.dwg .pd { fill: var(--m-line); opacity: .7; }
+.dwg .po { fill: none; stroke: var(--m-line); stroke-width: .6; opacity: .75; }
+.dwg .steel { stroke: var(--steel); stroke-width: 2.4; fill: none; }
+.dwg .steel-thin { stroke: var(--steel); stroke-width: 1.4; fill: none; }
+.dwg .drum { fill: none; stroke: var(--steel); stroke-width: 2.6; }
+.dwg .drum-plan { fill: color-mix(in srgb, var(--fire) 8%, transparent); stroke: var(--steel); stroke-width: 2.4; }
+.dwg .duct-in { fill: var(--sheet); stroke: none; }
+.dwg .void { fill: var(--sheet); stroke: var(--ink); stroke-width: .8; }
+.dwg .cap { fill: var(--steel); stroke: none; }
+.dwg .collar { fill: none; stroke: var(--steel); stroke-width: 1.4; }
+.dwg .classA { fill: color-mix(in srgb, var(--ink) 10%, transparent); stroke: var(--steel); stroke-width: 1.4; }
+.dwg .screen { fill: none; stroke: var(--steel); stroke-width: .9; stroke-dasharray: 2 2; }
+.dwg .hidden { fill: none; stroke: var(--ink-2); stroke-width: .9; stroke-dasharray: 5 3; }
+.dwg .pipe-plan { fill: var(--sheet); stroke: var(--steel); stroke-width: 2; }
+.dwg .pipe-sec { fill: var(--sheet); stroke: var(--steel); stroke-width: 2.4; }
+.dwg .hearth { fill: none; stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 1.5 2.5; }
+.dwg .wood { fill: var(--m-cob); stroke: var(--m-line); stroke-width: .8; }
+.dwg .flame { fill: color-mix(in srgb, var(--fire) 55%, transparent); stroke: none; }
+.dwg .mesh { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 6 3; }
+.dwg .pad { fill: none; stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 4 3; }
+.dwg .clr { fill: none; stroke: var(--warn); stroke-width: 1.3; stroke-dasharray: 7 4; }
+.dwg .clr2 { fill: none; stroke: var(--warn); stroke-width: 1; stroke-dasharray: 2 3; }
+.dwg .brk { fill: none; stroke: var(--ink); stroke-width: 1; }
+.dwg .gas { fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.dwg .gas.thin { stroke-width: 1.5; }
+.dwg .gas.fade { stroke-dasharray: 10 4; }
+.dwg .g-fire { stroke: var(--fire); }
+.dwg .g-warm { stroke: var(--warm); }
+.dwg .g-cool { stroke: var(--cool); }
+.dwg .ah-fire { fill: var(--fire); }
+.dwg .ah-warm { fill: var(--warm); }
+.dwg .ah-cool { fill: var(--cool); }
+.dwg .ah-ink { fill: var(--ink); }
+.dwg .dim { stroke: var(--ink-2); stroke-width: .8; }
+.dwg .ext { stroke: var(--ink-3); stroke-width: .6; stroke-dasharray: 3 2; }
+.dwg .lead { stroke: var(--ink-2); stroke-width: .8; fill: none; }
+.dwg .dot { fill: var(--ink-2); }
+.dwg text { fill: var(--ink); }
+.dwg .t { font: 500 12.5px "IBM Plex Sans", sans-serif; }
+.dwg .t-sm { font: 400 11.5px "IBM Plex Sans", sans-serif; fill: var(--ink-2); }
+.dwg .t-dim { font: 500 12px "IBM Plex Mono", monospace; fill: var(--ink); }
+.dwg .t-key { font-weight: 700; fill: var(--cool); }
+.dwg .t-fire { font: 600 12px "IBM Plex Sans", sans-serif; fill: var(--fire); }
+.dwg .t-cool { font: 600 12px "IBM Plex Sans", sans-serif; fill: var(--cool); }
+.dwg .t-warn { fill: var(--warn); }
+.dwg .tag circle { fill: var(--sheet); stroke: var(--cool); stroke-width: 1.4; }
+.dwg .tag text { font: 700 11px "IBM Plex Mono", monospace; fill: var(--cool); }
+
+/* legend under figures */
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 8px 12px; border-top: 1px solid var(--rule); font-size: .84rem; color: var(--ink-2); }
+.legend i { display: inline-block; width: 22px; height: 12px; vertical-align: -1px; margin-right: 6px; border: 1px solid var(--ink-3); }
+.legend i.l-brick { background: var(--m-brick); }
+.legend i.l-ins { background: var(--m-ins); }
+.legend i.l-conc { background: var(--m-conc); }
+.legend i.l-sand { background: var(--m-sand); }
+.legend i.l-fire { background: var(--fire); border: 0; height: 3px; vertical-align: 3px; }
+.legend i.l-warm { background: var(--warm); border: 0; height: 3px; vertical-align: 3px; }
+.legend i.l-cool { background: var(--cool); border: 0; height: 3px; vertical-align: 3px; }
+
+/* ---------- steps ---------- */
+ol.steps { counter-reset: st; list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+ol.steps > li {
+  counter-increment: st; display: grid; grid-template-columns: 44px 1fr; gap: 2px 12px;
+  padding: 14px 0; border-bottom: 1px solid var(--rule);
+}
+ol.steps > li::before {
+  content: counter(st, decimal-leading-zero);
+  font: 600 1.35rem/1 "Barlow Condensed", sans-serif; color: var(--ink-3);
+  grid-row: span 3; padding-top: 2px;
+}
+ol.steps > li b { font-weight: 600; }
+ol.steps > li p, ol.steps > li ul { grid-column: 2; color: var(--ink-2); }
+ol.steps ul { margin: 4px 0 0; padding-left: 18px; }
+
+/* callouts */
+.callout { padding: 12px 14px; border: 1px solid var(--rule); background: var(--sheet); display: grid; gap: 6px; }
+.callout.stop { border-left: 4px solid var(--warn); background: var(--warn-bg); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+.callout.care { border-left: 4px solid var(--caution); background: var(--caution-bg); border-color: color-mix(in srgb, var(--caution) 35%, transparent); }
+.callout h3 { font-size: 1.15rem; }
+
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+ul.plain { margin: 0; padding-left: 18px; display: grid; gap: 5px; }
+
+details.src { border: 1px solid var(--rule); background: var(--sheet); }
+details.src summary { cursor: pointer; padding: 12px 14px; font-weight: 600; }
+details.src ol { margin: 0; padding: 0 16px 14px 36px; display: grid; gap: 8px; font-size: .9rem; }
+details.src li span { color: var(--ink-2); }
+footer { margin-top: 48px; padding-top: 12px; border-top: 1.5px solid var(--ink); color: var(--ink-2); font-size: .88rem; display: grid; gap: 6px; }
+
+@media (max-width: 560px) {
+  body { font-size: 15.5px; }
+  .tb-main { padding: 18px 14px 16px; }
+  .sizebar { padding: 12px 14px; }
+  h2 { font-size: 1.6rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 48px; }
+
+</style>
+<div class="wrap">
+
+<header class="titleblock">
+  <div class="tb-main">
+    <span class="eyebrow">Plan set &middot; Rev A &middot; 27 Sep 2026 &middot; for Ryan</span>
+    <h1>Barrel Rocket Mass Heater</h1>
+    <p class="lede">An 8-inch J-tube rocket heater under your 55-gallon drum, venting through a sand-and-pebble sleeping bench. The drum throws heat while the fire burns; the bench gives it back through the night, so the fire can be out before you sleep.</p>
+  </div>
+  <div class="tb-cells">
+    <div class="tb-cell"><span class="eyebrow">System</span><b>8-inch J-tube</b><span class="sub">55-gal drum bell, drawn to scale</span></div>
+    <div class="tb-cell"><span class="eyebrow">Burn pattern</span><b>Evening burn, out by bedtime</b><span class="sub">The bench carries the night</span></div>
+    <div class="tb-cell"><span class="eyebrow">Bench</span><b>36 &times; 84 &times; 18 in</b><span class="sub">About 1.5 tons; needs a slab</span></div>
+    <div class="tb-cell"><span class="eyebrow">Status</span><b style="color:var(--warn)">Check 1 open</b><span class="sub">Washington install rule: read first</span></div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sections">
+  <a href="#how">How it works</a><a href="#checks">Checks</a><a href="#materials">Materials</a><a href="#sizes">Sizes</a><a href="#sheets">Sheets</a><a href="#build">Build</a><a href="#run">Run it</a><a href="#fixes">Fixes</a><a href="#numbers">Numbers</a><a href="#sources">Sources</a>
+</nav>
+
+<section id="how">
+  <div class="sec-head"><span class="eyebrow">Principle</span><h2>How the heat moves</h2></div>
+  
+<figure class="sheet" id="sheet-s-1">
+  <div class="sheet-head"><span class="no">S-1</span><span class="ttl">Gas path through core, drum, bench and chimney</span><span class="scale">Long section &middot; to scale, chimney shortened &middot; 8-inch</span></div>
+  <div class="dscroll"><svg viewBox="0 0 920 600" role="img" aria-label="Long section of the whole heater showing the gas path: room air enters the feed tube, burns in the tunnel, rises through the insulated riser, turns down inside the drum, passes through the bench duct where the mass takes its heat, and leaves cool up the chimney." class="dwg " xmlns="http://www.w3.org/2000/svg"><defs><pattern id="f1-brick" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" class="pf-brick"/><path d="M0 8L8 0M-2 2L2 -2M6 10L10 6" class="pl"/></pattern><pattern id="f1-ins" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" class="pf-ins"/><circle cx="2" cy="2" r=".9" class="pd"/><circle cx="6.5" cy="5.5" r=".9" class="pd"/><circle cx="3.5" cy="7.5" r=".6" class="pd"/></pattern><pattern id="f1-conc" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="16" height="12" class="pf-conc"/><path d="M2 3l2.2 0 -1.1 -2z M10 8l2.6 0 -1.3 -2.3z" class="pd"/><circle cx="7" cy="4" r=".8" class="pd"/><circle cx="13.5" cy="2.5" r=".6" class="pd"/><circle cx="4.5" cy="9.5" r=".7" class="pd"/></pattern><pattern id="f1-sand" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="12" height="10" class="pf-sand"/><circle cx="3" cy="3" r="1.4" class="po"/><circle cx="9" cy="7" r="1.8" class="po"/><circle cx="8.5" cy="1.5" r=".7" class="pd"/><circle cx="2" cy="8" r=".7" class="pd"/></pattern><pattern id="f1-grav" width="18" height="12" patternUnits="userSpaceOnUse"><rect width="18" height="12" class="pf-grav"/><ellipse cx="4" cy="4" rx="3" ry="2" class="po"/><ellipse cx="13" cy="8" rx="3.5" ry="2.3" class="po"/><circle cx="11" cy="2" r="1" class="pd"/></pattern><pattern id="f1-cob" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" class="pf-cob"/><path d="M1 7q2 -2 4 0M5 3q2 -2 4 0" class="pl"/></pattern><pattern id="f1-far" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" class="pf-far"/></pattern><marker id="f1-ah-fire" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-fire"/></marker><marker id="f1-ah-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-warm"/></marker><marker id="f1-ah-cool" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-cool"/></marker><marker id="f1-ah-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-ink"/></marker></defs><rect x="50.0" y="548.0" width="840.0" height="16.0" fill="url(#f1-conc)" class="edge" /><line x1="50.0" y1="580.0" x2="890.0" y2="580.0" class="edge-lt" /><polygon points="50.0,212.55 890.0,254.55 890.0,238.55 50.0,196.55" fill="url(#f1-far)" class="edge"/><text x="886.0" y="230.55" class="t-sm" text-anchor="end" >roof</text><rect x="150.0" y="530.0" width="130.0" height="10.0" fill="url(#f1-brick)" class="edge" /><rect x="150.0" y="466.0" width="10.0" height="64.0" fill="url(#f1-brick)" class="edge" /><rect x="190.0" y="466.0" width="10.0" height="24.0" fill="url(#f1-brick)" class="edge" /><rect x="190.0" y="490.0" width="50.0" height="10.0" fill="url(#f1-brick)" class="edge" /><rect x="219.0" y="360.4" width="21.0" height="129.6" fill="url(#f1-ins)" class="edge" /><rect x="270.0" y="360.4" width="21.0" height="169.6" fill="url(#f1-ins)" class="edge" /><rect x="291.0" y="490.0" width="32.0" height="58.0" fill="url(#f1-brick)" class="edge" /><rect x="293.0" y="500.0" width="20.0" height="46.0" class="void" /><rect x="209.0" y="352.0" width="92.0" height="138.0" class="drum" /><rect x="323.0" y="476.0" width="336.0" height="72.0" fill="url(#f1-sand)" class="edge" /><rect x="309.0" y="504.0" width="350.0" height="32.0" class="duct-in" /><line x1="309.0" y1="536.0" x2="659.0" y2="536.0" class="steel-thin" /><line x1="309.0" y1="504.0" x2="659.0" y2="504.0" class="steel-thin" /><rect x="659.0" y="504.0" width="4.0" height="32.0" class="duct-in" /><rect x="663.0" y="324.0" width="32.0" height="224.0" class="duct-in" /><line x1="663.0" y1="548.0" x2="663.0" y2="324.0" class="steel-thin" /><line x1="695.0" y1="548.0" x2="695.0" y2="324.0" class="steel-thin" /><rect x="663.0" y="80.0" width="32.0" height="220.0" class="duct-in" /><line x1="663.0" y1="300.0" x2="663.0" y2="80.0" class="steel-thin" /><line x1="695.0" y1="300.0" x2="695.0" y2="80.0" class="steel-thin" /><path d="M655.0 324.0 L675.0 320.8 L683.0 327.2 L703.0 324.0" class="brk" /><path d="M655.0 300.0 L675.0 296.8 L683.0 303.2 L703.0 300.0" class="brk" /><rect x="659.8" y="548.0" width="38.4" height="4.8" class="cap" /><rect x="651.0" y="63.2" width="56.0" height="4.8" class="cap" /><rect x="654.2" y="220.0" width="49.6" height="44.0" class="collar" /><path d="M175.0 398.0 L175.0 462.0" class="gas g-cool " marker-end="url(#f1-ah-cool)"/><path d="M175.0 518.0 L248.0 518.0" class="gas g-fire " marker-end="url(#f1-ah-fire)"/><path d="M255.0 510.0 L255.0 368.4" class="gas g-fire " marker-end="url(#f1-ah-fire)"/><path d="M255.0 356.4 L295.5 356.4 L295.5 478.0" class="gas g-warm " marker-end="url(#f1-ah-warm)"/><path d="M295.5 494.0 L295.5 520.0 L411.0 520.0" class="gas g-warm " marker-end="url(#f1-ah-warm)"/><path d="M427.0 520.0 L647.0 520.0" class="gas g-cool fade" marker-end="url(#f1-ah-cool)"/><path d="M679.0 528.0 L679.0 332.0" class="gas g-cool " marker-end="url(#f1-ah-cool)"/><path d="M679.0 292.0 L679.0 92.0" class="gas g-cool " marker-end="url(#f1-ah-cool)"/><path d="M679.0 58.0 L679.0 28.0" class="gas g-cool " marker-end="url(#f1-ah-cool)"/><path d="M205.0 454.0 L189.0 454.0" class="gas g-fire thin" marker-end="url(#f1-ah-fire)"/><path d="M205.0 418.0 L189.0 418.0" class="gas g-fire thin" marker-end="url(#f1-ah-fire)"/><path d="M205.0 382.0 L189.0 382.0" class="gas g-fire thin" marker-end="url(#f1-ah-fire)"/><path d="M363.0 471.2 L363.0 452.0" class="gas g-warm thin" marker-end="url(#f1-ah-warm)"/><path d="M427.0 471.2 L427.0 452.0" class="gas g-warm thin" marker-end="url(#f1-ah-warm)"/><path d="M491.0 471.2 L491.0 452.0" class="gas g-warm thin" marker-end="url(#f1-ah-warm)"/><path d="M555.0 471.2 L555.0 452.0" class="gas g-warm thin" marker-end="url(#f1-ah-warm)"/><path d="M619.0 471.2 L619.0 452.0" class="gas g-warm thin" marker-end="url(#f1-ah-warm)"/><text x="160.0" y="418.0" class="t" text-anchor="end" >1  room air in</text><path d="M228.0 518.0 L126.0 442.0" class="lead"/><circle cx="228.0" cy="518.0" r="1.8" class="dot"/><text x="122.0" y="446.0" class="t" text-anchor="end" >2  burn tunnel</text><path d="M255.0 408.4 L227.0 304.0" class="lead"/><circle cx="255.0" cy="408.4" r="1.8" class="dot"/><text x="223.0" y="308.0" class="t" text-anchor="end" >3  insulated riser</text><path d="M297.0 360.0 L333.0 304.0" class="lead"/><circle cx="297.0" cy="360.0" r="1.8" class="dot"/><text x="337.0" y="308.0" class="t" text-anchor="start" >4  drum radiates into the room</text><path d="M305.0 516.0 L369.0 404.0" class="lead"/><circle cx="305.0" cy="516.0" r="1.8" class="dot"/><text x="373.0" y="408.0" class="t" text-anchor="start" >5  manifold</text><text x="491.0" y="440.0" class="t" text-anchor="middle" >6  bench stores heat for the night</text><path d="M679.0 368.0 L715.0 368.0" class="lead"/><circle cx="679.0" cy="368.0" r="1.8" class="dot"/><text x="719.0" y="372.0" class="t" text-anchor="start" >7  cool exhaust out</text><text x="711.0" y="316.0" class="t-sm" text-anchor="start" >chimney shortened</text><path d="M698.2 550.4 L731.0 504.0" class="lead"/><circle cx="698.2" cy="550.4" r="1.8" class="dot"/><text x="735.0" y="508.0" class="t-sm" text-anchor="start" >cleanout / priming cap</text><path d="M703.8 224.0 L731.0 196.0" class="lead"/><circle cx="703.8" cy="224.0" r="1.8" class="dot"/><text x="735.0" y="200.0" class="t-sm" text-anchor="start" >listed roof pass-through</text></svg></div>
+  <div class="legend"><span><i class="l-brick"></i>firebrick</span><span><i class="l-ins"></i>insulation</span><span><i class="l-conc"></i>concrete</span><span><i class="l-sand"></i>sand + pebble fill</span><span><i class="l-fire"></i>hot gas</span><span><i class="l-warm"></i>warm gas</span><span><i class="l-cool"></i>cool air / exhaust</span></div>
+  
+</figure>
+<figcaption>Room air is pulled down the feed tube, burns sideways through the tunnel and finishes burning in the insulated riser. The hot gas hits the drum lid, turns down, and heats the drum wall, which radiates into the room. What is left runs through the bench duct, where the sand and pebbles take most of the rest. It leaves at 100&ndash;200&deg;F; a woodstove&rsquo;s exhaust leaves at 350&ndash;500&deg;F. That gap is heat kept in the building.</figcaption>
+</section>
+
+<section id="checks">
+  <div class="sec-head"><span class="eyebrow">Before you build</span><h2>Checks that decide whether and where</h2></div>
+  <p class="prose">These are legal and life-safety calls, so they are yours. Each one shows what the record says and what is still open. Tick them off as you settle them; the ticks are saved in this browser only.</p>
+  <ol class="checks">
+<li class="check" data-id="c1">
+  <input type="checkbox" id="c1" aria-describedby="c1-why">
+  <label for="c1">Washington&rsquo;s install rule <span class="lbl c3">Class 3</span></label>
+  <div class="why" id="c1-why">
+<p><span class="lbl rec">Record</span> Ecology: &ldquo;It is illegal to install an uncertified wood stove in Washington&hellip; a homeowner cannot apply to certify their wood stove.&rdquo; PSCAA says the same, and its 2012 rule change added &ldquo;a prohibition on installing unapproved devices.&rdquo; ORCAA lists &ldquo;installation&hellip; of an uncertified solid fuel burning device by a private citizen&rdquo; as a violation. No Washington rule mentions rocket mass heaters. The site-built masonry-heater route (WAC 51-51-1002) needs an Ecology-approved type with tight-fitting doors and outside combustion air; this design has an open feed tube.</p>
+<p><span class="lbl inf">Inferred</span> This heater is an uncertified device with no path to certification, so installing it in a building conflicts with those rules. Rests on the four sources above and the absence of any rocket-heater rule.</p>
+<p><span class="lbl nir">Not in record</span> Which county the outbuilding is in. Seattle / King County is PSCAA, (206) 716-1195. Tahuya / Mason County is ORCAA, orcaa.org. That agency is the check.</p></div>
+</li>
+<li class="check" data-id="c2">
+  <input type="checkbox" id="c2" aria-describedby="c2-why">
+  <label for="c2">Permit, occupancy, insurance <span class="lbl c3">Class 3</span></label>
+  <div class="why" id="c2-why">
+<p><span class="lbl rec">Record</span> The residential code expects solid-fuel room heaters to be tested to UL 1482 and installed per their listing (IRC M1410.1), so a site-built heater needs the building official&rsquo;s approval. PSCAA: installing an uncertified stove &ldquo;can void insurance policy coverage in some instances.&rdquo; One county building department (Coconino, AZ) reviewed rocket mass heaters and declined to approve them, citing escaping gases.</p>
+<p><span class="lbl nir">Not in record</span> Whether sleeping in this outbuilding needs a permit or dwelling approval (not verified this session). Check with the county building department and your insurer.</p></div>
+</li>
+<li class="check" data-id="c3">
+  <input type="checkbox" id="c3" aria-describedby="c3-why">
+  <label for="c3">The floor can carry it <span class="lbl c3">Class 3</span></label>
+  <div class="why" id="c3-why">
+<p><span class="lbl inf">Inferred</span> The bench alone weighs about 2,800&ndash;3,000 lb: roughly 29 ft&sup3; of sand and pebbles at 95&ndash;103 lb/ft&sup3;. That is about 140 lb on every square foot it covers, before the core and drum. It goes on a slab on grade, not a framed floor.</p>
+<p><span class="lbl nir">Not in record</span> What is under the spot you picked.</p></div>
+</li>
+<li class="check" data-id="c4">
+  <input type="checkbox" id="c4" aria-describedby="c4-why">
+  <label for="c4">CO and smoke alarms before the first fire <span class="lbl c3">Class 3</span></label>
+  <div class="why" id="c4-why">
+<p><span class="lbl rec">Record</span> The feed tube is open to the room, so if the draft reverses, smoke and CO come in. Builders report CO trouble mostly as the fire is dying down.</p>
+<p>Put a CO alarm and a smoke alarm in the room you sleep in and test them before any fire. The code sections that likely require them (RCW 19.27.530, IRC R315) were named in research but not read this session.</p></div>
+</li>
+<li class="check" data-id="c5">
+  <input type="checkbox" id="c5" aria-describedby="c5-why">
+  <label for="c5">What the drum held <span class="lbl c3">Class 3</span></label>
+  <div class="why" id="c5-why">
+<p><span class="lbl rec">Record</span> OSHA 1910.252(a)(3)(i): no cutting or welding on used drums &ldquo;until they have been cleaned so thoroughly as to make absolutely certain that there are no flammable materials present.&rdquo; NIOSH case reports include a sealed drum with leftover diesel that exploded under a cut-off saw.</p>
+<p><span class="lbl nir">Not in record</span> What your drum held, and whether it is galvanized or lined. Don&rsquo;t cut it until you know, it&rsquo;s clean, and it&rsquo;s open to air.</p></div>
+</li>
+<li class="check" data-id="c6">
+  <input type="checkbox" id="c6" aria-describedby="c6-why">
+  <label for="c6">What the pipe is <span class="lbl c3">Class 3</span></label>
+  <div class="why" id="c6-why">
+<p><span class="lbl rec">Record</span> The system stays one size from feed tube to chimney cap. Galvanized coatings are rated for 392&deg;F continuous; zinc melts at 787&deg;F (419.5&deg;C), and riser-top readings peak around 1,400&deg;F. Zinc oxide fume causes metal fume fever.</p>
+<p><span class="lbl nir">Not in record</span> Your pipe&rsquo;s outside diameter and whether it is galvanized. These sheets are drawn for 8-inch.</p></div>
+</li>
+<li class="check" data-id="c7">
+  <input type="checkbox" id="c7" aria-describedby="c7-why">
+  <label for="c7">Clearances in the room <span class="lbl c3">Class 3</span></label>
+  <div class="why" id="c7-why">
+<p><span class="lbl rec">Record</span> NFPA 211 values for unlisted stoves, as reported by secondary sources (the primary table was not viewed): 36 in from the drum to combustibles; 12 in at the sides and rear, 18 in above, with 24-gauge sheet metal on a 1-in ventilated air space; 18 in for single-wall pipe; non-combustible floor 18 in out on all sides. Sheet S-3 draws these lines.</p></div>
+</li>
+<li class="check" data-id="c8">
+  <input type="checkbox" id="c8" aria-describedby="c8-why">
+  <label for="c8">The roof cut <span class="lbl c3">Class 3</span></label>
+  <div class="why" id="c8-why">
+<p><span class="lbl rec">Record</span> Single-wall pipe must not pass through a wall, ceiling or roof; use a listed insulated chimney with a listed support or firestop. The top goes at least 3 ft above the roof where it passes through and 2 ft higher than anything within 10 ft.</p>
+<p><span class="lbl inf">Inferred</span> If the building is old, the roofing or siding you cut through is a sampling question under your own survey rules.</p></div>
+</li></ol>
+  <div class="callout care">
+    <h3>If check 1 comes back no</h3>
+    <p>The lawful version is a certified wood stove, new or used-and-certified, on a hearth poured from your sand, cement and pebbles, with a masonry bench or wall beside it, outside the stove&rsquo;s listed clearances, to soak up and hold heat. The drum and loose pipe don&rsquo;t go in that version, and the chimney is listed parts either way. <span class="lbl inf">Inferred</span></p>
+  </div>
+</section>
+
+<section id="materials">
+  <div class="sec-head"><span class="eyebrow">Inventory</span><h2>Your materials, and where each one goes</h2></div>
+  
+<div class="tscroll"><table>
+<thead><tr><th>What you have</th><th>Where it goes</th><th>Keep it out of</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td class="key">55-gal steel drum</td><td>The bell over the riser: radiator and cooktop</td><td class="no">Don&rsquo;t use a galvanized drum</td><td>The usual bell for an 8-inch core. The top runs 600&ndash;700&deg;F at high fire, above zinc&rsquo;s 392&deg;F rating. <span class="lbl rec">Record</span></td></tr>
+<tr><td class="key">Steel pipe</td><td>Bench duct and the pipe from the bench up to the ceiling, if it is 8 in</td><td class="no">Anything under 8 in; the core; through the ceiling or roof</td><td>One size all the way. Single-wall pipe can&rsquo;t pass through the building; that part is listed chimney. <span class="lbl rec">Record</span></td></tr>
+<tr><td class="key">Galvanized pipe, if any</td><td>Only the far half of the bench duct</td><td class="no">Core, riser, manifold, the first run out of the manifold</td><td>Rated 392&deg;F continuous. The gas temperature entering the bench wasn&rsquo;t found, so the first run is black steel. <span class="lbl inf">Inferred</span></td></tr>
+<tr><td class="key">Sand</td><td>Bench fill; clay-sand mortar and seals (2&ndash;3 sand : 1 clay); concrete</td><td>&mdash;</td><td>Dry sand is about 100 lb/ft&sup3; and holds 0.19 BTU per lb per &deg;F. <span class="lbl rec">Record</span></td></tr>
+<tr><td class="key">Portland cement</td><td>Slab (1 cement : 2 sand : 3 gravel, about 3,000 psi); bench shell; bench cap past the first 2 ft</td><td class="no">Feed tube, tunnel, riser, manifold, first 2 ft of bench</td><td>Portland concrete is typically limited to about 212&deg;F service; its binder breaks down at 750&ndash;1,100&deg;F; wet concrete can spall explosively. <span class="lbl rec">Record</span> The 2-ft line is <span class="lbl inf">Inferred</span></td></tr>
+<tr><td class="key">Pebbles / gravel</td><td>Gravel base, slab aggregate, bench fill</td><td class="no">Anywhere near flame; keep them 2&ndash;3 ft away</td><td>River rock holds water and can crack violently when heated. <span class="lbl rec">Record</span></td></tr>
+<tr><td class="key">&ldquo;Packing pebbles&rdquo; if perlite or vermiculite</td><td>Riser insulation and the layer under the core: 1 part clay slip to 6&ndash;9 parts</td><td>&mdash;</td><td>The clay keeps it in place; loose perlite slumps. <span class="lbl rec">Record</span></td></tr>
+<tr><td class="key">&hellip;if foam packing peanuts</td><td>Nothing</td><td class="no">The whole heater</td><td>Plastic foam burns and smokes. <span class="lbl inf">Inferred</span> What yours are: <span class="lbl nir">Not in record</span></td></tr>
+</tbody></table></div>
+  <h3>What the plan needs that isn&rsquo;t on your list</h3>
+  
+<ul class="plain">
+<li><b>Firebrick</b>, standard hard 9 &times; 4.5 &times; 2.5 in: about 40 for the floor, tunnel, roof and feed tube, and about 50 more for a firebrick riser shaft; add 10% for cuts. <span class="lbl inf">Inferred</span> Counted from these sheets; no authoritative count was found.</li>
+<li><b>Clay</b>: bagged fireclay or dug clay subsoil, for slip, mortar, seals and the perlite mix.</li>
+<li><b>Perlite</b> (garden center), if your pebbles aren&rsquo;t perlite. Or ceramic fiber blanket, which is an IARC 2B possible carcinogen and forms cristobalite after firing; handle it like the work you already do.</li>
+<li><b>Riser sleeve</b>: 18 in OD, plain sheet steel, not galvanized.</li>
+<li><b>Fittings</b>: 8-in black stovepipe for the first run, one 8-in tee with a cap for the chimney base, a plate or cap for the manifold cleanout, sheet-metal screws, high-temperature sealant.</li>
+<li><b>Listed chimney parts</b>: ceiling or roof support, insulated chimney sections to height, flashing, storm collar, cap with spark screen.</li>
+<li><b>Safety</b>: CO alarm, smoke alarm, ABC extinguisher, lidded metal ash can, P100 respirator for perlite, cement and fiber dust.</li>
+<li><b>Optional</b>: a &frac14;-in steel disc to lay inside the drum lid. The lid is a wear part (reported life over two years) and the disc extends it; measure gap G to the disc. An infrared thermometer to read the exhaust (140&ndash;200&deg;F is the target).</li>
+</ul>
+</section>
+
+<section id="sizes">
+  <div class="sec-head"><span class="eyebrow">Dimension schedule</span><h2>Sizes</h2></div>
+  <p class="prose">Letters match the drawings. The 8-inch column is what the sheets show. The 6-inch column is reference only: the drum&rsquo;s size changes the 6-inch tunnel and riser, so redraw before building at 6-inch. Most of these numbers come from experienced builders (the Wisners and Evans &amp; Jackson, as quoted on the permies.com forum), not from tested standards; that is the state of the field.</p>
+  <div class="tscroll"><table><thead><tr><th>Key / part</th><th>8-inch (drawn)</th><th>6-inch (reference)</th><th>Rule and basis</th></tr></thead><tbody><tr><td class="key"><span class="k">A</span>Feed tube, inside</td><td class="v on">7.5 &times; 7.5 in</td><td class="v">5.5 &times; 5.5 in</td><td>Square openings never smaller than the pipe (8-in pipe = 50.3 in&sup2;; 7.5-in square = 56.3 in&sup2;). <span class="lbl rec">Record</span></td></tr><tr><td class="key"><span class="k">B</span>Feed tube height, tunnel floor to top</td><td class="v on">16 in</td><td class="v">15 in</td><td><span class="lbl rec">Record</span></td></tr><tr><td class="key"><span class="k">C</span>Burn tunnel, inside height</td><td class="v on">7.5 in</td><td class="v">5.5 in</td><td>Same square as A; not dimensioned on S-2. <span class="lbl rec">Record</span></td></tr><tr><td class="key"><span class="k">D</span>Tunnel roof, feed shaft to riser shaft</td><td class="v on">12.5 in</td><td class="v">about 12 in</td><td>8-in: 12.5 in maximum <span class="lbl rec">Record</span>. The drum sets the minimum: at 12.5 in it clears the feed tube by 2.25 in <span class="lbl inf">Inferred</span>. 6-in: the drum&rsquo;s radius forces about 12 in <span class="lbl inf">Inferred</span>. Whether a 6-inch burns clean with a roof that long: <span class="lbl nir">Not in record</span>; the Wisners&rsquo; 21-in tunnel sat under a different bell.</td></tr><tr><td class="key"><span class="k">E</span>Riser, inside</td><td class="v on">7.5 &times; 7.5 in</td><td class="v">5.5 &times; 5.5 in</td><td>Same area as A. <span class="lbl rec">Record</span></td></tr><tr><td class="key"><span class="k">F</span>Riser height, tunnel floor to top</td><td class="v on">42.4 in</td><td class="v">47 in</td><td>8-in: 40 in minimum <span class="lbl rec">Record</span>; the drawn height is set by the drum <span class="lbl inf">Inferred</span>. 6-in: the Wisners&rsquo; as-built <span class="lbl rec">Record</span>; under a 55-gal drum that means raising the drum about 6 in on a masonry ring <span class="lbl inf">Inferred</span>.</td></tr><tr><td class="key"><span class="k">G</span>Gap, riser top to drum lid</td><td class="v on">2 in</td><td class="v">1.5 in</td><td>About a quarter of the pipe diameter. Under 1 in chokes it; over 3 in reportedly reverses the flow. <span class="lbl rec">Record</span> One source gives 1.5 in for 8-in.</td></tr><tr><td class="key"><span class="k">H</span>Side gap, sleeve to drum wall</td><td class="v on">2.25 in</td><td class="v">about 3.25 in</td><td>The ring&rsquo;s area must be at least the riser&rsquo;s <span class="lbl rec">Record</span>. Drawn ring: 143 in&sup2;, 2.5&times; <span class="lbl inf">Inferred</span>.</td></tr><tr><td class="key"><span class="k">J</span>Riser insulation at the faces</td><td class="v on">2.75 in</td><td class="v">2.75 in</td><td>At least 2 in of perlite-clay <span class="lbl rec">Record</span>, mixed 1 slip : 6&ndash;9 perlite.</td></tr><tr><td class="key"><span class="k">K</span>Manifold flow area</td><td class="v on">about 160 in&sup2; (12 &times; 14 in)</td><td class="v">about 90 in&sup2;</td><td>At least 1.5&times; the pipe area where the flow turns; about 3&times; as a rule of thumb. <span class="lbl rec">Record</span></td></tr><tr><td class="key"><span class="k">L</span>Duct and chimney diameter</td><td class="v on">8 in</td><td class="v">6 in</td><td>Same size all the way, never smaller. <span class="lbl rec">Record</span></td></tr><tr><td class="key"><span class="k">M</span>Duct allowance</td><td class="v on">50 ft, less 5 ft per 90&deg; bend</td><td class="v">35 ft, less 5 ft per 90&deg; bend</td><td><span class="lbl rec">Record</span> One source gives about 45 ft for 6-in. This bench uses about 7.5 ft and one bend, so about 12.5 ft of the allowance <span class="lbl inf">Inferred</span>.</td></tr><tr><td class="key"><span class="k">N</span>Bench length</td><td class="v on">84 in</td><td class="v">84 in</td><td><span class="lbl inf">Inferred</span> Sized for one sleeper.</td></tr><tr><td class="key"><span class="k">P</span>Bench width</td><td class="v on">36 in</td><td class="v">36 in</td><td><span class="lbl inf">Inferred</span></td></tr><tr><td class="key"><span class="k">Q</span>Bench height</td><td class="v on">18 in</td><td class="v">18 in</td><td><span class="lbl inf">Inferred</span></td></tr><tr><td class="key"><span class="k">R</span>Mass over the duct</td><td class="v on">7 in</td><td class="v">9 in</td><td><span class="lbl inf">Inferred</span> 4 in of fill plus a 3-in cap.</td></tr><tr><td class="key"><span class="k">&mdash;</span>Drum</td><td class="v on">55-gal</td><td class="v">55-gal</td><td>Open-head drum: 22.5 in inside diameter, 33.5 in inside height; about 23 &times; 34.5 in outside. <span class="lbl rec">Record</span></td></tr></tbody></table></div>
+</section>
+
+<section id="sheets">
+  <div class="sec-head"><span class="eyebrow">Drawings</span><h2>Sheets</h2></div>
+  <p class="prose">Drawn to scale from one set of numbers. Build to the numbers in the schedule, not by measuring the screen. On a phone, scroll each sheet sideways or pinch to zoom.</p>
+  
+<figure class="sheet" id="sheet-s-2">
+  <div class="sheet-head"><span class="no">S-2</span><span class="ttl">Core section</span><span class="scale">Section on centerline &middot; to scale &middot; 8-inch</span></div>
+  <div class="dscroll"><svg viewBox="0 0 830 565" role="img" aria-label="Section through the rocket core: feed tube, burn tunnel, insulated heat riser inside the upturned 55-gallon drum, and the manifold that feeds the bench duct." class="dwg " xmlns="http://www.w3.org/2000/svg"><defs><pattern id="f2-brick" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" class="pf-brick"/><path d="M0 8L8 0M-2 2L2 -2M6 10L10 6" class="pl"/></pattern><pattern id="f2-ins" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" class="pf-ins"/><circle cx="2" cy="2" r=".9" class="pd"/><circle cx="6.5" cy="5.5" r=".9" class="pd"/><circle cx="3.5" cy="7.5" r=".6" class="pd"/></pattern><pattern id="f2-conc" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="16" height="12" class="pf-conc"/><path d="M2 3l2.2 0 -1.1 -2z M10 8l2.6 0 -1.3 -2.3z" class="pd"/><circle cx="7" cy="4" r=".8" class="pd"/><circle cx="13.5" cy="2.5" r=".6" class="pd"/><circle cx="4.5" cy="9.5" r=".7" class="pd"/></pattern><pattern id="f2-sand" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="12" height="10" class="pf-sand"/><circle cx="3" cy="3" r="1.4" class="po"/><circle cx="9" cy="7" r="1.8" class="po"/><circle cx="8.5" cy="1.5" r=".7" class="pd"/><circle cx="2" cy="8" r=".7" class="pd"/></pattern><pattern id="f2-grav" width="18" height="12" patternUnits="userSpaceOnUse"><rect width="18" height="12" class="pf-grav"/><ellipse cx="4" cy="4" rx="3" ry="2" class="po"/><ellipse cx="13" cy="8" rx="3.5" ry="2.3" class="po"/><circle cx="11" cy="2" r="1" class="pd"/></pattern><pattern id="f2-cob" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" class="pf-cob"/><path d="M1 7q2 -2 4 0M5 3q2 -2 4 0" class="pl"/></pattern><pattern id="f2-far" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" class="pf-far"/></pattern><marker id="f2-ah-fire" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-fire"/></marker><marker id="f2-ah-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-warm"/></marker><marker id="f2-ah-cool" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-cool"/></marker><marker id="f2-ah-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-ink"/></marker></defs><rect x="88" y="478.0" width="522.0" height="32.0" fill="url(#f2-grav)" class="edge-lt" /><rect x="88" y="446" width="522.0" height="32.0" fill="url(#f2-conc)" class="edge" /><rect x="192" y="430.0" width="268.0" height="16.0" fill="url(#f2-ins)" class="edge" /><rect x="460.0" y="330.0" width="22.0" height="116.0" fill="url(#f2-brick)" class="edge" /><rect x="482.0" y="350.0" width="44.0" height="92.0" fill="url(#f2-far)" class="edge-lt" /><rect x="482.0" y="442.0" width="64.0" height="4.0" fill="url(#f2-cob)" class="edge-lt" /><rect x="526.0" y="422.0" width="20.0" height="20.0" fill="url(#f2-brick)" class="edge" /><rect x="526.0" y="350.0" width="20.0" height="8.0" fill="url(#f2-brick)" class="edge" /><rect x="494.0" y="330.0" width="52.0" height="20.0" fill="url(#f2-brick)" class="edge" /><rect x="546.0" y="326.0" width="64.0" height="120.0" fill="url(#f2-sand)" class="edge" /><rect x="546.0" y="302.0" width="64.0" height="24.0" fill="url(#f2-cob)" class="edge" /><rect x="518.0" y="358.0" width="92.0" height="64.0" class="duct-in" /><line x1="518.0" y1="422.0" x2="610.0" y2="422.0" class="steel" /><line x1="518.0" y1="358.0" x2="610.0" y2="358.0" class="steel" /><path d="M610.0 510.0 L610.0 410.0 L604.0 405.0 L616.0 399.0 L610.0 394.0 L610.0 294.0" class="brk"/><rect x="200.0" y="410.0" width="260.0" height="20.0" fill="url(#f2-brick)" class="edge" /><rect x="220.0" y="350.0" width="220.0" height="60.0" fill="url(#f2-far)" class="edge-lt" /><rect x="220.0" y="282.0" width="60.0" height="68.0" fill="url(#f2-far)" class="edge-lt" /><rect x="380.0" y="70.8" width="60.0" height="279.2" fill="url(#f2-far)" class="edge-lt" /><rect x="200.0" y="282.0" width="20.0" height="128.0" fill="url(#f2-brick)" class="edge" /><rect x="280.0" y="282.0" width="20.0" height="48.0" fill="url(#f2-brick)" class="edge" /><rect x="280.0" y="330.0" width="100.0" height="20.0" fill="url(#f2-brick)" class="edge" /><rect x="360.0" y="70.8" width="20.0" height="259.2" fill="url(#f2-brick)" class="edge" /><rect x="440.0" y="70.8" width="20.0" height="339.2" fill="url(#f2-brick)" class="edge" /><rect x="338.0" y="70.8" width="22.0" height="259.2" fill="url(#f2-ins)" class="edge" /><rect x="460.0" y="70.8" width="22.0" height="259.2" fill="url(#f2-ins)" class="edge" /><line x1="338.0" y1="330.0" x2="338.0" y2="70.8" class="steel-thin" /><line x1="482.0" y1="330.0" x2="482.0" y2="70.8" class="steel-thin" /><rect x="318.0" y="54.0" width="184.0" height="276.0" class="drum" /><line x1="315.2" y1="238.0" x2="318.0" y2="238.0" class="steel" /><line x1="502.0" y1="238.0" x2="504.8" y2="238.0" class="steel" /><line x1="315.2" y1="146.0" x2="318.0" y2="146.0" class="steel" /><line x1="502.0" y1="146.0" x2="504.8" y2="146.0" class="steel" /><polygon points="318.0,330.0 305.2,330.0 318.0,317.2" fill="url(#f2-cob)" class="edge"/><polygon points="502.0,330.0 514.8,330.0 502.0,317.2" fill="url(#f2-cob)" class="edge"/><rect x="225.6" y="272.4" width="14.4" height="125.6" class="wood" /><rect x="244.4" y="262.8" width="17.6" height="135.2" class="wood" /><rect x="263.2" y="277.2" width="12.8" height="120.8" class="wood" /><path d="M224.0 408.4 Q252.0 370.0 304.0 384.4 Q336.0 394.0 388.0 378.0 L388.0 406.8 Z" class="flame" /><path d="M250.0 211.6 L250.0 254.8" class="gas g-cool " marker-end="url(#f2-ah-cool)"/><path d="M288.0 380.4 L392.0 380.4" class="gas g-fire " marker-end="url(#f2-ah-fire)"/><path d="M410.0 362.0 L410.0 94.8" class="gas g-fire " marker-end="url(#f2-ah-fire)"/><path d="M405.2 63.6 L329.2 63.6 L329.2 258.0" class="gas g-warm " marker-end="url(#f2-ah-warm)"/><path d="M414.8 63.6 L491.0 63.6 L491.0 359.6 L510.0 359.6 L510.0 380.4 L598.0 390.0" class="gas g-warm " marker-end="url(#f2-ah-warm)"/><line x1="220.0" y1="535.6" x2="280.0" y2="535.6" class="dim"/><line x1="220.0" y1="530.6" x2="220.0" y2="540.6" class="dim"/><line x1="280.0" y1="530.6" x2="280.0" y2="540.6" class="dim"/><line x1="220.0" y1="410.0" x2="220.0" y2="535.6" class="ext"/><line x1="280.0" y1="410.0" x2="280.0" y2="535.6" class="ext"/><text x="250.0" y="529.6" class="t-dim" text-anchor="middle"><tspan class="t-key">A</tspan> <tspan class="dv" data-d="A">7.5 in</tspan></text><line x1="280.0" y1="535.6" x2="380.0" y2="535.6" class="dim"/><line x1="280.0" y1="530.6" x2="280.0" y2="540.6" class="dim"/><line x1="380.0" y1="530.6" x2="380.0" y2="540.6" class="dim"/><line x1="280.0" y1="350.0" x2="280.0" y2="535.6" class="ext"/><line x1="380.0" y1="350.0" x2="380.0" y2="535.6" class="ext"/><text x="330.0" y="529.6" class="t-dim" text-anchor="middle"><tspan class="t-key">D</tspan> <tspan class="dv" data-d="D">12.5 in</tspan></text><line x1="380.0" y1="535.6" x2="440.0" y2="535.6" class="dim"/><line x1="380.0" y1="530.6" x2="380.0" y2="540.6" class="dim"/><line x1="440.0" y1="530.6" x2="440.0" y2="540.6" class="dim"/><line x1="380.0" y1="410.0" x2="380.0" y2="535.6" class="ext"/><line x1="440.0" y1="410.0" x2="440.0" y2="535.6" class="ext"/><text x="410.0" y="529.6" class="t-dim" text-anchor="middle"><tspan class="t-key">E</tspan> <tspan class="dv" data-d="E">7.5 in</tspan></text><line x1="182.4" y1="410.0" x2="182.4" y2="282.0" class="dim"/><line x1="177.4" y1="410.0" x2="187.4" y2="410.0" class="dim"/><line x1="177.4" y1="282.0" x2="187.4" y2="282.0" class="dim"/><line x1="200.0" y1="410.0" x2="182.4" y2="410.0" class="ext"/><line x1="200.0" y1="282.0" x2="182.4" y2="282.0" class="ext"/><text x="174.4" y="350.0" class="t-dim" text-anchor="end"><tspan class="t-key">B</tspan> <tspan class="dv" data-d="B">16 in</tspan></text><line x1="24" y1="410.0" x2="24" y2="70.8" class="dim"/><line x1="19" y1="410.0" x2="29" y2="410.0" class="dim"/><line x1="19" y1="70.8" x2="29" y2="70.8" class="dim"/><line x1="338.0" y1="410.0" x2="24" y2="410.0" class="ext"/><line x1="338.0" y1="70.8" x2="24" y2="70.8" class="ext"/><text x="32" y="244.4" class="t-dim" text-anchor="start"><tspan class="t-key">F</tspan> <tspan class="dv" data-d="F">42.4 in</tspan></text><line x1="538.0" y1="70.8" x2="538.0" y2="54.8" class="dim"/><line x1="533.0" y1="70.8" x2="543.0" y2="70.8" class="dim"/><line x1="533.0" y1="54.8" x2="543.0" y2="54.8" class="dim"/><line x1="482.0" y1="70.8" x2="538.0" y2="70.8" class="ext"/><line x1="482.0" y1="54.8" x2="538.0" y2="54.8" class="ext"/><text x="546.0" y="66.8" class="t-dim" text-anchor="start"><tspan class="t-key">G</tspan> <tspan class="dv" data-d="G">2 in</tspan></text><line x1="482.0" y1="118" x2="500.0" y2="118" class="dim"/><line x1="482.0" y1="113" x2="482.0" y2="123" class="dim"/><line x1="500.0" y1="113" x2="500.0" y2="123" class="dim"/><line x1="500.0" y1="118" x2="510.20000000000005" y2="118" class="ext"/><text x="513.2" y="122" class="t-dim" text-anchor="start"><tspan class="t-key">H</tspan> <tspan class="dv" data-d="H">2.25 in</tspan></text><line x1="460.0" y1="150" x2="482.0" y2="150" class="dim"/><line x1="460.0" y1="145" x2="460.0" y2="155" class="dim"/><line x1="482.0" y1="145" x2="482.0" y2="155" class="dim"/><line x1="482.0" y1="150" x2="510.20000000000005" y2="150" class="ext"/><text x="513.2" y="154" class="t-dim" text-anchor="start"><tspan class="t-key">J</tspan> <tspan class="dv" data-d="J">2.75 in</tspan></text><line x1="602.0" y1="422.0" x2="602.0" y2="358.0" class="dim"/><line x1="597.0" y1="422.0" x2="607.0" y2="422.0" class="dim"/><line x1="597.0" y1="358.0" x2="607.0" y2="358.0" class="dim"/><text x="610.0" y="394.0" class="t-dim" text-anchor="start"><tspan class="t-key">L</tspan> <tspan class="dv" data-d="L">8 in</tspan></text><path d="M502.0 86 L578.0 86" class="lead"/><circle cx="502.0" cy="86" r="1.8" class="dot"/><text x="582.0" y="90" class="t" text-anchor="start" >55-gal drum, open end down</text><path d="M480.4 190 L578.0 190" class="lead"/><circle cx="480.4" cy="190" r="1.8" class="dot"/><text x="582.0" y="194" class="t" text-anchor="start" >steel sleeve, 18 in OD</text><path d="M468.0 222 L578.0 222" class="lead"/><circle cx="468.0" cy="222" r="1.8" class="dot"/><text x="582.0" y="226" class="t" text-anchor="start" >riser insulation</text><path d="M449.6 254 L578.0 254" class="lead"/><circle cx="449.6" cy="254" r="1.8" class="dot"/><text x="582.0" y="258" class="t" text-anchor="start" >firebrick riser shaft</text><path d="M506.0 326.0 L578.0 286" class="lead"/><circle cx="506.0" cy="326.0" r="1.8" class="dot"/><text x="582.0" y="290" class="t" text-anchor="start" >clay-sand seal</text><path d="M578.0 314.0 L626.0 318" class="lead"/><circle cx="578.0" cy="314.0" r="1.8" class="dot"/><text x="630.0" y="322" class="t" text-anchor="start" >clay-sand cap near manifold</text><path d="M500.4 406.0 L626.0 346.0" class="lead"/><circle cx="500.4" cy="406.0" r="1.8" class="dot"/><text x="630.0" y="350.0" class="t" text-anchor="start" >manifold + ash trap</text><path d="M590.0 402.0 L626.0 442.0" class="lead"/><circle cx="590.0" cy="402.0" r="1.8" class="dot"/><text x="630.0" y="446.0" class="t" text-anchor="start" >bench fill</text><text x="91" y="466.0" class="t-sm" text-anchor="start" >concrete slab</text><text x="91" y="498.0" class="t-sm" text-anchor="start" >compacted gravel</text><text x="250.0" y="200.4" class="t-cool" text-anchor="middle" >air in</text><text x="312.0" y="360.4" class="t-fire" text-anchor="middle" >flame</text><path d="M336.0 340.4 L292.0 150.0" class="lead"/><circle cx="336.0" cy="340.4" r="1.8" class="dot"/><text x="288.0" y="154.0" class="t" text-anchor="end" >burn tunnel roof</text><path d="M202.4 438.0 L180.0 423.6" class="lead"/><circle cx="202.4" cy="438.0" r="1.8" class="dot"/><text x="176.0" y="427.6" class="t-sm" text-anchor="end" >insulating layer</text></svg></div>
+  <div class="legend"><span><i class="l-brick"></i>firebrick</span><span><i class="l-ins"></i>insulation</span><span><i class="l-conc"></i>concrete</span><span><i class="l-sand"></i>sand + pebble fill</span><span><i class="l-fire"></i>hot gas</span><span><i class="l-warm"></i>warm gas</span><span><i class="l-cool"></i>cool air / exhaust</span></div>
+  <ol class="notes"><li>Mortar: thin clay slip or fireclay mortar. No Portland cement anywhere on this sheet except the slab.</li><li>Riser insulation: perlite and clay slip, 1 : 6&ndash;9, packed between the brick shaft and the sleeve; or ceramic fiber blanket, with a respirator. A bare steel liner lasts one or two seasons, and loose perlite slumps.</li><li>Measure G before setting the drum: riser top to the underside of the lid, or of the &frac14;-in disc if you add one.</li><li>The drum must lift off for inspection, so seal its rim with clay-sand, not cement.</li><li>The manifold floor sits below the duct inlet, so ash settles there instead of in the duct. Clean it through cleanout 1.</li></ol>
+</figure>
+<figcaption>The J-tube core under the drum. Wood stands in the feed tube and burns at the bottom; the flame is pulled sideways through the tunnel and up the insulated riser. The drum rim sits on the tunnel roof and the manifold wall, sealed with clay-sand.</figcaption>
+  
+<figure class="sheet" id="sheet-s-3">
+  <div class="sheet-head"><span class="no">S-3</span><span class="ttl">Plan and clearances</span><span class="scale">Plan &middot; to scale &middot; 8-inch</span></div>
+  <div class="dscroll"><svg viewBox="0 0 850 440" role="img" aria-label="Plan view of the heater and sleeping bench with the clearance lines that must stay free of combustible walls and furniture." class="dwg " xmlns="http://www.w3.org/2000/svg"><defs><pattern id="f3-brick" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" class="pf-brick"/><path d="M0 8L8 0M-2 2L2 -2M6 10L10 6" class="pl"/></pattern><pattern id="f3-ins" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" class="pf-ins"/><circle cx="2" cy="2" r=".9" class="pd"/><circle cx="6.5" cy="5.5" r=".9" class="pd"/><circle cx="3.5" cy="7.5" r=".6" class="pd"/></pattern><pattern id="f3-conc" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="16" height="12" class="pf-conc"/><path d="M2 3l2.2 0 -1.1 -2z M10 8l2.6 0 -1.3 -2.3z" class="pd"/><circle cx="7" cy="4" r=".8" class="pd"/><circle cx="13.5" cy="2.5" r=".6" class="pd"/><circle cx="4.5" cy="9.5" r=".7" class="pd"/></pattern><pattern id="f3-sand" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="12" height="10" class="pf-sand"/><circle cx="3" cy="3" r="1.4" class="po"/><circle cx="9" cy="7" r="1.8" class="po"/><circle cx="8.5" cy="1.5" r=".7" class="pd"/><circle cx="2" cy="8" r=".7" class="pd"/></pattern><pattern id="f3-grav" width="18" height="12" patternUnits="userSpaceOnUse"><rect width="18" height="12" class="pf-grav"/><ellipse cx="4" cy="4" rx="3" ry="2" class="po"/><ellipse cx="13" cy="8" rx="3.5" ry="2.3" class="po"/><circle cx="11" cy="2" r="1" class="pd"/></pattern><pattern id="f3-cob" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" class="pf-cob"/><path d="M1 7q2 -2 4 0M5 3q2 -2 4 0" class="pl"/></pattern><pattern id="f3-far" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" class="pf-far"/></pattern><marker id="f3-ah-fire" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-fire"/></marker><marker id="f3-ah-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-warm"/></marker><marker id="f3-ah-cool" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-cool"/></marker><marker id="f3-ah-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-ink"/></marker></defs><circle cx="368.75" cy="228.0" r="142.5" class="clr"/><circle cx="368.75" cy="228.0" r="70.5" class="clr2"/><circle cx="686.75" cy="228.0" r="66.0" class="clr"/><polygon points="236.0,316.5 419.75,316.5 419.75,282.0 704.75,282.0 704.75,174.0 419.75,174.0 419.75,139.5 236.0,139.5" fill="url(#f3-far)" class="edge-lt"/><rect x="290.0" y="209.25" width="37.5" height="37.5" fill="url(#f3-brick)" class="edge" /><rect x="297.5" y="216.75" width="22.5" height="22.5" class="void" /><rect x="327.5" y="209.25" width="60.0" height="37.5" class="hidden" /><rect x="394.25" y="199.5" width="25.5" height="57.0" fill="url(#f3-brick)" class="edge" /><rect x="395.75" y="207.0" width="16.5" height="42.0" class="hidden" /><circle cx="368.75" cy="228.0" r="34.5" class="drum-plan"/><circle cx="368.75" cy="228.0" r="27.0" class="hidden"/><rect x="392.75" y="256.5" width="18.0" height="4.8" class="cap" /><rect x="419.75" y="174.0" width="252.0" height="108.0" fill="url(#f3-sand)" class="edge" /><rect x="419.75" y="216.0" width="255.0" height="24.0" class="hidden" /><circle cx="686.75" cy="228.0" r="12.0" class="pipe-plan"/><line x1="419.75" y1="303.0" x2="671.75" y2="303.0" class="dim"/><line x1="419.75" y1="298.0" x2="419.75" y2="308.0" class="dim"/><line x1="671.75" y1="298.0" x2="671.75" y2="308.0" class="dim"/><line x1="419.75" y1="282.0" x2="419.75" y2="303.0" class="ext"/><line x1="671.75" y1="282.0" x2="671.75" y2="303.0" class="ext"/><text x="545.75" y="297.0" class="t-dim" text-anchor="middle"><tspan class="t-key">N</tspan> <tspan class="dv" data-d="N">84 in</tspan></text><line x1="761.75" y1="282.0" x2="761.75" y2="174.0" class="dim"/><line x1="756.75" y1="282.0" x2="766.75" y2="282.0" class="dim"/><line x1="756.75" y1="174.0" x2="766.75" y2="174.0" class="dim"/><line x1="671.75" y1="282.0" x2="761.75" y2="282.0" class="ext"/><line x1="671.75" y1="174.0" x2="761.75" y2="174.0" class="ext"/><text x="769.75" y="232.0" class="t-dim" text-anchor="start"><tspan class="t-key">P</tspan> <tspan class="dv" data-d="P">36 in</tspan></text><line x1="403.25" y1="126.0" x2="511.25" y2="126.0" class="dim"/><line x1="403.25" y1="121.0" x2="403.25" y2="131.0" class="dim"/><line x1="511.25" y1="121.0" x2="511.25" y2="131.0" class="dim"/><text x="457.25" y="120.0" class="t-dim" text-anchor="middle">36 in</text><line x1="403.25" y1="159.0" x2="439.25" y2="159.0" class="dim"/><line x1="403.25" y1="154.0" x2="403.25" y2="164.0" class="dim"/><line x1="439.25" y1="154.0" x2="439.25" y2="164.0" class="dim"/><text x="421.25" y="153.0" class="t-dim" text-anchor="middle">12 in</text><path d="M263.0 228.0 L200.0 147.0" class="lead"/><circle cx="263.0" cy="228.0" r="1.8" class="dot"/><text x="196.0" y="151.0" class="t-sm" text-anchor="end" >hearth: slab, 18 in past core</text><path d="M308.75 228.0 L200.0 198.0" class="lead"/><circle cx="308.75" cy="228.0" r="1.8" class="dot"/><text x="196.0" y="202.0" class="t-sm" text-anchor="end" >feed tube</text><path d="M401.75 260.1 L401.75 351.0" class="lead"/><circle cx="401.75" cy="260.1" r="1.8" class="dot"/><text x="405.75" y="355.0" class="t-sm" text-anchor="start" >cleanout 1 (manifold)</text><text x="545.75" y="210.0" class="t" text-anchor="middle" >sleeping bench</text><text x="545.75" y="261.0" class="t-sm" text-anchor="middle" >duct runs down the middle</text><path d="M686.75 234.0 L650.75 321.0" class="lead"/><circle cx="686.75" cy="234.0" r="1.8" class="dot"/><text x="646.75" y="325.0" class="t-sm" text-anchor="end" >cleanout 2 + chimney above</text><text x="368.75" y="75.0" class="t-sm t-warn" text-anchor="middle" >unshielded: combustibles stay outside</text><text x="368.75" y="327.0" class="t-sm t-warn" text-anchor="middle" >with ventilated shield</text><text x="686.75" y="151.5" class="t-sm t-warn" text-anchor="middle" >single-wall pipe: 18 in</text></svg></div>
+  <div class="legend"><span><i class="l-brick"></i>firebrick</span><span><i class="l-ins"></i>insulation</span><span><i class="l-conc"></i>concrete</span><span><i class="l-sand"></i>sand + pebble fill</span><span><i class="l-fire"></i>hot gas</span><span><i class="l-warm"></i>warm gas</span><span><i class="l-cool"></i>cool air / exhaust</span></div>
+  <ol class="notes"><li>Clearance lines are NFPA 211 values for unlisted stoves, from secondary sources. Confirm with the building official; this is check 7.</li><li>Shield: 24-gauge sheet metal on non-combustible spacers with 1 in of air behind it, open at the top and bottom.</li><li>The slab runs 18 in past the core on every side and under the whole bench.</li><li>The feed tube draws its air from the room. In a tight building, give the room a fresh-air inlet near the heater. <span class="lbl inf">Inferred</span></li></ol>
+</figure>
+<figcaption>Footprint of the heater and bench with the clearance lines. Combustible walls, furniture and bedding stay outside the red dashed lines, or behind a ventilated shield inside the dotted one.</figcaption>
+  
+<figure class="sheet" id="sheet-s-4">
+  <div class="sheet-head"><span class="no">S-4</span><span class="ttl">Bench section</span><span class="scale">Cross-section &middot; to scale &middot; 8-inch</span></div>
+  <div class="dscroll"><svg viewBox="0 0 790 372" role="img" aria-label="Cross-section through the sleeping bench: slab on gravel, masonry shell, dry sand and pebble fill around the 8-inch duct, and a cap." class="dwg " xmlns="http://www.w3.org/2000/svg"><defs><pattern id="f4-brick" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" class="pf-brick"/><path d="M0 8L8 0M-2 2L2 -2M6 10L10 6" class="pl"/></pattern><pattern id="f4-ins" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" class="pf-ins"/><circle cx="2" cy="2" r=".9" class="pd"/><circle cx="6.5" cy="5.5" r=".9" class="pd"/><circle cx="3.5" cy="7.5" r=".6" class="pd"/></pattern><pattern id="f4-conc" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="16" height="12" class="pf-conc"/><path d="M2 3l2.2 0 -1.1 -2z M10 8l2.6 0 -1.3 -2.3z" class="pd"/><circle cx="7" cy="4" r=".8" class="pd"/><circle cx="13.5" cy="2.5" r=".6" class="pd"/><circle cx="4.5" cy="9.5" r=".7" class="pd"/></pattern><pattern id="f4-sand" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="12" height="10" class="pf-sand"/><circle cx="3" cy="3" r="1.4" class="po"/><circle cx="9" cy="7" r="1.8" class="po"/><circle cx="8.5" cy="1.5" r=".7" class="pd"/><circle cx="2" cy="8" r=".7" class="pd"/></pattern><pattern id="f4-grav" width="18" height="12" patternUnits="userSpaceOnUse"><rect width="18" height="12" class="pf-grav"/><ellipse cx="4" cy="4" rx="3" ry="2" class="po"/><ellipse cx="13" cy="8" rx="3.5" ry="2.3" class="po"/><circle cx="11" cy="2" r="1" class="pd"/></pattern><pattern id="f4-cob" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" class="pf-cob"/><path d="M1 7q2 -2 4 0M5 3q2 -2 4 0" class="pl"/></pattern><pattern id="f4-far" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" class="pf-far"/></pattern><marker id="f4-ah-fire" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-fire"/></marker><marker id="f4-ah-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-warm"/></marker><marker id="f4-ah-cool" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-cool"/></marker><marker id="f4-ah-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-ink"/></marker></defs><rect x="108.0" y="286.0" width="384.0" height="32.0" fill="url(#f4-grav)" class="edge-lt" /><rect x="108.0" y="254" width="384.0" height="32.0" fill="url(#f4-conc)" class="edge" /><rect x="156.0" y="134.0" width="32.0" height="120.0" fill="url(#f4-conc)" class="edge" /><rect x="412.0" y="134.0" width="32.0" height="120.0" fill="url(#f4-conc)" class="edge" /><rect x="188.0" y="134.0" width="224.0" height="120.0" fill="url(#f4-sand)" class="edge" /><rect x="156.0" y="110.0" width="288.0" height="24.0" fill="url(#f4-conc)" class="edge" /><line x1="164.0" y1="123.6" x2="436.0" y2="123.6" class="mesh" /><circle cx="300" cy="198.0" r="34.8" fill="url(#f4-cob)" class="edge-lt"/><circle cx="300" cy="198.0" r="32.0" class="pipe-sec"/><rect x="164.0" y="92.4" width="272.0" height="17.6" class="pad" /><line x1="132.0" y1="254" x2="132.0" y2="110.0" class="dim"/><line x1="127.0" y1="254" x2="137.0" y2="254" class="dim"/><line x1="127.0" y1="110.0" x2="137.0" y2="110.0" class="dim"/><text x="124.0" y="186.0" class="t-dim" text-anchor="end"><tspan class="t-key">Q</tspan> <tspan class="dv" data-d="Q">18 in</tspan></text><line x1="156.0" y1="346.0" x2="444.0" y2="346.0" class="dim"/><line x1="156.0" y1="341.0" x2="156.0" y2="351.0" class="dim"/><line x1="444.0" y1="341.0" x2="444.0" y2="351.0" class="dim"/><line x1="156.0" y1="254" x2="156.0" y2="346.0" class="ext"/><line x1="444.0" y1="254" x2="444.0" y2="346.0" class="ext"/><text x="300.0" y="340.0" class="t-dim" text-anchor="middle"><tspan class="t-key">P</tspan> <tspan class="dv" data-d="P">36 in</tspan></text><line x1="352.0" y1="254" x2="352.0" y2="230.0" class="dim"/><line x1="347.0" y1="254" x2="357.0" y2="254" class="dim"/><line x1="347.0" y1="230.0" x2="357.0" y2="230.0" class="dim"/><text x="360.0" y="246.0" class="t-dim" text-anchor="start">3 in</text><line x1="352.0" y1="166.0" x2="352.0" y2="110.0" class="dim"/><line x1="347.0" y1="166.0" x2="357.0" y2="166.0" class="dim"/><line x1="347.0" y1="110.0" x2="357.0" y2="110.0" class="dim"/><text x="360.0" y="142.0" class="t-dim" text-anchor="start"><tspan class="t-key">R</tspan> <tspan class="dv" data-d="R">7 in</tspan></text><line x1="268.0" y1="188.4" x2="332.0" y2="188.4" class="dim"/><line x1="268.0" y1="183.4" x2="268.0" y2="193.4" class="dim"/><line x1="332.0" y1="183.4" x2="332.0" y2="193.4" class="dim"/><text x="300.0" y="182.4" class="t-dim" text-anchor="middle"><tspan class="t-key">L</tspan> <tspan class="dv" data-d="L">8 in</tspan></text><path d="M428.0 101.2 L484.0 70.0" class="lead"/><circle cx="428.0" cy="101.2" r="1.8" class="dot"/><text x="488.0" y="74.0" class="t" text-anchor="start" >sleeping pad</text><path d="M420.0 118.0 L484.0 118.0" class="lead"/><circle cx="420.0" cy="118.0" r="1.8" class="dot"/><text x="488.0" y="122.0" class="t" text-anchor="start" >cap: 1:2:3 concrete + wire mesh</text><path d="M428.0 182 L484.0 182" class="lead"/><circle cx="428.0" cy="182" r="1.8" class="dot"/><text x="488.0" y="186" class="t" text-anchor="start" >shell: block, poured concrete, stone or cob</text><path d="M360.0 228.4 L484.0 228.4" class="lead"/><circle cx="360.0" cy="228.4" r="1.8" class="dot"/><text x="488.0" y="232.4" class="t" text-anchor="start" >dry sand + pebble fill, tamped</text><path d="M468.0 270.0 L508.0 290.8" class="lead"/><circle cx="468.0" cy="270.0" r="1.8" class="dot"/><text x="512.0" y="294.8" class="t" text-anchor="start" >slab on grade</text><path d="M266.4 186.0 L84.0 126.0" class="lead"/><circle cx="266.4" cy="186.0" r="1.8" class="dot"/><text x="80.0" y="130.0" class="t" text-anchor="end" >duct</text><path d="M267.2 212.4 L84.0 230.0" class="lead"/><circle cx="267.2" cy="212.4" r="1.8" class="dot"/><text x="80.0" y="234.0" class="t-sm" text-anchor="end" >clay slip skin</text></svg></div>
+  <div class="legend"><span><i class="l-brick"></i>firebrick</span><span><i class="l-ins"></i>insulation</span><span><i class="l-conc"></i>concrete</span><span><i class="l-sand"></i>sand + pebble fill</span><span><i class="l-fire"></i>hot gas</span><span><i class="l-warm"></i>warm gas</span><span><i class="l-cool"></i>cool air / exhaust</span></div>
+  <ol class="notes"><li>Lay the duct on a 3-in sand bed and paint it with clay slip so the fill beds tight against it.</li><li>Fill with dry sand and pebbles in layers, tamping each one.</li><li>Within 2 ft of the manifold, cap with clay-sand (2&ndash;3 sand : 1 clay, no straw near the pipe) instead of concrete. <span class="lbl inf">Inferred</span></li><li>Beyond that, a 3-in cap of 1:2:3 concrete with wire mesh, over a thin layer of sand so the cap can move.</li></ol>
+</figure>
+<figcaption>The sleeping bench is a masonry box of dry sand and pebbles around the duct. Dry fill lets the pipe move as it heats and can be dug out to repair it.</figcaption>
+  
+<figure class="sheet" id="sheet-s-5">
+  <div class="sheet-head"><span class="no">S-5</span><span class="ttl">Chimney and roof</span><span class="scale">Schematic &middot; not to scale</span></div>
+  <div class="dscroll"><svg viewBox="0 0 800 560" role="img" aria-label="Chimney exit: a capped tee at the bottom, pipe up to a listed support, a listed insulated chimney through the roof, and a top at least 3 feet above the roof and 2 feet above anything within 10 feet." class="dwg " xmlns="http://www.w3.org/2000/svg"><defs><pattern id="f5-brick" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" class="pf-brick"/><path d="M0 8L8 0M-2 2L2 -2M6 10L10 6" class="pl"/></pattern><pattern id="f5-ins" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" class="pf-ins"/><circle cx="2" cy="2" r=".9" class="pd"/><circle cx="6.5" cy="5.5" r=".9" class="pd"/><circle cx="3.5" cy="7.5" r=".6" class="pd"/></pattern><pattern id="f5-conc" width="16" height="12" patternUnits="userSpaceOnUse"><rect width="16" height="12" class="pf-conc"/><path d="M2 3l2.2 0 -1.1 -2z M10 8l2.6 0 -1.3 -2.3z" class="pd"/><circle cx="7" cy="4" r=".8" class="pd"/><circle cx="13.5" cy="2.5" r=".6" class="pd"/><circle cx="4.5" cy="9.5" r=".7" class="pd"/></pattern><pattern id="f5-sand" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="12" height="10" class="pf-sand"/><circle cx="3" cy="3" r="1.4" class="po"/><circle cx="9" cy="7" r="1.8" class="po"/><circle cx="8.5" cy="1.5" r=".7" class="pd"/><circle cx="2" cy="8" r=".7" class="pd"/></pattern><pattern id="f5-grav" width="18" height="12" patternUnits="userSpaceOnUse"><rect width="18" height="12" class="pf-grav"/><ellipse cx="4" cy="4" rx="3" ry="2" class="po"/><ellipse cx="13" cy="8" rx="3.5" ry="2.3" class="po"/><circle cx="11" cy="2" r="1" class="pd"/></pattern><pattern id="f5-cob" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" class="pf-cob"/><path d="M1 7q2 -2 4 0M5 3q2 -2 4 0" class="pl"/></pattern><pattern id="f5-far" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" class="pf-far"/></pattern><marker id="f5-ah-fire" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-fire"/></marker><marker id="f5-ah-warm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-warm"/></marker><marker id="f5-ah-cool" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-cool"/></marker><marker id="f5-ah-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah-ink"/></marker></defs><rect x="40.0" y="520.0" width="748.0" height="13.2" fill="url(#f5-conc)" class="edge" /><rect x="40.0" y="480.4" width="338.8" height="39.6" fill="url(#f5-sand)" class="edge" /><path d="M40.0 520.0 L40.0 508.2 L34.0 503.2 L46.0 497.2 L40.0 492.2 L40.0 480.4" class="brk"/><rect x="378.8" y="495.8" width="4.4" height="17.6" class="duct-in" /><rect x="383.2" y="164.26" width="17.6" height="353.54" class="duct-in" /><rect x="381.0" y="517.8" width="22.0" height="2.86" class="cap" /><line x1="383.2" y1="517.8" x2="383.2" y2="513.4" class="steel-thin" /><line x1="383.2" y1="495.8" x2="383.2" y2="164.26" class="steel-thin" /><line x1="400.8" y1="517.8" x2="400.8" y2="164.26" class="steel-thin" /><line x1="40.0" y1="322.0" x2="788.0" y2="322.0" class="edge" /><rect x="374.4" y="317.6" width="35.2" height="15.4" class="collar" /><rect x="378.8" y="164.26" width="26.4" height="153.34" class="classA" /><polygon points="40.0,218.6 788.0,308.36 788.0,299.56 40.0,209.8" fill="url(#f5-far)" class="edge"/><polygon points="356.8,246.94 427.2,255.38 427.2,253.18 356.8,244.74" class="steel-thin"/><rect x="374.4" y="236.64" width="35.2" height="4.4" class="collar" /><rect x="378.8" y="153.26" width="26.4" height="11.0" class="screen" /><rect x="370.0" y="149.74" width="44.0" height="3.52" class="cap" /><line x1="453.6" y1="252.04" x2="453.6" y2="164.26" class="dim"/><line x1="448.6" y1="252.04" x2="458.6" y2="252.04" class="dim"/><line x1="448.6" y1="164.26" x2="458.6" y2="164.26" class="dim"/><line x1="405.2" y1="252.04" x2="453.6" y2="252.04" class="ext"/><line x1="405.2" y1="164.26" x2="453.6" y2="164.26" class="ext"/><text x="461.6" y="212.15" class="t-dim" text-anchor="start">3 ft min</text><line x1="128.0" y1="220.36" x2="128.0" y2="129.06" class="ext" /><line x1="392.0" y1="149.74" x2="392.0" y2="129.06" class="ext" /><line x1="128.0" y1="133.46" x2="392.0" y2="133.46" class="dim"/><line x1="128.0" y1="128.46" x2="128.0" y2="138.46" class="dim"/><line x1="392.0" y1="128.46" x2="392.0" y2="138.46" class="dim"/><text x="260.0" y="127.46000000000001" class="t-dim" text-anchor="middle">10 ft</text><line x1="114.8" y1="220.36" x2="114.8" y2="164.26" class="dim"/><line x1="109.8" y1="220.36" x2="119.8" y2="220.36" class="dim"/><line x1="109.8" y1="164.26" x2="119.8" y2="164.26" class="dim"/><text x="106.8" y="196.31" class="t-dim" text-anchor="end">2 ft min</text><line x1="128.0" y1="164.26" x2="378.8" y2="164.26" class="ext" /><path d="M401.9 519.12 L480.0 502.4" class="lead"/><circle cx="401.9" cy="519.12" r="1.8" class="dot"/><text x="484.0" y="506.4" class="t-sm" text-anchor="start" >tee: cleanout, priming port, drip cap</text><path d="M400.8 410.0 L480.0 410.0" class="lead"/><circle cx="400.8" cy="410.0" r="1.8" class="dot"/><text x="484.0" y="414.0" class="t-sm" text-anchor="start" >pipe in the room: 18 in to combustibles</text><path d="M409.6 325.3 L480.0 339.6" class="lead"/><circle cx="409.6" cy="325.3" r="1.8" class="dot"/><text x="484.0" y="343.6" class="t-sm" text-anchor="start" >listed ceiling support / firestop</text><path d="M405.2 300.0 L480.0 311.0" class="lead"/><circle cx="405.2" cy="300.0" r="1.8" class="dot"/><text x="484.0" y="315.0" class="t-sm" text-anchor="start" >listed insulated chimney</text><path d="M409.6 238.84 L480.0 243.24" class="lead"/><circle cx="409.6" cy="238.84" r="1.8" class="dot"/><text x="484.0" y="247.24" class="t-sm" text-anchor="start" >storm collar + flashing</text><path d="M414.0 151.06 L480.0 115.86" class="lead"/><circle cx="414.0" cy="151.06" r="1.8" class="dot"/><text x="484.0" y="119.86" class="t-sm" text-anchor="start" >cap with spark screen</text><text x="56.0" y="504.2" class="t-sm" text-anchor="start" >bench end</text><text x="44.0" y="316.0" class="t-sm" text-anchor="start" >ceiling</text><text x="784.0" y="293.56" class="t-sm" text-anchor="end" >roof</text></svg></div>
+  
+  <ol class="notes"><li>The tee at the bottom is the cleanout, the priming port and the drip cap. The condensate is acidic.</li><li>Keep the chimney inside the building as long as possible and exit near the peak. A warm chimney draws; a cold one can stall, and wall exits let wind push the system backwards.</li><li>Once running, the exhaust should read 140&ndash;200&deg;F at the base. Below 140&deg;F it condenses.</li></ol>
+</figure>
+<figcaption>Where the exhaust leaves the bench it turns up through a capped tee, runs up inside the building to a listed support, and passes through the roof in listed insulated chimney.</figcaption>
+</section>
+
+<section id="build">
+  <div class="sec-head"><span class="eyebrow">Sequence</span><h2>Build it in this order</h2></div>
+  
+<ol class="steps">
+<li><b>Settle the checks.</b><p>Checks 1 and 3 decide whether and where this gets built. Nothing below matters until they are answered.</p></li>
+<li><b>Measure and sort what you have.</b><p>Pipe outside diameter; galvanized or black; what the drum held; what the &ldquo;packing pebbles&rdquo; are.</p></li>
+<li><b>Make the drum safe, then cut it.</b><p>Clean and vent it first. Cut off the end with the bung holes; the plain end becomes the lid. Burn the paint off outdoors, upwind, until it is bare steel.</p></li>
+<li><b>Pour the slab.</b><p>Dig out, lay 4 in of compacted gravel, pour 4 in of 1:2:3 concrete, reaching 18 in past the core on every side and under the whole bench. Let it cure before loading it.</p></li>
+<li><b>Lay the insulating layer.</b><p>2 in of perlite-clay under the core footprint. Let it dry.</p></li>
+<li><b>Dry-fit the core.</b><p>Floor, tunnel walls, roof and feed tube without mortar. Check A through E against the table and check that the drum clears the feed tube by 2.25 in. Then set the bricks in thin clay slip or fireclay mortar.</p></li>
+<li><b>Build the riser.</b><p>Shaft to F (42.4 in above the tunnel floor), the 18-in sleeve around it, insulation packed between, and a cap over the top edge of the insulation.</p></li>
+<li><b>Test the open core.</b><p>With the drum off, burn paper and small sticks: the flame should lay over and run into the riser. If it won&rsquo;t, fix it now while everything is reachable. <span class="lbl inf">Inferred</span></p></li>
+<li><b>Build the manifold and set the drum.</b><p>Firebrick and clay, floor below the duct inlet, cleanout 1 on the side. Measure G, set the drum, seal the rim with clay-sand.</p></li>
+<li><b>Run the duct and the chimney.</b><p>Black steel for the first run, every joint screwed and sealed, the capped tee at the chimney base, listed support and insulated chimney through the roof, spark-screen cap, 3 ft / 2 ft / 10 ft.</p></li>
+<li><b>Smoke-test before burying anything.</b><p>Run a fire and check every joint and seal. Fix leaks while they are still exposed. <span class="lbl inf">Inferred</span></p></li>
+<li><b>Build the bench.</b><p>Shell walls, clay slip painted on the duct, fill in tamped layers, clay-sand cap near the manifold, concrete cap beyond.</p></li>
+<li><b>Dry it out.</b><p>Small, short fires until the masonry is dry. Wet masonry heated fast can crack or spall.</p></li>
+<li><b>Alarms up, extinguisher by the door.</b><p>Then the first full burn.</p></li>
+</ol>
+</section>
+
+<section id="run">
+  <div class="sec-head"><span class="eyebrow">Operation</span><h2>Run it</h2></div>
+  <div class="callout stop">
+    <h3>The sleeping rule</h3>
+    <p>Never sleep with a fire in it. Burn in the evening while you are up: the drum heats the room while it burns, and the bench gives heat back overnight. Builders report bench tops of 100&ndash;120&deg;F at the hot end and 80&ndash;90&deg;F at the far end on 8-inch systems, and 130&ndash;140&deg;F after a full day of burning.</p>
+  </div>
+  
+<ol class="steps">
+<li><b>Before lighting.</b><p>Test the CO alarm. Nothing inside the clearance lines, nothing on the drum. Check the agency&rsquo;s burn-ban status.</p></li>
+<li><b>Prime a cold system.</b><p>Light a twist of newspaper in the chimney-base tee, cap it, then light the feed tube.</p></li>
+<li><b>Light.</b><p>Paper and kindling standing in the feed tube. Add split dry wood standing on end once it draws hard.</p></li>
+<li><b>Feed.</b><p>Keep the tube loaded but not packed. Cut sticks to about the tube&rsquo;s height; overlong sticks are a reported cause of smoke coming back out.</p></li>
+<li><b>Fuel.</b><p>Dry, seasoned wood, with paper to start. Washington bans burning garbage, treated or painted wood, plastics, rubber and similar (WAC 173-433-120).</p></li>
+<li><b>Watch the chimney.</b><p>Visible smoke after start-up means a poor burn. The state limit is 20% opacity for 6 minutes in any hour; start-up gets 20 minutes in any 4 hours.</p></li>
+<li><b>Finish while awake.</b><p>Stop feeding and let it burn down to ash. Builders report CO trouble mostly as the fire dies down, so be up for that part.</p></li>
+<li><b>Close the feed.</b><p>Once no coals glow, set a lid on the feed tube so the chimney doesn&rsquo;t pull the bench&rsquo;s heat out overnight. <span class="lbl inf">Inferred</span></p></li>
+<li><b>Ash.</b><p>Shovel it out of the tunnel cold, into a lidded metal can, outside.</p></li>
+</ol>
+  <div class="callout care">
+    <h3>Burn bans</h3>
+    <p>In a Stage 1 ban, PSCAA and ORCAA don&rsquo;t allow uncertified devices unless the device is your only adequate source of heat and you hold an approved exemption (PSCAA) or have notified the agency (ORCAA). In Stage 2, no wood burning at all, with the same exception. PSCAA&rsquo;s last exemption approvals ran until August 31, 2026. &ldquo;Adequate source of heat&rdquo; means holding 70&deg;F at 3 ft above the floor in all normally inhabited areas. <span class="lbl rec">Record</span></p>
+  </div>
+</section>
+
+<section id="fixes">
+  <div class="sec-head"><span class="eyebrow">Troubleshooting</span><h2>Fixes</h2></div>
+  
+<div class="tscroll"><table>
+<thead><tr><th>What you see</th><th>Likely cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Smoke rolls out the feed tube on a cold start</td><td>Cold chimney and bench</td><td>Prime at the tee with newspaper, then relight</td></tr>
+<tr><td>Smoke comes back out during a burn</td><td>Sticks too long; tube packed full; wet wood; ash choking the tunnel or manifold</td><td>Shorter sticks, fewer at a time, dry wood, clean out</td></tr>
+<tr><td>Fire creeps up the wood in the feed tube</td><td>Reported by builders; no settled cause found</td><td>Shorter sticks, push them down, check the draft; stay with it</td></tr>
+<tr><td>Weak, lazy flame</td><td>Ash in the tunnel; air leaking at cleanout caps or the drum seal; wet wood</td><td>Clean out, reseal, drier wood</td></tr>
+<tr><td>Drum lid thin, warped or glowing</td><td>Normal wear (reported life over two years), or overfiring</td><td>&frac14;-in disc inside the lid; smaller loads</td></tr>
+<tr><td>Drips or black liquid at the chimney tee</td><td>Condensation: exhaust under 140&deg;F; the condensate is acidic</td><td>Shorter duct, or a warmer chimney (inside the building, insulated)</td></tr>
+<tr><td>CO alarm sounds</td><td>A leak or the draft reversing</td><td>Get out and ventilate; find the cause before the next fire</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="numbers">
+  <div class="sec-head"><span class="eyebrow">Performance</span><h2>What the numbers say</h2></div>
+  
+<div class="tscroll"><table>
+<thead><tr><th>Question</th><th>Answer</th><th>Basis</th></tr></thead><tbody>
+<tr><td>Heat while it burns</td><td class="v">48,000&ndash;100,000 BTU/h (8-in)</td><td><span class="lbl rec">Record</span> Forum estimates that disagree: about 14 kW, versus 10&ndash;12 lb of wood in a 45-minute burn at about 100,000 BTU/h. A 6-inch moves about half the gas of an 8-inch.</td></tr>
+<tr><td>What one did in service</td><td class="v">~800 sq ft, &lt; &frac12; cord/yr</td><td><span class="lbl rec">Record</span> The Wisners&rsquo; 6-inch, as its only heat, as reported.</td></tr>
+<tr><td>Bench weight</td><td class="v">2,800&ndash;3,000 lb</td><td><span class="lbl inf">Inferred</span> 29 ft&sup3; of fill (36 &times; 84 &times; 18 in less the duct) at 95&ndash;103 lb/ft&sup3;. About 140 lb per ft&sup2; of footprint.</td></tr>
+<tr><td>Heat the bench holds</td><td class="v">~5,500 BTU per 10&deg;F</td><td><span class="lbl inf">Inferred</span> 2,900 lb &times; 0.19 BTU/lb&middot;&deg;F &times; 10&deg;F. Roughly an hour of a 1,500-W heater (5,118 BTU/h). The missing factor is how far the whole bench&rsquo;s temperature rises, which nobody has measured for this build.</td></tr>
+<tr><td>How warm the room stays overnight</td><td class="v">&mdash;</td><td><span class="lbl nir">Not in record</span> Depends on floor area, insulation and air leaks. The bench surface itself: 100&ndash;120&deg;F at the hot end, 80&ndash;90&deg;F at the far end on 8-inch builds.</td></tr>
+<tr><td>Efficiency</td><td class="v">not tested</td><td><span class="lbl rec">Record</span> No proper emissions testing of rocket mass heaters exists. The widely repeated 61.8% figure comes from a masonry-heater study.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="sources">
+  <div class="sec-head"><span class="eyebrow">Evidence trail</span><h2>Source record</h2></div>
+  <p class="prose">This session&rsquo;s network blocked direct page loads, so every source was read through search-engine excerpts tied to these links; quoted wording is close paraphrase. Open the link before relying on any Class 3 item. Items research named but did not read: RCW 19.27.530 and IRC R315 (CO alarms), IRC R314 (smoke alarms), IRC R1003.9 (chimney height text), WAC 51-51-0105 (permit exemptions).</p>
+  <details class="src"><summary>Show all 56 sources</summary><ol><li><b>S1</b> <span>permies.com/t/75071 &mdash; basic 8-in dimensions: 7.5-in square openings, 16-in feed, tunnel roof &le;12.5 in, riser 40 in+.</span><br><a href="https://permies.com/t/75071/Basic-dimensions-rocket-mass-heater" target="_blank" rel="noopener">permies.com/t/75071/Basic-dimensions-rocket-mass-heater</a></li><li><b>S2</b> <span>One Community Global, Wisner &ldquo;Annex&rdquo; 6-in plans: 5.5-in feed, 15-in feed height, 21-in tunnel, 47-in riser; flame path 1,200&ndash;2,800&deg;F; drum 200&ndash;800&deg;F; masonry 60&ndash;90&deg;F; about 800 sq ft on under half a cord a year; 25 ft of duct with seven bends = 55 ft of drag.</span><br><a href="https://onecommunityglobal.org/wp-content/uploads/2014/05/Rocket-Mass-Heater-Plans-Annex6.pdf" target="_blank" rel="noopener">onecommunityglobal.org/wp-content/uploads/2014/05/Rocket-Mass-Heater-P</a></li><li><b>S3</b> <span>permies.com/t/98267 &mdash; riser-top gap: 1.5 in (6-in), 2 in (8-in); 0.8 in too small; over 3 in reversed flow.</span><br><a href="https://permies.com/t/98267/relationship-riser-top-barrel" target="_blank" rel="noopener">permies.com/t/98267/relationship-riser-top-barrel</a></li><li><b>S4</b> <span>permies.com/t/7778 &mdash; 8-in pairs with a 55-gal drum; top gap 2&ndash;3 in, side gaps 1.5&ndash;2 in.</span><br><a href="https://permies.com/t/7778/Rocket-Stove-Dimensions" target="_blank" rel="noopener">permies.com/t/7778/Rocket-Stove-Dimensions</a></li><li><b>S5</b> <span>permies.com/t/75218 &mdash; gap area at least the riser area; one builder uses 1.5 in on 8-in; Wisner guide on 2 in perlite / 4 in vermiculite.</span><br><a href="https://permies.com/t/75218/Barrel-heat-riser-gap-CSA" target="_blank" rel="noopener">permies.com/t/75218/Barrel-heat-riser-gap-CSA</a></li><li><b>S6</b> <span>permies.com/t/74402 &mdash; manifold: 150% of pipe area where the flow turns, 2&ndash;4&times; where it drops; 3&times; rule of thumb; bottlenecks cause smoke-back.</span><br><a href="https://permies.com/t/74402/Rocket-Mass-Heater-MANIFOLD" target="_blank" rel="noopener">permies.com/t/74402/Rocket-Mass-Heater-MANIFOLD</a></li><li><b>S7</b> <span>permies.com/t/44716 &mdash; 8-in duct: about 50 ft minus 5 ft per 90&deg; bend.</span><br><a href="https://permies.com/t/44716/RMH-ducting-length" target="_blank" rel="noopener">permies.com/t/44716/RMH-ducting-length</a></li><li><b>S8</b> <span>permies.com/t/97315 &mdash; 6-in duct: about 35 ft minus 5 ft per bend; warm vertical chimney adds allowance.</span><br><a href="https://permies.com/t/97315/Horizontal-duct-chimney-length-inch" target="_blank" rel="noopener">permies.com/t/97315/Horizontal-duct-chimney-length-inch</a></li><li><b>S9</b> <span>greenlifehomestead.com &mdash; 6-in core with a 55-gal drum; 55-gal top 600&ndash;700&deg;F at high fire.</span><br><a href="https://greenlifehomestead.com/6-rocket-heater-core/" target="_blank" rel="noopener">greenlifehomestead.com/6-rocket-heater-core/</a></li><li><b>S10</b> <span>permies.com/t/134595 &mdash; perlite-clay: 1 slip to 6&ndash;9 perlite (Evans/Jackson).</span><br><a href="https://permies.com/t/134595/Perlite-Clay-mix-ratios" target="_blank" rel="noopener">permies.com/t/134595/Perlite-Clay-mix-ratios</a></li><li><b>S11</b> <span>permies.com/t/29673 &mdash; steel riser liners last one or two seasons; unbound perlite collapses.</span><br><a href="https://permies.com/t/29673/Heat-Riser-Insulation" target="_blank" rel="noopener">permies.com/t/29673/Heat-Riser-Insulation</a></li><li><b>S12</b> <span>NTP Report on Carcinogens / ScienceDirect &mdash; ceramic fiber hazards (IARC 2B; cristobalite after firing).</span><br><a href="https://www.ncbi.nlm.nih.gov/books/NBK590815/" target="_blank" rel="noopener">www.ncbi.nlm.nih.gov/books/NBK590815/</a></li><li><b>S13</b> <span>US patent 10358387 background &mdash; Portland concrete typically limited to about 100&deg;C service.</span><br><a href="https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/10358387" target="_blank" rel="noopener">image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/10358387</a></li><li><b>S14</b> <span>PMC7731264 &mdash; calcium hydroxide breaks down at about 400&ndash;600&deg;C.</span><br><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7731264/" target="_blank" rel="noopener">www.ncbi.nlm.nih.gov/pmc/articles/PMC7731264/</a></li><li><b>S15</b> <span>Promat &mdash; explosive spalling from moisture and heating rate.</span><br><a href="https://www.promat.com/en/tunnels/your-project/expert-area/159998/the-effect-of-fire-concrete-spalling/" target="_blank" rel="noopener">www.promat.com/en/tunnels/your-project/expert-area/159998/the-effect-o</a></li><li><b>S16</b> <span>IFLScience / HelloGravel &mdash; river rock can crack violently or explode; keep 2&ndash;3 ft from flame.</span><br><a href="https://www.iflscience.com/why-you-should-never-use-river-rocks-in-a-campfire-69167" target="_blank" rel="noopener">www.iflscience.com/why-you-should-never-use-river-rocks-in-a-campfire-</a></li><li><b>S17</b> <span>American Galvanizers Association &mdash; 392&deg;F continuous; peeling above 480&deg;F; 660&deg;F short-term.</span><br><a href="https://galvanizeit.org/knowledgebase/article/performance-and-inspection-of-hdg-exposed-to-extreme-temperatures" target="_blank" rel="noopener">galvanizeit.org/knowledgebase/article/performance-and-inspection-of-hd</a></li><li><b>S18</b> <span>nuclear-power.com &mdash; zinc melts at 419.5&deg;C, boils at 907&deg;C.</span><br><a href="https://www.nuclear-power.com/zinc-melting-point-boiling-point/" target="_blank" rel="noopener">www.nuclear-power.com/zinc-melting-point-boiling-point/</a></li><li><b>S19</b> <span>NIOSH Pocket Guide &mdash; zinc oxide fume limits; metal fume fever.</span><br><a href="https://www.cdc.gov/niosh/npg/npgd0675.html" target="_blank" rel="noopener">www.cdc.gov/niosh/npg/npgd0675.html</a></li><li><b>S20</b> <span>OSHA 29 CFR 1910.252(a)(3)(i) &mdash; hot work on used drums.</span><br><a href="https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.252" target="_blank" rel="noopener">www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.252</a></li><li><b>S21</b> <span>NIOSH / CDC Stacks case report &mdash; drum with leftover diesel exploded under a cut-off saw.</span><br><a href="https://stacks.cdc.gov/view/cdc/228911" target="_blank" rel="noopener">stacks.cdc.gov/view/cdc/228911</a></li><li><b>S22</b> <span>permies.com/t/204360 &mdash; burning paint off a 55-gal drum.</span><br><a href="https://permies.com/t/204360/Burning-paint-gallon-drum" target="_blank" rel="noopener">permies.com/t/204360/Burning-paint-gallon-drum</a></li><li><b>S23</b> <span>permies.com/t/60298 &mdash; exhaust 100&ndash;200&deg;F versus 350&ndash;500&deg;F for a woodstove; warm chimney inside, exit near the peak.</span><br><a href="https://permies.com/t/60298/insulate-chimney-show-Rocket-Mass" target="_blank" rel="noopener">permies.com/t/60298/insulate-chimney-show-Rocket-Mass</a></li><li><b>S24</b> <span>permies.com/t/161237 &mdash; condensation stops above 140&deg;F; 180&ndash;200&deg;F ideal.</span><br><a href="https://permies.com/t/161237/exhaust-temp" target="_blank" rel="noopener">permies.com/t/161237/exhaust-temp</a></li><li><b>S25</b> <span>permies.com/t/74197 &mdash; priming with newspaper in the chimney-base cleanout.</span><br><a href="https://permies.com/t/74197/Starting-draw" target="_blank" rel="noopener">permies.com/t/74197/Starting-draw</a></li><li><b>S26</b> <span>permies.com/t/148338 &mdash; condensate volume; it is acidic.</span><br><a href="https://permies.com/t/148338/Dealing-condensation" target="_blank" rel="noopener">permies.com/t/148338/Dealing-condensation</a></li><li><b>S27</b> <span>permies.com/t/100951 &mdash; CO problems typically around the time the fire dies down.</span><br><a href="https://permies.com/t/100951/Carbon-Monoxide" target="_blank" rel="noopener">permies.com/t/100951/Carbon-Monoxide</a></li><li><b>S28</b> <span>permies.com/t/19562 &mdash; smoke-back from sticks longer than the feed tube.</span><br><a href="https://permies.com/t/19562/Fire-coming-feed-tube-rocket" target="_blank" rel="noopener">permies.com/t/19562/Fire-coming-feed-tube-rocket</a></li><li><b>S29</b> <span>permies.com/t/106984 &mdash; drum top is a wear part (&gt;2 years); &frac14;-in sacrificial plate.</span><br><a href="https://permies.com/t/106984/Replacing-barrel" target="_blank" rel="noopener">permies.com/t/106984/Replacing-barrel</a></li><li><b>S30</b> <span>greenhomebuilding.com &mdash; cob: 2&ndash;3 sand to 1 clay by volume.</span><br><a href="https://www.greenhomebuilding.com/QandA/cob/mixing.htm" target="_blank" rel="noopener">www.greenhomebuilding.com/QandA/cob/mixing.htm</a></li><li><b>S31</b> <span>Lackan Cottage &mdash; no straw next to the pipework.</span><br><a href="https://lackancottage.co.uk/project/rocket-mass-heater/" target="_blank" rel="noopener">lackancottage.co.uk/project/rocket-mass-heater/</a></li><li><b>S32</b> <span>Appropedia CCAT &mdash; clay slip on the pipe for contact.</span><br><a href="https://www.appropedia.org/CCAT_rocket_mass_cobb_bench_heater" target="_blank" rel="noopener">www.appropedia.org/CCAT_rocket_mass_cobb_bench_heater</a></li><li><b>S33</b> <span>permies.com/t/34708 &mdash; 8-in bench tops 100&ndash;120&deg;F hot end, 80&ndash;90&deg;F far end, 130&ndash;140&deg;F after a full day.</span><br><a href="https://permies.com/t/34708/cob-bench-temperatures" target="_blank" rel="noopener">permies.com/t/34708/cob-bench-temperatures</a></li><li><b>S34</b> <span>permies.com/t/20840 &mdash; an 8-in moves about twice the gas of a 6-in.</span><br><a href="https://permies.com/t/20840/rocket-mass-heater" target="_blank" rel="noopener">permies.com/t/20840/rocket-mass-heater</a></li><li><b>S35</b> <span>permies.com/t/266511 and t/21119 &mdash; 8-in output estimates: about 100,000 BTU/h vs about 14 kW (conflict).</span><br><a href="https://permies.com/t/266511/BTU-hour-tube" target="_blank" rel="noopener">permies.com/t/266511/BTU-hour-tube</a></li><li><b>S36</b> <span>Handprint Press &mdash; no proper contemporary emissions testing of rocket mass heaters.</span><br><a href="https://www.handprintpress.com/tech/recent-research-on-rocket-mass-heaters-and-bell-design/" target="_blank" rel="noopener">www.handprintpress.com/tech/recent-research-on-rocket-mass-heaters-and</a></li><li><b>S37</b> <span>InspectApedia &mdash; chimney height: 3 ft above the roof, 2 ft above anything within 10 ft.</span><br><a href="https://inspectapedia.com/chimneys/Chimney_Height_Codes_Specifications.php" target="_blank" rel="noopener">inspectapedia.com/chimneys/Chimney_Height_Codes_Specifications.php</a></li><li><b>S38</b> <span>Repackify &mdash; 55-gal open-head drum: 22.5 in ID, 33.5 in inside height; about 23 &times; 34.5 in outside.</span><br><a href="https://www.repackify.com/blog/55-gallon-drum-dimensions" target="_blank" rel="noopener">www.repackify.com/blog/55-gallon-drum-dimensions</a></li><li><b>S39</b> <span>Concrete mix guides &mdash; 1:2:3 by volume, about 3,000 psi at 28 days.</span><br><a href="https://www.probuildercalc.com/blog/how-to-read-a-concrete-mix-ratio-1-2-3-explained" target="_blank" rel="noopener">www.probuildercalc.com/blog/how-to-read-a-concrete-mix-ratio-1-2-3-exp</a></li><li><b>S40</b> <span>Dry sand density about 101.8 lb/ft&sup3; (range 87&ndash;118); sand with gravel 103 lb/ft&sup3;; quartz sand 830 J/kg&middot;K (0.19 BTU/lb&middot;&deg;F).</span><br><a href="https://www.engineeringtoolbox.com/specific-heat-solids-d_154.html" target="_blank" rel="noopener">www.engineeringtoolbox.com/specific-heat-solids-d_154.html</a></li><li><b>L1</b> <span>Ecology wood stove page &mdash; illegal to install an uncertified wood stove; homeowners cannot certify.</span><br><a href="https://ecology.wa.gov/air-climate/air-quality/smoke-fire/wood-stove-info" target="_blank" rel="noopener">ecology.wa.gov/air-climate/air-quality/smoke-fire/wood-stove-info</a></li><li><b>L2</b> <span>PSCAA Legal Overview &mdash; illegal to install an uncertified stove or insert in WA; can void insurance.</span><br><a href="https://pscleanair.gov/170/Legal-Overview" target="_blank" rel="noopener">pscleanair.gov/170/Legal-Overview</a></li><li><b>L3</b> <span>PSCAA Regulation I, Article 13 &mdash; 2012 amendment added a prohibition on installing unapproved devices (section number not confirmed).</span><br><a href="https://pscleanair.gov/DocumentCenter/View/5319" target="_blank" rel="noopener">pscleanair.gov/DocumentCenter/View/5319</a></li><li><b>L4</b> <span>ORCAA Regulations, Rule 8.1 &mdash; installation of an uncertified device by a private citizen is a violation; burn bans.</span><br><a href="https://www.orcaa.org/wp-content/uploads/ORCAA-Regulations.pdf" target="_blank" rel="noopener">www.orcaa.org/wp-content/uploads/ORCAA-Regulations.pdf</a></li><li><b>L5</b> <span>RCW 70A.15.3510 / .3520 &mdash; device definitions; used devices must be certified to be installed.</span><br><a href="https://app.leg.wa.gov/RCW/default.aspx?cite=70A.15.3520" target="_blank" rel="noopener">app.leg.wa.gov/RCW/default.aspx?cite=70A.15.3520</a></li><li><b>L6</b> <span>WAC 173-433-100, -110, -120, -150 &mdash; certification standard, 20% opacity, prohibited fuels, Stage 2 rule.</span><br><a href="https://app.leg.wa.gov/WAC/default.aspx?cite=173-433" target="_blank" rel="noopener">app.leg.wa.gov/WAC/default.aspx?cite=173-433</a></li><li><b>L7</b> <span>WAC 51-51-1002 (IRC R1002 as amended) &mdash; masonry heaters: Ecology-approved type, ASTM E1602 / UL 1482 / EN 15250, ducted outside air, tight doors.</span><br><a href="https://app.leg.wa.gov/WAC/default.aspx?cite=51-51-1002" target="_blank" rel="noopener">app.leg.wa.gov/WAC/default.aspx?cite=51-51-1002</a></li><li><b>L8</b> <span>RCW 70A.15.3580, WAC 173-433-030 &mdash; burn-ban stages; adequate source of heat = 70&deg;F at 3 ft above the floor in all normally inhabited areas.</span><br><a href="https://app.leg.wa.gov/RCW/default.aspx?cite=70A.15.3580" target="_blank" rel="noopener">app.leg.wa.gov/RCW/default.aspx?cite=70A.15.3580</a></li><li><b>L9</b> <span>PSCAA burn bans and &ldquo;No Other Adequate Source of Heat&rdquo; exemption; approvals ran until August 31, 2026.</span><br><a href="https://pscleanair.gov/171/No-Other-Adequate-Source-of-Heat" target="_blank" rel="noopener">pscleanair.gov/171/No-Other-Adequate-Source-of-Heat</a></li><li><b>L10</b> <span>PSCAA Tacoma-Pierce Smoke Reduction Zone &mdash; uncertified stoves illegal to operate since 10/1/2015.</span><br><a href="https://pscleanair.gov/547/Tacoma-Pierce-Stove-Rule" target="_blank" rel="noopener">pscleanair.gov/547/Tacoma-Pierce-Stove-Rule</a></li><li><b>L11</b> <span>IRC M1410.1 &mdash; solid-fuel room heaters tested to UL 1482 and installed per listing.</span><br><a href="https://up.codes/s/vented-room-heaters" target="_blank" rel="noopener">up.codes/s/vented-room-heaters</a></li><li><b>L12</b> <span>ICC &mdash; 2021 IRC Appendix AS is strawbale; no rocket-heater appendix found.</span><br><a href="https://codes.iccsafe.org/content/IRC2021P2/appendix-as-strawbale-construction" target="_blank" rel="noopener">codes.iccsafe.org/content/IRC2021P2/appendix-as-strawbale-construction</a></li><li><b>L13</b> <span>Maine State Fire Marshal / InspectApedia &mdash; NFPA 211 unlisted-stove clearances (36 in, 18 in pipe, 18 in floor).</span><br><a href="https://www1.maine.gov/dacf/mfs/projects/woodheatmaine/downloads/woodstove_installation.pdf" target="_blank" rel="noopener">www1.maine.gov/dacf/mfs/projects/woodheatmaine/downloads/woodstove_ins</a></li><li><b>L14</b> <span>Eagle Point Mutual &mdash; clearance reduction with 24-gauge sheet metal on 1-in air space: 36 &rarr; 12 in sides and rear, 18 in above; pipe 18 &rarr; 6 in.</span><br><a href="https://www.eaglepointmutual.com/important_tips/solid_fuel_heating.pdf" target="_blank" rel="noopener">www.eaglepointmutual.com/important_tips/solid_fuel_heating.pdf</a></li><li><b>L15</b> <span>NFPA 211 pass-through summary &mdash; single-wall pipe must not penetrate walls, ceilings or roofs.</span><br><a href="https://www.rockfordchimneysupply.com/blogs/chimney-pipe-and-stove-pipe/nfpa-211-combustible-wall-pass-thru-explained" target="_blank" rel="noopener">www.rockfordchimneysupply.com/blogs/chimney-pipe-and-stove-pipe/nfpa-2</a></li><li><b>L16</b> <span>Coconino County, AZ &mdash; building department panel declined to approve rocket mass heaters.</span><br><a href="https://www.coconino.az.gov/2538/Permitting-Of-Specific-Alternative-Metho" target="_blank" rel="noopener">www.coconino.az.gov/2538/Permitting-Of-Specific-Alternative-Metho</a></li></ol></details>
+</section>
+
+<footer>
+  <p>Prepared 27 Sep 2026 for Ryan. Class 3 items are Ryan&rsquo;s to decide; this sheet is the evidence for those decisions, not the decision.</p>
+  <p>Labels: <span class="lbl rec">Record</span> a retrieved source says it. <span class="lbl inf">Inferred</span> worked out from recorded factors. <span class="lbl nir">Not in record</span> nothing retrieved supports it yet.</p>
+</footer>
+</div>
+<script>
+(function () {
+  var KEY = 'rmh-checks-v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
+  document.querySelectorAll('.check').forEach(function (li) {
+    var id = li.getAttribute('data-id');
+    var box = li.querySelector('input');
+    if (state[id]) { box.checked = true; li.classList.add('done'); }
+    box.addEventListener('change', function () {
+      li.classList.toggle('done', box.checked);
+      state[id] = box.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    });
+  });
+})();
+</script>
