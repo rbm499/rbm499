@@ -43,8 +43,16 @@ Closed out 2026-08-20: Letter of Completion + invoice ($7,198.45) sent to
 Sam Ardekani. Notifications finished clean (L&I 7/27–8/17; PSCAA
 202603095-6). See `job-26-3011.md`.
 
-- ⚠️ **Open**: Sam wants the invoice re-issued to the homeowner,
-  **Manni Batra, mannibatra@gmail.com**, same amount. Not yet sent.
+- Invoice re-issued to the homeowner and **sent 2026-08-25**, canonical PDF
+  attached, from the locked document system. See `job-26-3011.md`.
+- ⚠️ **PAYMENT UNCONFIRMED as of 2026-10-14** — $7,198.45, 48 days out.
+  Client chose to pay by check. The weekly watch was **stopped 2026-10-14**
+  after 8 runs: it could only see Chase alert email, never the account, and
+  deposit alerts were never enabled. So treat this as unconfirmed, **not
+  known-unpaid** — do not let silence read as non-payment.
+- A 1.5%/month (18% APR) past-due charge is available from ~2026-09-25 per
+  the invoice terms. NOT applied — Michael's call. The client actively
+  requested payment instructions, so this reads as slow, not refusing.
 
 ## Active Job: 25-4509 — 4509 Eastern Ave N, Seattle ("the 4plex")
 
