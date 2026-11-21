@@ -47,10 +47,10 @@ For every message seen (incoming or outgoing, SMS/MMS, plus RCS notifications �
    * `send`  → enqueue for upload (durable, survives reboot/force-stop).
    * `drop`  → **nothing is stored or uploaded**; only increment the 24 h counter. No body, no
      address, no hash is persisted for dropped messages.
-   * `defer` → keep on the phone (durable) up to `policy.defer_hours`; upload later only if the same
-     address produces a `send` (the "thread lookback": when address A yields `send`, enqueue A's
-     deferred messages that are still within `defer_hours`, oldest first, *before* the new one).
-     Expire silently (delete) after `defer_hours`.
+   * `defer` → (keyword mode, or a blank text) keep on the phone (durable) up to `policy.defer_hours`;
+     upload later only if the same address produces a `send` (the "thread lookback": when address A
+     yields `send`, enqueue A's deferred messages that are still within `defer_hours`, oldest first,
+     *before* the new one). Expire silently (delete) after `defer_hours`.
    * `hold`  → media with no text from an unknown number: keep on the phone up to
      `policy.hold_media_days`, never upload automatically, count it in the heartbeat.
 4. Direction `out` uses the same gate on the counterpart's address (Michael's outgoing texts to
@@ -136,7 +136,9 @@ content resolver; do not load huge files fully into memory. Retry like ingest.
 Signed, empty body. Response is the on-device gate policy (same shape as `gate_vectors.json` →
 `policy`): `version`, `numbers` (e164 → `client|crew|vendor|agency`), `exclude_numbers`,
 `provisional_business`, `client_labels`, `drop_sender_kinds`, `business_terms`,
-`job_number_pattern`, `address_pattern`, `defer_hours`, `hold_media_days`. Cache it; until the first
+`job_number_pattern`, `address_pattern`, `defer_hours`, `hold_media_days`, `unknown_policy`
+(`"ai_all"` default: every text from an unsaved, non-allowlisted number is sent for AI screening;
+`"keyword"`: only texts with a business signal are sent, the rest `defer`). Cache it; until the first
 successful download use a built-in default policy (empty numbers, default terms/patterns from the
 Python `DEFAULT_BUSINESS_TERMS` / `JOB_NUMBER_PATTERN` / `ADDRESS_PATTERN`).
 

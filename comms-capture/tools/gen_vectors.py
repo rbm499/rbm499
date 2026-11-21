@@ -87,6 +87,11 @@ POLICY = gate.Policy(
     client_labels=["AAAD Clients"],
 )
 C = lambda **k: k  # noqa: E731
+NEW_CUSTOMER = [
+    "Hi, this is Dan. Pasha gave me your number. We're thinking of remodeling our 1962 kitchen, can someone come take a look?",
+    "Can you send me pricing?",
+    "The inspector told us to call you",
+]
 GATE_CASES = [
     C(address="+12065550101", body="ok thanks"),
     C(address="(206) 555-0101", body="can you come tuesday"),
@@ -128,6 +133,9 @@ GATE_CASES = [
     C(address="+12065550101", body="", has_media=True),
     C(address="+12065550177", body="123 Main St is the place"),
     C(address="+12065550177", body="the 26-4708 job", contact_saved=True, contact_labels=["Family"]),
+    *[C(address="+12065550177", body=t) for t in NEW_CUSTOMER],
+    C(address="+12065550177", body="   "),
+    C(address="+12065550177", body="", has_media=True),
 ]
 cases = []
 for c in GATE_CASES:
@@ -138,7 +146,18 @@ for c in GATE_CASES:
         "contact_saved": c.get("contact_saved", False), "contact_labels": c.get("contact_labels", []),
         "decision": d.decision, "reason": d.reason, "kind": d.kind, "e164": d.e164,
     })
-dump("gate_vectors.json", {"policy": POLICY.to_dict(), "cases": cases})
+KEYWORD_POLICY = gate.Policy.from_dict({**POLICY.to_dict(), "version": "vector-policy-keyword-1", "unknown_policy": "keyword"})
+cases_kw = []
+for c in GATE_CASES:
+    d = gate.decide(KEYWORD_POLICY, c["address"], c.get("body", ""), c.get("has_media", False),
+                    c.get("contact_saved", False), c.get("contact_labels", []))
+    cases_kw.append({
+        "address": c["address"], "body": c.get("body", ""), "has_media": c.get("has_media", False),
+        "contact_saved": c.get("contact_saved", False), "contact_labels": c.get("contact_labels", []),
+        "decision": d.decision, "reason": d.reason, "kind": d.kind, "e164": d.e164,
+    })
+dump("gate_vectors.json", {"policy": POLICY.to_dict(), "cases": cases,
+                           "policy_keyword": KEYWORD_POLICY.to_dict(), "cases_keyword": cases_kw})
 
 # ----------------------------------------------------------------- wire
 SECRET = "test-secret-0001"

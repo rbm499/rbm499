@@ -45,6 +45,13 @@ def test_gate(c):
     assert (d.decision, d.reason, d.kind, d.e164) == (c["decision"], c["reason"], c["kind"], c["e164"])
 
 
+@pytest.mark.parametrize("c", GATE["cases_keyword"], ids=lambda c: f"kw|{c['address']}|{c['body'][:25]}")
+def test_gate_keyword_mode(c):
+    pol = gate.Policy.from_dict(GATE["policy_keyword"])
+    d = gate.decide(pol, c["address"], c["body"], c["has_media"], c["contact_saved"], c["contact_labels"])
+    assert (d.decision, d.reason, d.kind, d.e164) == (c["decision"], c["reason"], c["kind"], c["e164"])
+
+
 W = load("wire_vectors.json")
 
 

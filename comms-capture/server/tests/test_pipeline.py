@@ -64,7 +64,8 @@ def test_unknown_lead_queued_and_thread_becomes_business(env):
     assert STRANGER in env.pipeline.policy().provisional_business
     # the rest of the thread now passes the gate on the phone AND on the server
     from commscap.gate import decide
-    assert decide(env.pipeline.policy(), STRANGER, "ok sounds good").decision == "send"
+    d = decide(env.pipeline.policy(), STRANGER, "ok sounds good")
+    assert (d.decision, d.reason) == ("send", "thread_business")  # not merely "unsaved": the thread is now known business
     assert env.pipeline.queue_view()[0]["role"] == "unknown"
 
 

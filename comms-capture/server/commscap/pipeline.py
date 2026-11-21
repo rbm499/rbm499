@@ -108,7 +108,8 @@ class Pipeline:
             elif n.get("role") in ROLES:
                 numbers.setdefault(a, n["role"])
         p = Policy(numbers=numbers, exclude_numbers=sorted(set(excluded) - set(numbers)),
-                   provisional_business=sorted(provisional), client_labels=["AAAD Clients"], defer_hours=self.s.defer_hours)
+                   provisional_business=sorted(provisional), client_labels=["AAAD Clients"], defer_hours=self.s.defer_hours,
+                   unknown_policy=self.s.unknown_policy)
         blob = json.dumps(p.to_dict(), sort_keys=True)
         p.version = hashlib.sha1(blob.encode()).hexdigest()[:10] + "." + RULE_VERSION
         return p

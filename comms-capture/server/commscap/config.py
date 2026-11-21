@@ -49,6 +49,7 @@ class Settings:
     hold_hours_unclear: int = 72
     defer_hours: int = 24
     sensitive_business_policy: str = "file_hidden"  # or "drop"
+    unknown_policy: str = "ai_all"  # or "keyword" (stricter, misses new customers)
     auto_assoc_min: float = 0.80  # INFERRED
     auto_assoc_margin: float = 0.25  # INFERRED
     ingest_budget_seconds: float = 20.0
@@ -90,6 +91,7 @@ class Settings:
         s.ai_enabled = e.get("COMMSCAP_AI", "on").lower() != "off" and bool(e.get("ANTHROPIC_API_KEY"))
         s.tz = e.get("COMMSCAP_TZ", s.tz)
         s.sensitive_business_policy = e.get("COMMSCAP_SENSITIVE_BUSINESS", s.sensitive_business_policy)
+        s.unknown_policy = e.get("COMMSCAP_UNKNOWN_POLICY", s.unknown_policy)
         if e.get("COMMSCAP_NOTIFY_DIR"):
             s.notify_dir = Path(e["COMMSCAP_NOTIFY_DIR"])
         s.notify_webhook = e.get("COMMSCAP_NOTIFY_WEBHOOK") or None

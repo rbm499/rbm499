@@ -54,9 +54,569 @@
     "job_number_pattern": "(?<![\\d-])\\d{2}-\\d{3,5}(?![\\d-])",
     "address_pattern": "(?i)\\b\\d{3,5}\\s+(?:[NSEW]{1,2}\\s+)?(?:\\d{1,3}(?:st|nd|rd|th)|[A-Za-z]+)\\s+(?:ave|avenue|st|street|rd|road|blvd|way|ln|lane|dr|drive|ct|court|pl|place|pkwy|hwy)\\b",
     "defer_hours": 24,
-    "hold_media_days": 7
+    "hold_media_days": 7,
+    "unknown_policy": "ai_all"
   },
   "cases": [
+    {
+      "address": "+12065550101",
+      "body": "ok thanks",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "allow_client",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "address": "(206) 555-0101",
+      "body": "can you come tuesday",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "allow_client",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "address": "206-555-0102",
+      "body": "lol dinner after?",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "allow_crew",
+      "kind": "phone",
+      "e164": "+12065550102"
+    },
+    {
+      "address": "+12065550103",
+      "body": "results are in",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "allow_vendor",
+      "kind": "phone",
+      "e164": "+12065550103"
+    },
+    {
+      "address": "+12065550104",
+      "body": "inspector will be on site",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "allow_agency",
+      "kind": "phone",
+      "e164": "+12065550104"
+    },
+    {
+      "address": "+12065550199",
+      "body": "I need a bid for 4708 8th Ave NE",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "drop",
+      "reason": "explicit_exclude",
+      "kind": "phone",
+      "e164": "+12065550199"
+    },
+    {
+      "address": "+12065550150",
+      "body": "ok sounds good",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "thread_business",
+      "kind": "phone",
+      "e164": "+12065550150"
+    },
+    {
+      "address": "CHASE",
+      "body": "Your invoice is ready",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "drop",
+      "reason": "automated_sender",
+      "kind": "alpha",
+      "e164": null
+    },
+    {
+      "address": "227898",
+      "body": "Your verification code is 483920",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "drop",
+      "reason": "automated_sender",
+      "kind": "shortcode",
+      "e164": null
+    },
+    {
+      "address": "john@example.com",
+      "body": "photo attached",
+      "has_media": true,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "drop",
+      "reason": "automated_sender",
+      "kind": "email",
+      "e164": null
+    },
+    {
+      "address": "+12065550177",
+      "body": "Your verification code is 483920",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "drop",
+      "reason": "otp_code",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "Hi, I need a bid for asbestos testing at my house",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "Can you give an estimate for 4708 8th Ave NE?",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "happy birthday! love you",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "ok",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "",
+      "has_media": true,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "hold",
+      "reason": "media_only_unknown",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "here you go",
+      "has_media": true,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "need a bid for 26-4708",
+      "has_media": false,
+      "contact_saved": true,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "saved_contact_job_number",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "need a bid for the house",
+      "has_media": false,
+      "contact_saved": true,
+      "contact_labels": [],
+      "decision": "drop",
+      "reason": "saved_contact_not_allowlisted",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "dinner at 6?",
+      "has_media": false,
+      "contact_saved": true,
+      "contact_labels": [],
+      "decision": "drop",
+      "reason": "saved_contact_not_allowlisted",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "hello",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [
+        "AAAD Clients"
+      ],
+      "decision": "send",
+      "reason": "label_client",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "gate code is 4821 for 26-4708",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "the code is 4821",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "I forbid it",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "Quote: $4,500",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "L&I inspector is here",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "2026-11-21 dinner?",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "call me at 206-555-0105",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "we are at 6527 32nd Ave NW",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "I owe you 200 bucks",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+442071234567",
+      "body": "hello",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+442071234567"
+    },
+    {
+      "address": "+12065550177",
+      "body": "",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "defer",
+      "reason": "no_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "55555",
+      "body": "bid on the job",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "drop",
+      "reason": "automated_sender",
+      "kind": "shortcode",
+      "e164": null
+    },
+    {
+      "address": "+12065550177",
+      "body": "We need an asbestos survey",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "mold on the bathroom ceiling",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "moldy bread again",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "BID",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550101",
+      "body": "",
+      "has_media": true,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "allow_client",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "address": "+12065550177",
+      "body": "123 Main St is the place",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "the 26-4708 job",
+      "has_media": false,
+      "contact_saved": true,
+      "contact_labels": [
+        "Family"
+      ],
+      "decision": "send",
+      "reason": "saved_contact_job_number",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "Hi, this is Dan. Pasha gave me your number. We're thinking of remodeling our 1962 kitchen, can someone come take a look?",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "Can you send me pricing?",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "The inspector told us to call you",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "send",
+      "reason": "unknown_unsaved",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "   ",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "defer",
+      "reason": "no_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "",
+      "has_media": true,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "hold",
+      "reason": "media_only_unknown",
+      "kind": "phone",
+      "e164": "+12065550177"
+    }
+  ],
+  "policy_keyword": {
+    "version": "vector-policy-keyword-1",
+    "numbers": {
+      "+12065550101": "client",
+      "+12065550102": "crew",
+      "+12065550103": "vendor",
+      "+12065550104": "agency"
+    },
+    "exclude_numbers": [
+      "+12065550199"
+    ],
+    "provisional_business": [
+      "+12065550150"
+    ],
+    "client_labels": [
+      "AAAD Clients"
+    ],
+    "drop_sender_kinds": [
+      "alpha",
+      "shortcode",
+      "email"
+    ],
+    "business_terms": [
+      "bid",
+      "estimate",
+      "quote",
+      "proposal",
+      "invoice",
+      "change order",
+      "scope of work",
+      "work order",
+      "asbestos",
+      "ahera",
+      "abatement",
+      "remediation",
+      "mold",
+      "lead paint",
+      "vermiculite",
+      "popcorn ceiling",
+      "survey",
+      "inspection",
+      "clearance",
+      "test results",
+      "lab results",
+      "pscaa",
+      "l&i",
+      "permit",
+      "demolition",
+      "contractor",
+      "sq ft",
+      "square feet"
+    ],
+    "job_number_pattern": "(?<![\\d-])\\d{2}-\\d{3,5}(?![\\d-])",
+    "address_pattern": "(?i)\\b\\d{3,5}\\s+(?:[NSEW]{1,2}\\s+)?(?:\\d{1,3}(?:st|nd|rd|th)|[A-Za-z]+)\\s+(?:ave|avenue|st|street|rd|road|blvd|way|ln|lane|dr|drive|ct|court|pl|place|pkwy|hwy)\\b",
+    "defer_hours": 24,
+    "hold_media_days": 7,
+    "unknown_policy": "keyword"
+  },
+  "cases_keyword": [
     {
       "address": "+12065550101",
       "body": "ok thanks",
@@ -498,6 +1058,61 @@
       ],
       "decision": "send",
       "reason": "saved_contact_job_number",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "Hi, this is Dan. Pasha gave me your number. We're thinking of remodeling our 1962 kitchen, can someone come take a look?",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "defer",
+      "reason": "no_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "Can you send me pricing?",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "defer",
+      "reason": "no_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "The inspector told us to call you",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "defer",
+      "reason": "no_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "   ",
+      "has_media": false,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "defer",
+      "reason": "no_business_signal",
+      "kind": "phone",
+      "e164": "+12065550177"
+    },
+    {
+      "address": "+12065550177",
+      "body": "",
+      "has_media": true,
+      "contact_saved": false,
+      "contact_labels": [],
+      "decision": "hold",
+      "reason": "media_only_unknown",
       "kind": "phone",
       "e164": "+12065550177"
     }

@@ -7,8 +7,8 @@ shared/vectors/gate_vectors.json.
 Decisions
   send   - upload now
   drop   - never leaves the phone (only a content-free counter is kept)
-  defer  - keep on the phone up to policy.defer_hours; sent later if the same thread turns
-           out to be business (so one keyword hit rescues the earlier "ok" / "yes" replies)
+  defer  - (keyword mode, or an empty text) keep on the phone up to policy.defer_hours; sent later
+           if the same thread turns out to be business (one keyword hit rescues earlier "ok" replies)
   hold   - media with no text from an unknown number; kept on the phone, not uploaded
 """
 from __future__ import annotations
@@ -54,6 +54,10 @@ class Policy:
     address_pattern: str = ADDRESS_PATTERN
     defer_hours: int = 24
     hold_media_days: int = 7
+    # "ai_all": every text from an unsaved, non-allowlisted number goes to the AI screen (the privacy
+    # boundary is "saved contacts are never captured unless clients"). "keyword": only texts with a
+    # business signal go; the rest wait (defer) - stricter, but silently misses new customers.
+    unknown_policy: str = "ai_all"
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -68,6 +72,7 @@ class Policy:
             "address_pattern": self.address_pattern,
             "defer_hours": self.defer_hours,
             "hold_media_days": self.hold_media_days,
+            "unknown_policy": self.unknown_policy,
         }
 
     @classmethod
@@ -143,4 +148,6 @@ def decide(
         return Decision(SEND, "unknown_business_signal", kind, e164)
     if not body.strip() and has_media:
         return Decision(HOLD, "media_only_unknown", kind, e164)
+    if policy.unknown_policy == "ai_all" and body.strip():
+        return Decision(SEND, "unknown_unsaved", kind, e164)
     return Decision(DEFER, "no_business_signal", kind, e164)

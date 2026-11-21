@@ -40,8 +40,8 @@ nudges, policy, "send me this photo"  ◄──────  heartbeat reply
 |---|---|---|---|
 | Number matches a client in the job register | send | screen (heuristic if AI down) → file/queue | yes |
 | Crew / vendor / agency number (set in review page) | send | **AI screen required** (crew texts include private chatter) | only if business |
-| Unknown number, text has a business signal (bid, asbestos, address, job no. …) | send | AI screen | only if business |
-| Unknown number, no signal ("ok", "yes") | **defer** ≤24 h; sent only if that thread later proves business | – | no |
+| Unknown (unsaved) number, any text | **send** (`unknown_policy = ai_all`, the default) | AI screen decides; personal → deleted | only if business |
+| …same, strict mode (`unknown_policy = keyword`) | send only with a business signal (bid, asbestos, address, job no. …); otherwise **defer** ≤24 h, sent only if the thread later proves business | AI screen | only if business |
 | Unknown number, photo only | **hold** ≤7 days, never auto-uploaded | – | no (counted in the daily digest) |
 | Saved personal contact, not a client | **drop** (unless the text carries a job number `26-####`) | – | never |
 | Short-code / alphabetic / email sender, one-time codes | drop | re-checked | never |
@@ -72,8 +72,9 @@ Site access information (gate/door codes) is deliberately **not** treated as a s
 
 ## 4. Privacy model
 
-* Nothing leaves the phone unless the on-device gate says `send`. Dropped messages are never stored — not
-  even a hash — only a counter.
+* Nothing leaves the phone unless the on-device gate says `send`. The boundary is "people Michael has saved
+  are never captured unless they are clients; strangers are screened". Dropped messages are never stored —
+  not even a hash — only a counter.
 * The server stores a message only after it passes screening (or while waiting for screening). Private
   verdict → row deleted. Held unclear texts expire after 72 h without a trace.
 * Alerts, digests and nudges never contain message text — only counts, masked numbers, contact names, job
@@ -81,8 +82,13 @@ Site access information (gate/door codes) is deliberately **not** treated as a s
 * Michael sees what was sent on his phone, can mark any contact private, and can pause capture; a pause is
   reported (alerts if > 4 h).
 * The review page builds the DOM from text nodes only (message text is attacker-controlled).
-* **Residual exposure (honest):** a text from an *unknown* number that contains a business word is read by
-  the AI screen before it is judged private. The gate keeps that list specific, but it is not zero.
+* **Residual exposure (honest):** with the default `ai_all`, *every* text from an unsaved number is read by
+  the AI screen before it is judged private (that is what "screen new customers by content" requires: a
+  synthetic check found the keyword-only alternative silently deferred 13 of 20 plausible first texts from
+  new customers). Most private contacts are saved, so the population is small, and a private verdict deletes
+  it at once and excludes the number — but it is not zero. `COMMSCAP_UNKNOWN_POLICY=keyword` trades coverage
+  for less exposure. A new customer Michael has already saved as a contact is treated as a saved contact:
+  mark it as a client in the app (or give it the "AAAD Clients" label).
 * **NOT IN RECORD:** Anthropic's data-retention terms for this account's API traffic were not looked up.
   Messages that pass the gate are sent to the Claude API for screening; confirm the account's retention
   setting before relying on "private texts never leave".
