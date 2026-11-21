@@ -129,11 +129,23 @@ used mainly by them, until a conversation has been assigned once (then thread co
 | Gate, redaction, phone normalisation, signing, message ids | Python reference passes its own shared vectors (RECORD: `pytest` in `server/`, 219 tests passing at last run). |
 | Screening / association / filing / reply clock / health / API / review page | Tested end to end with synthetic data and a scripted screener; page loaded in headless Chromium at phone and desktop width, no console errors. |
 | **Live Claude call** | **NOT RUN** — no API key in this environment. Request shape follows the current API reference (JSON-schema output, no forced tool choice, refusal handled, fallback beta with a plain retry). First real call will tell. |
-| Android core logic (gate etc.) | See `android/` report — Kotlin core tested against the same vectors here if the agent report below says so. |
-| **Android app module** | **NOT COMPILED HERE** — Google's Maven (`dl.google.com`) is unreachable from this environment. Compiles only in CI (GitHub Actions); never run on a device. |
+| Android `core` (gate, redaction, phone numbers, signing, policy overlay, lookback, backoff, response handling) | **241 Kotlin tests pass** (RECORD: re-run from scratch by the main session, `gradle :core:test`, 0 failures). Both gate-vector sets (ai_all and keyword), the phone, redaction and signing vectors are asserted case by case. The builder also ran ~42,000 random inputs against the Python reference with 0 mismatches (throwaway test, reported not re-run). |
+| **Android `:app` module** | **Not built by me anywhere.** Google's Maven is unreachable here; the builder type-checked the sources against the real API 34 framework jar using hand-written androidx.work stubs. The first real build is the GitHub Actions run on PR #8 (result recorded in the 2026-11-21b addendum). Never run on a device. |
+| Phone regex engine | Android's regex engine differs from the JVM and cannot be exercised here. The core drops an unsupported flag if the engine rejects it, and the app runs a **self-check on the phone and refuses to capture** if any gate/redaction case fails — a failure is visible on the status screen, not silent. |
 | **Michael's phone type** | **NOT IN RECORD.** Everything phone-side assumes Android. |
 | Windows deployment (MSI laptop) | Not tested; paths are plain `pathlib`. The laptop has logged five unexpected shutdowns (10/22 inventory) — the phone queue is the durable buffer, and the digest/dead-man ping covers a dead server. |
 | Drive API filer | **Not built.** The filer writes to a local folder (the Drive-synced `Job sites` directory); a cloud-hosted server would need a Drive-API filer. |
 | Calls / voicemail | Out of scope; "Handled" button covers a phone-call reply. |
 | RCS | Inbound only, via notifications. Outgoing RCS cannot be captured; recommended setting is RCS chats **off** on Michael's phone. |
 | Media-only texts from unknown numbers | Held on the phone, not uploaded (a vision screen is a later option). Lesson in the record (10/22): empty-body sends from a new client can only be found by sender, not keyword. |
+
+## 9. Phone-app behaviours worth knowing (from the build report; builder's words, not yet observed on a device)
+
+* An incoming-SMS broadcast is only a trigger to scan the system store: the broadcast timestamp differs from the store's `date`, which would have produced a second uid and broken the nightly reconcile.
+* **Capture stops (cursors do not advance) while the Contacts permission is missing**, because under `ai_all` Contacts is the privacy boundary. Texts arriving meanwhile are picked up when it is restored.
+* Group MMS: every counterpart must pass the gate. A server "business" verdict never lifts a local "private" mark.
+* "Pause until tomorrow" ends at 6 am. The reconcile window never starts before capture was first enabled.
+* RCS/chat notifications are mapped to numbers by contact name; a title that cannot be resolved is dropped (incoming RCS from an unsaved sender with no number in the notification may therefore be missed — another reason to turn RCS chats off).
+* A permanent 4xx on a batch blocks the head of the upload queue (the contract forbids deleting unsent texts); the status screen shows it. Needs a person if it ever happens.
+* `targetSdk` is 34: targeting API 35 limits `dataSync` foreground services and blocks starting them from a boot receiver, which this design relies on.
+* A debug keystore is committed on purpose so each CI build installs over the previous one without uninstalling (uninstalling would delete the queue and setup). It protects nothing and is not a release key. **If this repository is or becomes public, anyone could build an update signed with that key — regenerate it and keep the private copy outside the repo.**
