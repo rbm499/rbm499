@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text Review</title>
+<style>
+  :root { --bg:#f6f5f2; --card:#fff; --ink:#1c1b19; --mute:#6b675f; --line:#e3e0d8; --accent:#1d5fa8; --warn:#b26a00; --bad:#b3261e; --ok:#2e7d32; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141413; --card:#1f1e1c; --ink:#ece9e2; --mute:#a29d92; --line:#34322e; --accent:#7ab2ec; --warn:#e8a33d; --bad:#f2837c; --ok:#7bc47f; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.45 system-ui, sans-serif; }
+  main { max-width: 900px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.25rem; margin: 4px 0 12px; }
+  h2 { font-size: 1.05rem; margin: 24px 0 8px; display:flex; gap:8px; align-items:center; }
+  .count { background:var(--line); border-radius:10px; padding:0 8px; font-size:.85rem; color:var(--mute); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .grow { flex:1 1 auto; }
+  .mute { color:var(--mute); font-size:.9rem; }
+  .msg { border-left:3px solid var(--line); padding:2px 10px; margin:6px 0; white-space:pre-wrap; word-break:break-word; }
+  .msg.out { border-left-color:var(--accent); }
+  .chip, button, select { font:inherit; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); padding:6px 10px; }
+  select { flex:1 1 220px; min-width:0; max-width:100%; text-overflow:ellipsis; }
+  .chip { max-width:100%; text-align:left; white-space:normal; }
+  button { cursor:pointer; min-height:40px; }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button.danger { color:var(--bad); }
+  .chip { cursor:pointer; }
+  .lvl1 { color:var(--warn); } .lvl2 { color:var(--warn); font-weight:600; } .lvl3, .critical { color:var(--bad); font-weight:600; }
+  .warning { color:var(--warn); } .info { color:var(--mute); }
+  .empty { color:var(--mute); padding:8px 0; }
+  input { font:inherit; padding:8px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); width:100%; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Text Review <span class="mute" id="stamp"></span></h1>
+  <div id="login" class="card" hidden>
+    <p>Enter the review token.</p>
+    <div class="row"><input id="tok" type="password" autocomplete="current-password" aria-label="Review token"><button class="primary" id="go">Open</button></div>
+  </div>
+  <div id="app" hidden>
+    <h2>Replies due <span class="count" id="n-sla">0</span></h2><div id="sla"></div>
+    <h2>Needs a job number <span class="count" id="n-queue">0</span></h2><div id="queue"></div>
+    <h2>Capture health <span class="count" id="n-health">0</span></h2><div id="health"></div>
+    <h2>Recently filed <span class="count" id="n-filed">0</span></h2><div id="filed"></div>
+  </div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+let TOKEN = ""; try { TOKEN = localStorage.getItem("commscap_token") || ""; } catch (e) {}
+let state = null, busy = false;
+
+function h(tag, attrs, ...kids) {           // DOM builder: text only, never innerHTML (message text is untrusted)
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") el.className = v; else if (k.startsWith("on")) el.addEventListener(k.slice(2), v); else el.setAttribute(k, v);
+  }
+  for (const kid of kids.flat()) if (kid != null) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  return el;
+}
+const fmtTime = (ms) => new Date(ms).toLocaleString("en-US", { timeZone: "America/Los_Angeles", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+const fmtWait = (ms) => { const m = Math.max(0, Math.floor(ms / 60000)), hh = Math.floor(m / 60); return hh ? `${hh}h ${String(m % 60).padStart(2, "0")}m` : `${m}m`; };
+
+async function api(path, body) {
+  const res = await fetch(path, { method: body ? "POST" : "GET", headers: { "X-UI-Token": TOKEN, ...(body ? { "Content-Type": "application/json" } : {}) }, body: body ? JSON.stringify(body) : undefined });
+  if (res.status === 401 || res.status === 403) { $("login").hidden = false; $("app").hidden = true; throw new Error("auth"); }
+  if (!res.ok) throw new Error((await res.text()) || res.status);
+  return res.json();
+}
+async function act(path, body) { if (busy) return; busy = true; try { await api(path, body); await load(); } catch (e) { if (e.message !== "auth") alert("That did not work: " + e.message); } finally { busy = false; } }
+
+function renderSla(s) {
+  const box = $("sla"); box.replaceChildren();
+  $("n-sla").textContent = s.sla.length;
+  if (!s.sla.length) return box.append(h("div", { class: "empty" }, "No client is waiting for a reply."));
+  for (const it of s.sla.sort((a, b) => b.waiting_ms - a.waiting_ms)) {
+    box.append(h("div", { class: "card row" },
+      h("div", { class: "grow" }, h("strong", {}, it.name || it.masked), " ", h("span", { class: "mute" }, `${it.job_no ? "job " + it.job_no : "no job number yet"} · ${it.topic.replace("_", " ")}`)),
+      h("span", { class: "lvl" + Math.max(1, it.level) }, `waiting ${fmtWait(it.waiting_ms)}${it.urgency === "high" ? " · URGENT" : ""}`),
+      h("button", { onclick: () => act("/ui/api/handled", { uid: it.uid }) }, "Handled")));
+  }
+}
+
+function jobSelect(jobs) {
+  const sel = h("select", { "aria-label": "Job" }, h("option", { value: "" }, "Pick a job…"));
+  for (const j of jobs) sel.append(h("option", { value: j.job_no }, `${j.job_no} — ${j.site.split(",")[0]}${j.open ? "" : " (closed)"}`));
+  return sel;
+}
+
+function renderQueue(s) {
+  const box = $("queue"); box.replaceChildren();
+  $("n-queue").textContent = s.queue.length;
+  if (!s.queue.length) return box.append(h("div", { class: "empty" }, "Nothing is waiting for a job number."));
+  for (const t of s.queue) {
+    const sel = jobSelect(s.jobs);
+    const card = h("div", { class: "card" },
+      h("div", { class: "row" }, h("strong", { class: "grow" }, `${t.name || t.masked} `, h("span", { class: "mute" }, `${t.name ? t.masked + " · " : ""}${t.role}`)),
+        t.needs_reply ? h("span", { class: "chip warning" }, "needs reply") : null),
+      t.messages.map((m) => h("div", { class: "msg " + m.dir }, h("div", { class: "mute" }, `${fmtTime(m.ts_ms)} · ${m.dir === "in" ? "received" : "sent"}${m.media ? " · " + m.media + " attachment(s)" : ""}`), m.text)),
+      t.candidates.length ? h("div", { class: "row" }, h("span", { class: "mute" }, "Likely:"), t.candidates.slice(0, 3).map((c) =>
+        h("button", { class: "chip", title: c.why.join(", "), onclick: () => act("/ui/api/assign", { address: t.address, job_no: c.job_no }) }, `${c.job_no} · ${c.site.split(",")[0]} (${Math.round(c.score * 100)}%)`))) : null,
+      h("div", { class: "row" }, sel,
+        h("button", { class: "primary", onclick: () => sel.value ? act("/ui/api/assign", { address: t.address, job_no: sel.value }) : alert("Pick a job first.") }, "File to job"),
+        h("button", { class: "danger", onclick: () => confirm("Discard this conversation and ignore this number from now on?") && act("/ui/api/private", { address: t.address }) }, "Not business")));
+    box.append(card);
+  }
+}
+
+function renderHealth(s) {
+  const box = $("health"); box.replaceChildren();
+  const hv = s.health;
+  $("n-health").textContent = hv.alerts.length;
+  for (const d of hv.devices) box.append(h("div", { class: "card mute" }, `Phone ${d.device_id}: last heard ${d.age_ms == null ? "never" : fmtWait(d.age_ms) + " ago"} · ${d.queue_depth ?? "?"} waiting to upload`));
+  if (!hv.alerts.length) box.append(h("div", { class: "empty" }, "All checks passing."));
+  for (const a of hv.alerts) box.append(h("div", { class: "card" }, h("strong", { class: a.level }, a.subject), h("div", { class: "mute" }, a.body)));
+}
+
+function renderFiled(s) {
+  const box = $("filed"); box.replaceChildren();
+  $("n-filed").textContent = s.filed.length;
+  if (!s.filed.length) return box.append(h("div", { class: "empty" }, "Nothing filed yet."));
+  for (const f of s.filed) {
+    const sel = jobSelect(s.jobs);
+    box.append(h("div", { class: "card row" },
+      h("div", { class: "grow" }, h("strong", {}, f.name), " → ", h("strong", {}, f.job_no), " ", h("span", { class: "mute" }, `${fmtTime(f.ts_ms)} · ${f.dir === "in" ? "received" : "sent"} · ${f.method}${f.conf != null ? " " + Math.round(f.conf * 100) + "%" : ""}`)),
+      sel, h("button", { onclick: () => sel.value ? act("/ui/api/refile", { uid: f.uid, job_no: sel.value }) : alert("Pick the correct job first.") }, "Wrong job?")));
+  }
+}
+
+async function load() {
+  try {
+    state = await api("/ui/api/state");
+    $("login").hidden = true; $("app").hidden = false;
+    $("stamp").textContent = "· updated " + fmtTime(state.now_ms);
+    renderSla(state); renderQueue(state); renderHealth(state); renderFiled(state);
+  } catch (e) { /* login box shown by api() */ }
+}
+$("go").addEventListener("click", () => { TOKEN = $("tok").value.trim(); try { localStorage.setItem("commscap_token", TOKEN); } catch (e) {} load(); });
+if (TOKEN) load(); else $("login").hidden = false;
+setInterval(() => { if (!document.hidden && !busy && TOKEN) load(); }, 20000);
+</script>
+</body>
+</html>

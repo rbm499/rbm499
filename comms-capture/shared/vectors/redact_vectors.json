@@ -1,0 +1,124 @@
+{
+  "redact": [
+    {
+      "input": "my card is 4111 1111 1111 1111 exp 12/27",
+      "output": "my card is [REDACTED:card] exp 12/27",
+      "tags": [
+        "card"
+      ]
+    },
+    {
+      "input": "card 4111-1111-1111-1112 typo",
+      "output": "card 4111-1111-1111-1112 typo",
+      "tags": []
+    },
+    {
+      "input": "ssn 123-45-6789 thanks",
+      "output": "ssn [REDACTED:ssn] thanks",
+      "tags": [
+        "ssn"
+      ]
+    },
+    {
+      "input": "password is hunter2 ok",
+      "output": "password is [REDACTED:secret] ok",
+      "tags": [
+        "secret"
+      ]
+    },
+    {
+      "input": "PIN: 4455",
+      "output": "PIN: [REDACTED:secret]",
+      "tags": [
+        "secret"
+      ]
+    },
+    {
+      "input": "pin the location on the map",
+      "output": "pin the location on the map",
+      "tags": []
+    },
+    {
+      "input": "routing number 123456789 and account number 98765432",
+      "output": "routing number [REDACTED:routing] and account number [REDACTED:account]",
+      "tags": [
+        "account",
+        "routing"
+      ]
+    },
+    {
+      "input": "acct # 12345678",
+      "output": "acct # [REDACTED:account]",
+      "tags": [
+        "account"
+      ]
+    },
+    {
+      "input": "gate code is 4821",
+      "output": "gate code is 4821",
+      "tags": []
+    },
+    {
+      "input": "call me at 206-555-0101",
+      "output": "call me at 206-555-0101",
+      "tags": []
+    },
+    {
+      "input": "invoice 26-4708 total $3,965.93",
+      "output": "invoice 26-4708 total $3,965.93",
+      "tags": []
+    },
+    {
+      "input": "nothing sensitive here",
+      "output": "nothing sensitive here",
+      "tags": []
+    },
+    {
+      "input": "",
+      "output": "",
+      "tags": []
+    }
+  ],
+  "is_otp": [
+    {
+      "input": "Your verification code is 483920",
+      "otp": true
+    },
+    {
+      "input": "483920 is your verification code",
+      "otp": true
+    },
+    {
+      "input": "Your Acme login code is: 118822",
+      "otp": true
+    },
+    {
+      "input": "OTP 556677 do not share",
+      "otp": true
+    },
+    {
+      "input": "gate code is 4821",
+      "otp": false
+    },
+    {
+      "input": "the code is 4821",
+      "otp": false
+    },
+    {
+      "input": "verification of the site is 2026",
+      "otp": false
+    },
+    {
+      "input": "Your one-time passcode: 99887766",
+      "otp": true
+    },
+    {
+      "input": "Please confirm the 26-4708 start date",
+      "otp": false
+    },
+    {
+      "input": "",
+      "otp": false
+    }
+  ]
+}

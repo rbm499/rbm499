@@ -1,0 +1,48 @@
+{
+  "secret": "test-secret-0001",
+  "signatures": [
+    {
+      "ts": 1700000000,
+      "device_id": "dev-1",
+      "body": "{\"schema\":1,\"messages\":[]}",
+      "body_sha256": "709d8cf7c248ae9c550d7357de308caea1ff0207113062886a4c2c205bb3e716",
+      "signature": "d9e9bf85067a764223db7fc18508e544a4b9c87ee64a2e5daa110d731dc8bc26"
+    },
+    {
+      "ts": 1789999999,
+      "device_id": "michael-phone-1",
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "signature": "4293fc598d37ad44b9342409f6d140b8700e947e94f0a6e85a919f1511daaec7"
+    }
+  ],
+  "uids": [
+    {
+      "device_id": "dev-1",
+      "direction": "in",
+      "address": "(206) 555-0101",
+      "ts_ms": 1789999999123,
+      "body": "ok thanks",
+      "media_count": 0,
+      "uid": "b4ce658fed8c91af4fc2380c2043f2b705ee921d891fcd0bbd1a8a40ee95cdbe"
+    },
+    {
+      "device_id": "dev-1",
+      "direction": "out",
+      "address": "+12065550101",
+      "ts_ms": 1789999999123,
+      "body": "On my way — see you at 9",
+      "media_count": 2,
+      "uid": "59c2cf206576e8e53915c74c8e39d5207bf7d9dde8cebaeebd3a4a92ac1992cb"
+    },
+    {
+      "device_id": "dev-1",
+      "direction": "in",
+      "address": "CHASE",
+      "ts_ms": 1,
+      "body": "",
+      "media_count": 0,
+      "uid": "958b305f95864dfa66f6c9848dbdb53c6cd5923f59439de2110e5c0ce5705cdb"
+    }
+  ]
+}
