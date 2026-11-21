@@ -67,7 +67,7 @@ Site access information (gate/door codes) is deliberately **not** treated as a s
 | Reminder after Michael already replied | Reply detection + "Handled" | Outgoing text to that number resolves the item and withdraws queued reminders. |
 | Text waiting for a job number too long | Review-queue ageing | Alert after 4 business hours. |
 | Phone and server disagree on ids / clocks drift | uid check, skew check | Accepted anyway (nothing dropped over an integrity check) but alerted. |
-| The whole thing silently stops | Daily digest at 7 PM (counts only) + optional dead-man ping URL | Silence of the digest is itself the alarm; `COMMSCAP_DEADMAN_URL` pings an external monitor each tick. |
+| The whole thing silently stops | Daily digest at 7 PM (counts only) + optional dead-man ping URL | Silence of the digest is itself the alarm; `COMMSCAP_DEADMAN_URL` pings an external monitor each tick (the ping code is **untested** — it needs a real URL). |
 | Misfiled by the automatic matcher | "Wrong job?" on the review page | Correction appended to the old transcript (history never rewritten), filed to the right job. |
 
 ## 4. Privacy model
@@ -126,7 +126,7 @@ used mainly by them, until a conversation has been assigned once (then thread co
 
 | Piece | Status |
 |---|---|
-| Gate, redaction, phone normalisation, signing, message ids | Python reference passes its own shared vectors (RECORD: pytest, 158 tests). |
+| Gate, redaction, phone normalisation, signing, message ids | Python reference passes its own shared vectors (RECORD: `pytest` in `server/`, 219 tests passing at last run). |
 | Screening / association / filing / reply clock / health / API / review page | Tested end to end with synthetic data and a scripted screener; page loaded in headless Chromium at phone and desktop width, no console errors. |
 | **Live Claude call** | **NOT RUN** — no API key in this environment. Request shape follows the current API reference (JSON-schema output, no forced tool choice, refusal handled, fallback beta with a plain retry). First real call will tell. |
 | Android core logic (gate etc.) | See `android/` report — Kotlin core tested against the same vectors here if the agent report below says so. |

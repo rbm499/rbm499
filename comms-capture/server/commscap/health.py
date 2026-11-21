@@ -16,7 +16,8 @@ from typing import Any, Dict, List, Tuple
 from .clock import BusinessClock
 from .config import Settings
 from .notify import Notifier
-from .sla import fmt_wait
+from .phone import mask
+from .sla import TOPIC_LABEL, fmt_wait
 from .store import Store
 
 PERM_LEVEL = {
@@ -164,6 +165,10 @@ class HealthMonitor:
             f"Discarded as private/automated/off-policy (24h, not stored): {sum(v for k, v in audit.items() if k in ('dropped', 'purged'))}",
             f"Client messages awaiting a reply: {len(open_sla)} ({len(overdue)} overdue)",
         ]
+        for s in sorted(open_sla, key=lambda x: x["started_ms"])[:8]:  # who is waiting: names/jobs/topics only, never text
+            lines.append(f"  · {s['contact_name'] or mask(s['address'])} — {('job ' + s['job_no']) if s['job_no'] else 'no job number yet'}"
+                         f" — {TOPIC_LABEL.get(s['topic'] or 'other', 'message')} — waiting {fmt_wait(now_ms - s['started_ms'])}"
+                         f"{' — URGENT' if s['urgency'] == 'high' else ''}")
         for d in devs:
             lines.append(f"Phone '{d['device_id']}' last heard from {fmt_wait(now_ms - d['last_hb_ms'])} ago"
                          if d.get("last_hb_ms") else f"Phone '{d['device_id']}': never")

@@ -105,6 +105,7 @@ def test_daily_digest_once_a_day_and_never_contains_message_text(env):
     text = outbox_text(env)
     assert "Daily text-capture summary 2026-11-23" in text and "Texts filed to job folders (24h): 1" in text
     assert "canarybody123" not in text
+    assert "Tony Park — job 26-4708 — scheduling — waiting" in text  # who is waiting, without what they wrote
     n = text.count("Daily text-capture summary")
     hb(env)
     env.pipeline.tick()
