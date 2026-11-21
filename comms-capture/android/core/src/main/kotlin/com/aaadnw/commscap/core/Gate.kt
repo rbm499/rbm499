@@ -17,6 +17,13 @@ data class Policy(
     val addressPattern: String = Gate.ADDRESS_PATTERN,
     val deferHours: Int = 24,
     val holdMediaDays: Int = 7,
+    /**
+     * "ai_all" (default): every non-blank text from an unsaved, non-allowlisted number is sent for the server's AI
+     * screen (the privacy boundary is "saved contacts are never captured unless they are clients").
+     * "keyword": only texts with a business signal are sent; the rest are deferred. Any other value behaves like
+     * "keyword" (same as the Python reference, which compares to "ai_all" exactly).
+     */
+    val unknownPolicy: String = Gate.UNKNOWN_AI_ALL,
 ) {
     fun toMap(): Map<String, Any?> = linkedMapOf(
         "version" to version,
@@ -30,6 +37,7 @@ data class Policy(
         "address_pattern" to addressPattern,
         "defer_hours" to deferHours,
         "hold_media_days" to holdMediaDays,
+        "unknown_policy" to unknownPolicy,
     )
 
     companion object {
@@ -52,6 +60,7 @@ data class Policy(
                 addressPattern = (d["address_pattern"] as? String) ?: base.addressPattern,
                 deferHours = (d["defer_hours"] as? Number)?.toInt() ?: base.deferHours,
                 holdMediaDays = (d["hold_media_days"] as? Number)?.toInt() ?: base.holdMediaDays,
+                unknownPolicy = (d["unknown_policy"] as? String) ?: base.unknownPolicy,
             )
         }
 
@@ -82,6 +91,9 @@ object Gate {
     const val DROP = "drop"
     const val DEFER = "defer"
     const val HOLD = "hold"
+
+    const val UNKNOWN_AI_ALL = "ai_all"
+    const val UNKNOWN_KEYWORD = "keyword"
 
     val DEFAULT_BUSINESS_TERMS: List<String> = listOf(
         "bid", "estimate", "quote", "proposal", "invoice", "change order", "scope of work", "work order",
@@ -185,7 +197,9 @@ object Gate {
 
         // Unknown, unsaved number.
         if (signals.isNotEmpty()) return Decision(SEND, "unknown_business_signal", kind, e164)
-        if (Text.strip(text).isEmpty() && hasMedia) return Decision(HOLD, "media_only_unknown", kind, e164)
+        val blank = Text.strip(text).isEmpty()
+        if (blank && hasMedia) return Decision(HOLD, "media_only_unknown", kind, e164)
+        if (policy.unknownPolicy == UNKNOWN_AI_ALL && !blank) return Decision(SEND, "unknown_unsaved", kind, e164)
         return Decision(DEFER, "no_business_signal", kind, e164)
     }
 
