@@ -13,6 +13,9 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         mavenCentral()
+        // androidx (core-ktx, work-runtime) is published only on Google's Maven; PREFER_SETTINGS ignores
+        // project-level repositories, so it must be listed here - and only when :app is included.
+        if (withApp) google()
     }
 }
 

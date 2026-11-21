@@ -15,6 +15,18 @@ android {
         versionName = "0.1.0"
     }
 
+    // A fixed debug key (committed on purpose, password "android") so every CI build is signed the same way and a new
+    // APK installs over the old one without uninstalling (uninstalling would delete the queue and the setup).
+    // It protects nothing: this is a private sideloaded app, never a Play Store release key.
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildFeatures {
         buildConfig = true
     }

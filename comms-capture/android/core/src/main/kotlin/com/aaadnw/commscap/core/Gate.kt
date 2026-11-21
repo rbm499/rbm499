@@ -108,7 +108,7 @@ object Gate {
 
     // Patterns come from a downloaded policy: compile once, and never let a bad pattern throw into the capture path.
     private val patternCache = ConcurrentHashMap<String, Pattern>()
-    private val NEVER_MATCHES: Pattern = Pattern.compile("(?!)")
+    private val NEVER_MATCHES: Pattern = Text.compile("[^\\s\\S]")
 
     private fun cached(key: String, build: () -> String): Pattern {
         patternCache[key]?.let { return it }

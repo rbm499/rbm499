@@ -16,7 +16,7 @@ object Redact {
 
     // Phrase-based on purpose: a bare "code" is not enough.
     private const val OTP_KEY =
-        """(?:(?:verification|security|confirmation|login|log-in|sign-in|authentication|one[- ]time)""" +
+        """(?:(?:verification|security|confirmation|login|log-in|sign-in|authentication|one[\- ]time)""" +
             """\s+(?:code|passcode|pin)|otp|2fa)"""
     private val OTP_A = Text.compile("""(?i)\b""" + OTP_KEY + """\b[^\d]{0,30}(?<!\d)\d{4,8}(?!\d)""")
     private val OTP_B = Text.compile("""(?i)\byour\s+(?:\w+\s+){0,2}code\s+(?:is|:)\s*\d{4,8}(?!\d)""")

@@ -9,7 +9,22 @@ import java.util.regex.Pattern
  * UNICODE_CHARACTER_CLASS).
  */
 internal object Text {
-    fun compile(pattern: String): Pattern = Pattern.compile(pattern, Pattern.UNICODE_CHARACTER_CLASS)
+    /**
+     * Android's java.util.regex is ICU-based: it throws IllegalArgumentException for UNICODE_CHARACTER_CLASS, but its
+     * \d \w \s \b and (?i) are already Unicode-aware, which is exactly what Python's `re` does for str patterns.
+     * So: ask for the flag where the JVM supports it, and use no flag where it is rejected.
+     */
+    internal fun supportedFlags(probe: (Int) -> Pattern = { Pattern.compile("a", it) }): Int =
+        try {
+            probe(Pattern.UNICODE_CHARACTER_CLASS)
+            Pattern.UNICODE_CHARACTER_CLASS
+        } catch (e: IllegalArgumentException) {
+            0
+        }
+
+    private val flags: Int by lazy { supportedFlags() }
+
+    fun compile(pattern: String): Pattern = Pattern.compile(pattern, flags)
 
     /** Same set of characters as Python's `str.isspace()`. */
     fun isPySpace(c: Char): Boolean {
