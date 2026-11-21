@@ -38,7 +38,21 @@ jobs:
 
       # -PwithApp includes the :app module (needs Google's Maven). Without it only :core exists.
       - name: Core tests and debug APK
-        run: gradle -p comms-capture/android -PwithApp :core:test :app:assembleDebug --stacktrace
+        run: |
+          set -o pipefail
+          for attempt in 1 2 3; do
+            if gradle -p comms-capture/android -PwithApp :core:test :app:assembleDebug --stacktrace 2>&1 | tee build.log; then
+              exit 0
+            fi
+            # Retry only when the failure was fetching dependencies (e.g. Maven Central answering 429 to a shared
+            # runner, seen on run 44962878592), never for a compile or test failure, which would just repeat.
+            if [ "$attempt" -lt 3 ] && grep -qE "Received status code (429|5[0-9][0-9])|Could not (GET|HEAD) |Read timed out|Connection reset|Remote host terminated" build.log; then
+              echo "::warning::dependency download failed on attempt $attempt; retrying after a pause"
+              sleep 45
+              continue
+            fi
+            exit 1
+          done
 
       - name: Upload core test report
         if: always()
