@@ -35,12 +35,57 @@ class GateBehaviourTest {
     }
 
     @Test
-    fun defaultPolicyGatesLikeTheReference() {
+    fun defaultPolicyIsAiAllAndSendsEveryNonBlankTextFromAnUnsavedNumber() {
         val p = Policy()
-        assertEquals("defer", Gate.decide(p, "+12065550177", "ok").decision)
-        assertEquals("send", Gate.decide(p, "+12065550177", "need a bid for 26-4708").decision)
+        assertEquals("send", Gate.decide(p, "+12065550177", "ok").decision)
+        assertEquals("unknown_unsaved", Gate.decide(p, "+12065550177", "ok").reason)
+        assertEquals("unknown_business_signal", Gate.decide(p, "+12065550177", "need a bid for 26-4708").reason)
         assertEquals("drop", Gate.decide(p, "CHASE", "invoice").decision)
         assertEquals("hold", Gate.decide(p, "+12065550177", "", hasMedia = true).decision)
+        assertEquals("send", Gate.decide(p, "+12065550177", "here you go", hasMedia = true).decision)
+    }
+
+    @Test
+    fun blankTextFromAnUnsavedNumberIsDeferredInBothModes() {
+        for (mode in listOf("ai_all", "keyword")) {
+            val p = Policy(unknownPolicy = mode)
+            assertEquals("defer", Gate.decide(p, "+12065550177", "").decision, mode)
+            assertEquals("defer", Gate.decide(p, "+12065550177", "  \n\t ").decision, mode)
+            assertEquals("hold", Gate.decide(p, "+12065550177", "   ", hasMedia = true).decision, mode)
+        }
+    }
+
+    @Test
+    fun keywordModeDefersTextWithoutABusinessSignal() {
+        val p = Policy(unknownPolicy = "keyword")
+        assertEquals("defer", Gate.decide(p, "+12065550177", "ok").decision)
+        assertEquals("send", Gate.decide(p, "+12065550177", "need a bid for 26-4708").decision)
+    }
+
+    @Test
+    fun anyOtherUnknownPolicyBehavesLikeKeyword() {
+        // The reference compares to "ai_all" exactly, so a typo can only make the phone stricter.
+        for (mode in listOf("AI_ALL", "ai-all", "", "nonsense")) {
+            assertEquals("defer", Gate.decide(Policy(unknownPolicy = mode), "+12065550177", "ok").decision, mode)
+        }
+    }
+
+    @Test
+    fun savedContactsAreNeverCapturedUnlessClientsInEitherMode() {
+        // The privacy boundary under ai_all: a saved contact is dropped no matter what the text says.
+        for (mode in listOf("ai_all", "keyword")) {
+            val p = Policy(unknownPolicy = mode, clientLabels = listOf("AAAD Clients"))
+            assertEquals("drop", Gate.decide(p, "+12065550177", "ok", contactSaved = true).decision, mode)
+            assertEquals("drop", Gate.decide(p, "+12065550177", "need a bid", contactSaved = true).decision, mode)
+            assertEquals("send", Gate.decide(p, "+12065550177", "the 26-4708 job", contactSaved = true).decision, mode)
+            assertEquals("send", Gate.decide(p, "+12065550177", "hi", contactSaved = true, contactLabels = listOf("AAAD Clients")).decision, mode)
+        }
+    }
+
+    @Test
+    fun unknownPolicyFromMapKeepsDefaultOnWrongType() {
+        assertEquals("ai_all", Policy.fromMap(mapOf("unknown_policy" to 3)).unknownPolicy)
+        assertEquals("keyword", Policy.fromMap(mapOf("unknown_policy" to "keyword")).unknownPolicy)
     }
 
     @Test
@@ -56,7 +101,7 @@ class GateBehaviourTest {
 
     @Test
     fun brokenPatternFromServerFailsClosedAndNeverThrows() {
-        val p = Policy(addressPattern = "([unclosed", jobNumberPattern = "(?<=a+)b", businessTerms = emptyList())
+        val p = Policy(addressPattern = "([unclosed", jobNumberPattern = "(?<=a+)b", businessTerms = emptyList(), unknownPolicy = "keyword")
         assertEquals(emptyList<String>(), Gate.businessSignals(p, "4708 8th Ave NE 26-4708"))
         assertEquals("defer", Gate.decide(p, "+12065550177", "4708 8th Ave NE").decision)
     }
