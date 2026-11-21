@@ -24,7 +24,7 @@ TONY, FELICIA, LUIS, ALEX = "+12065550101", "+12065550102", "+12065550103", "+12
 STRANGER, PERSON = "+12065550177", "+12065550188"
 
 REGISTER = {
-    "schemaVersion": "pipeline-1", "generated": "2026-11-01T00:00:00Z",
+    "schemaVersion": "pipeline-1", "generated": "2026-11-21T00:00:00Z",
     "jobs": [
         {"job_no": "26-4708", "site": "4708 8th Ave NE, Seattle, WA 98105", "client": "8th Ave NE, LLC", "stage": "awaiting_payment",
          "contact": {"name": "Tony Park", "email": "tony@example.com", "phone": "(206) 555-0101"}, "last_activity": {"date": "2026-10-21"}},

@@ -75,7 +75,9 @@ class LocalFolderFiler:
         jd = self.resolve_job_dir(job_no)
         if jd is not None:
             return jd / "Communications", False
-        return self.unfiled_root / (job_no or "no-job"), True
+        # job_no can come from a person typing in the review page: never let it choose a path
+        safe = re.sub(r"[^A-Za-z0-9 ._-]", "_", job_no or "").strip(" .") or "no-job"
+        return self.unfiled_root / safe[:60], True
 
     # ------------------------------------------------------------ writing
     @staticmethod

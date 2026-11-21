@@ -10,6 +10,7 @@ Checks (each raises an alert while the condition holds and resolves it when it c
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
 from .clock import BusinessClock
@@ -103,6 +104,28 @@ class HealthMonitor:
             jobs = sorted({r["job_no"] for r in self.store.q("SELECT DISTINCT job_no FROM messages WHERE state='filed' AND filed_path LIKE '%_COMMS_UNFILED%'")})
             active.append(("health:unfiled", "warning", f"{u['n']} text(s) filed in _COMMS_UNFILED",
                            f"No single job folder was found for: {', '.join(jobs)}. Create/rename the folder or move the files."))
+        jobs_n = int(self.store.kv_get("register_jobs", "0") or 0)
+        if jobs_n == 0:
+            active.append(("health:register-empty", "critical", "No job/contact register loaded",
+                           "Every client number looks like a stranger, so nothing can be filed automatically. "
+                           "Set COMMSCAP_REGISTER to the current JOB_PIPELINE.json."))
+        else:
+            gen = self.store.kv_get("register_generated", "") or ""
+            when_ms = None
+            try:
+                when_ms = int(datetime.fromisoformat(gen.replace("Z", "+00:00")).timestamp() * 1000) if gen else None
+            except ValueError:
+                when_ms = None
+            if when_ms is None:
+                when_ms = int(self.store.kv_get("register_mtime_ms", "0") or 0) or None
+            if when_ms is not None and now_ms - when_ms > h.register_stale_days * 86_400_000:
+                days = (now_ms - when_ms) // 86_400_000
+                active.append(("health:register-stale", "warning", f"Job/contact register is {days} days old",
+                               "Clients on jobs opened since then look like strangers (their texts are screened and queued "
+                               "instead of filed automatically). Refresh JOB_PIPELINE.json."))
+        if self.store.kv_get("register_error"):
+            active.append(("health:register-load-failed", "warning", "Register file could not be read",
+                           f"Keeping the previous register. Error: {self.store.kv_get('register_error')}."))
         mm = int(self.store.kv_get("uid_mismatch_count", "0") or 0)
         if mm:
             active.append(("health:uid-mismatch", "warning", f"{mm} message id(s) did not match between phone and office",

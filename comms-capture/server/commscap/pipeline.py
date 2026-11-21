@@ -15,6 +15,7 @@ import hashlib
 import json
 import re
 import shutil
+import threading
 import time
 import urllib.request
 from pathlib import Path
@@ -53,8 +54,39 @@ class Pipeline:
         self.clock = BusinessClock(settings)
         self.sla = SlaEngine(settings, store, self.clock, notifier)
         self.health = HealthMonitor(settings, store, self.clock, notifier)
+        self._busy: set = set()
+        self._busy_lock = threading.Lock()
+        self._reg_mtime: Optional[float] = None
+        self._record_register_state()
         if self.store.kv_get("started_ms") is None:
             self.store.kv_set("started_ms", str(self.now_ms()))
+
+    # ================================================================== register (client numbers + jobs)
+    def _record_register_state(self, error: str = "") -> None:
+        self.store.kv_set("register_generated", str(self.reg.generated or ""))
+        self.store.kv_set("register_jobs", str(len(self.reg.jobs)))
+        self.store.kv_set("register_error", error)
+        p = self.s.register_path
+        if p and Path(p).exists():
+            self._reg_mtime = Path(p).stat().st_mtime
+            self.store.kv_set("register_mtime_ms", str(int(self._reg_mtime * 1000)))
+
+    def reload_register_if_changed(self) -> bool:
+        """Pick up a refreshed JOB_PIPELINE.json without a restart. A broken file keeps the old register."""
+        p = self.s.register_path
+        if not p or not Path(p).exists():
+            return False
+        mt = Path(p).stat().st_mtime
+        if self._reg_mtime is not None and mt == self._reg_mtime:
+            return False
+        try:
+            self.reg = Register.from_file(Path(p))
+        except (ValueError, OSError, KeyError, TypeError) as e:
+            self._reg_mtime = mt  # do not re-parse the same broken file every minute
+            self._record_register_state(error=type(e).__name__)
+            return False
+        self._record_register_state()
+        return True
 
     def now_ms(self) -> int:
         return int(self.now() * 1000)
@@ -136,8 +168,12 @@ class Pipeline:
         dups: List[str] = []
         rejected: List[Dict[str, str]] = []
         new_uids: List[str] = []
-        for m in (payload.get("messages") or [])[:20]:
-            uid = str(m.get("uid") or "") if isinstance(m, dict) else ""
+        raw = payload.get("messages")
+        for m in (raw if isinstance(raw, list) else [])[:20]:
+            if not isinstance(m, dict):
+                rejected.append({"uid": "", "reason": "bad_schema"})
+                continue
+            uid = str(m.get("uid") or "")
             try:
                 out = self._accept(device_id, m, pol, now)
             except Reject as r:
@@ -161,6 +197,17 @@ class Pipeline:
 
     # ================================================================== screening / routing
     def process_message(self, uid: str) -> None:
+        with self._busy_lock:  # ingest threads and the tick loop must not screen the same text twice
+            if uid in self._busy:
+                return
+            self._busy.add(uid)
+        try:
+            self._process_message(uid)
+        finally:
+            with self._busy_lock:
+                self._busy.discard(uid)
+
+    def _process_message(self, uid: str) -> None:
         m = self.store.get_message(uid)
         if not m or m["state"] not in ("received", "pending_ai"):
             return
@@ -452,6 +499,7 @@ class Pipeline:
     # ================================================================== periodic work
     def tick(self) -> None:
         now = self.now_ms()
+        self.reload_register_if_changed()
         for m in self.store.messages_in_state("received", 50) + self.store.messages_in_state("pending_ai", 50):
             self.process_message(m["uid"])
         for m in self.store.messages_in_state("file_failed", 50):

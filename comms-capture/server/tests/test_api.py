@@ -103,3 +103,27 @@ def test_ui_disabled_without_token(env):
 
 def test_healthz_is_open_and_minimal(client):
     assert client.get("/healthz").json()["ok"] is True
+
+
+def test_oversize_body_rejected_before_parsing(client, env):
+    big = b"x" * (2 * 1024 * 1024 + 1)
+    r = client.post("/v1/ingest", content=big, headers=signed(env, big))
+    assert r.status_code == 413
+
+
+def test_non_object_entries_in_ingest_do_not_crash(client, env):
+    r = post(client, env, "/v1/ingest", {"messages": ["nonsense", 5, None, ["x"]]})
+    assert r.status_code == 200 and len(r.json()["rejected"]) == 4
+    assert post(client, env, "/v1/ingest", {"messages": "not a list"}).json()["accepted"] == []
+
+
+def test_ui_assign_cannot_choose_a_path(client, env):
+    env.screener.when("start", category="job_business", confidence=0.9)
+    from conftest import LUIS
+    post(client, env, "/v1/ingest", {"messages": [mk("dev-1", "in", LUIS, env.clock.ms(), "can we move the start?")]})
+    r = client.post("/ui/api/assign", json={"address": LUIS, "job_no": "../../../../tmp/evil"}, headers={"X-UI-Token": "ui-token"})
+    assert r.status_code == 200
+    unfiled = env.settings.unfiled_dir
+    written = [p for p in unfiled.rglob("*") if p.is_file()]
+    assert written and all(unfiled in p.parents for p in written)  # stayed inside _COMMS_UNFILED
+    assert not (env.tmp / "evil").exists()

@@ -30,6 +30,7 @@ class HealthConfig:
     filing_backlog_min: int = 60
     clock_skew_seconds: int = 240
     digest_hour_local: int = 19
+    register_stale_days: int = 7  # INFERRED: clients on newer jobs look like strangers once the register ages
 
 
 @dataclass

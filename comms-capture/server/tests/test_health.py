@@ -113,3 +113,49 @@ def test_daily_digest_once_a_day_and_never_contains_message_text(env):
     hb(env)
     env.pipeline.tick()
     assert outbox_text(env).count("Daily text-capture summary") == n + 1
+
+
+def test_stale_register_is_flagged_and_clears_after_refresh(env):
+    env.clock.advance(days=10)  # register says generated 2026-11-21; clock is now 2026-12-03
+    hb(env)
+    env.pipeline.tick()
+    assert "health:register-stale" in keys(env)
+    import json
+    fresh = {**__import__("conftest").REGISTER, "generated": "2026-12-03T00:00:00Z"}
+    p = env.tmp / "register.json"
+    p.write_text(json.dumps(fresh))
+    env.settings.register_path = p
+    hb(env)
+    env.pipeline.tick()  # picks the file up without a restart
+    assert "health:register-stale" not in keys(env)
+
+
+def test_register_reload_adds_new_clients_and_survives_a_broken_file(env):
+    import json
+    from conftest import REGISTER, mk
+    newcomer = {"job_no": "26-9999", "site": "9999 Alder St, Seattle", "client": "New Co", "stage": "opened",
+                "contact": {"name": "Nora New", "phone": "(206) 555-0166"}}
+    p = env.tmp / "register.json"
+    p.write_text(json.dumps({**REGISTER, "jobs": REGISTER["jobs"] + [newcomer]}))
+    env.settings.register_path = p
+    assert "+12065550166" not in env.pipeline.policy().numbers
+    assert env.pipeline.reload_register_if_changed() is True
+    assert env.pipeline.policy().numbers["+12065550166"] == "client"
+    n_before = len(env.pipeline.reg.jobs)
+    import os, time
+    p.write_text("{ not json")
+    os.utime(p, (time.time() + 5, time.time() + 5))
+    assert env.pipeline.reload_register_if_changed() is False
+    assert len(env.pipeline.reg.jobs) == n_before  # kept the last good register
+    hb(env)
+    env.pipeline.tick()
+    assert "health:register-load-failed" in keys(env)
+
+
+def test_no_register_at_all_is_critical(env):
+    from commscap.register import Register
+    env.pipeline.reg = Register([])
+    env.pipeline._record_register_state()
+    hb(env)
+    env.pipeline.tick()
+    assert "health:register-empty" in keys(env)

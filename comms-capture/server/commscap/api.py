@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import hmac
 import json
 import logging
 import time
@@ -41,10 +42,21 @@ def create_app(pipeline: Pipeline, settings: Settings, tick_seconds: Optional[fl
 
     app = FastAPI(title="comms-capture", lifespan=lifespan)
 
-    async def authed(request: Request) -> Tuple[str, bytes]:
+    MAX_JSON = 2 * 1024 * 1024
+    MAX_MEDIA = 30 * 1024 * 1024
+
+    async def authed(request: Request, max_bytes: int = MAX_JSON) -> Tuple[str, bytes]:
         device = request.headers.get("x-device-id", "")
         secret = settings.device_secrets.get(device)
+        try:
+            declared = int(request.headers.get("content-length", "0"))
+        except ValueError:
+            declared = 0
+        if declared > max_bytes:
+            raise HTTPException(status_code=413, detail="too_large")
         body = await request.body()
+        if len(body) > max_bytes:
+            raise HTTPException(status_code=413, detail="too_large")
         try:
             ts = int(request.headers.get("x-timestamp", "0"))
         except ValueError:
@@ -96,8 +108,7 @@ def create_app(pipeline: Pipeline, settings: Settings, tick_seconds: Optional[fl
 
     @app.put("/v1/media/{uid}/{sha}")
     async def media(uid: str, sha: str, request: Request):
-        await authed(request)
-        data = await request.body()
+        _dev, data = await authed(request, MAX_MEDIA)
         try:
             await run_in_threadpool(pipeline.accept_media, uid, sha, data)
         except ValueError as e:
@@ -110,7 +121,7 @@ def create_app(pipeline: Pipeline, settings: Settings, tick_seconds: Optional[fl
         if not tok:
             raise HTTPException(status_code=403, detail="ui_disabled")
         got = request.headers.get("x-ui-token") or request.headers.get("authorization", "").removeprefix("Bearer ")
-        if got != tok:
+        if not hmac.compare_digest(got.encode("utf-8"), tok.encode("utf-8")):
             raise HTTPException(status_code=401, detail="bad_token")
 
     @app.get("/ui")

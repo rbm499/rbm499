@@ -237,7 +237,8 @@ class Screener:
         if self._client is None:
             import anthropic  # imported lazily so the service runs (heuristic-only) without the SDK
 
-            self._client = anthropic.Anthropic()
+            # the SDK default timeout is 10 minutes; a hung call must not stall ingest or the tick loop
+            self._client = anthropic.Anthropic(timeout=45.0, max_retries=1)
         return self._client
 
     def screen_ai(self, inp: ScreenInput) -> ScreenResult:
