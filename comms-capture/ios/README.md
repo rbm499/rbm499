@@ -1,7 +1,8 @@
 # If Michael's phone is an iPhone
 
-**Michael's phone type is NOT IN RECORD** (checked 2026-11-21: the Drive memory bank names an Android phone
-running the field app, but its logs use "Mike" for both people, so whose phone that was is unclear).
+> **Not needed now.** Ryan confirmed on 2026-11-22 that Michael has a Samsung Galaxy S25 (Android). Kept only in case an iPhone is ever added.
+
+(On 2026-11-21 the phone type was NOT IN RECORD; Ryan has since stated it: Samsung Galaxy S25.)
 
 The office service does not care what sends it a signed message (`docs/WIRE_CONTRACT.md`). What changes on an
 iPhone is *how texts get to it*. Everything below is **INFERRED from general product knowledge and was not

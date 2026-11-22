@@ -102,6 +102,28 @@ directions, turn RCS off so everything is a normal text:
 Done in step 4. If texts arrive late, also check **Settings > Apps > Comms Capture > Battery** is set to
 **Unrestricted**.
 
+### 9. Samsung Galaxy S25: three things that commonly go wrong
+
+> The menu names below are from general knowledge of Samsung's One UI and were **not checked on this phone**
+> (Samsung's support site could not be reached when this was written). If a name differs, search **Settings**
+> for the word in bold.
+
+1. **Auto Blocker can stop the install.** If the phone refuses to install the file ("blocked by Auto
+   Blocker"), open **Settings > Security and privacy > Auto Blocker** and switch off the option that blocks
+   installing apps from unauthorized sources (or switch Auto Blocker off while you install). You can switch it
+   back on afterwards; an installed app keeps working.
+2. **Samsung puts unused apps to sleep, and "Unrestricted" alone does not stop that.** Open **Settings >
+   Battery > Background usage limits**. Switch **Put unused apps to sleep** off (or add the app to **Never
+   auto sleeping apps**), and make sure Comms Capture is **not** listed under **Sleeping apps** or **Deep
+   sleeping apps**. This is the most likely reason a Samsung phone stops capturing after a few days. The office
+   service raises an alert after 45 minutes without a check-in (3 hours overnight), so a sleeping app is
+   noticed, but fixing the setting is what prevents it.
+3. **Check it survives a restart.** Restart the phone, wait five minutes, open the app and confirm
+   **Capturing: ON** and a recent **Last upload to the office**.
+
+Which messages app is the phone using? The S25 can have both **Google Messages** and **Samsung Messages**.
+Step 7 (turn RCS chats off) must be done in whichever one is the default text app; the app listens to both.
+
 ---
 
 ## Everyday use (for the owner)
@@ -120,6 +142,7 @@ Done in step 4. If texts arrive late, also check **Settings > Apps > Comms Captu
 
 | What you see | What it means / what to do |
 |---|---|
+| Capturing stopped after a few days; the office reports the phone silent | Samsung put the app to sleep. Do step 9 point 2, then open the app once. Nothing is lost; texts received meanwhile are caught up. |
 | NOT capturing: the SMS (or Contacts) permission is missing | Tap **Allow**. If nothing happens, do step 3 first. Nothing is lost meanwhile; the app catches up. |
 | NOT capturing: the privacy self-check failed | The app tested its own privacy rules on this phone and one failed, so it stopped. Contact the developer. |
 | Problem: The office service does not accept this phone | Wrong secret, or the phone's date and time are wrong. Set Date & time to **automatic**, or re-enter the setup text. Nothing is deleted. |
@@ -165,3 +188,15 @@ Build locally with the Android SDK installed: `gradle -PwithApp :app:assembleDeb
 - The nightly check never looks further back than 48 hours, nor before the moment capture was first switched on.
 - `targetSdk` is 34. Moving to 35 means Android limits `dataSync` foreground services (about 6 hours per day) and
   forbids starting them from a boot receiver; the service would need an `onTimeout` handler.
+
+### Do not raise `targetSdk` to 35 without a redesign
+
+Verified against the official Android docs ("Behavior changes: Apps targeting Android 15 or higher", read
+2026-11-22): for apps that target Android 15 or higher, a `dataSync` foreground service is limited to 6 hours
+per 24 hours (after which the system calls `onTimeout`; a new one cannot be started until the user opens the
+app), and a `BOOT_COMPLETED` receiver may not start one at all. This app depends on a long-running `dataSync`
+service restarted at boot, so it stays at `targetSdk = 34` (a sideloaded app is not subject to Google Play's
+targeting requirement). The docs describe the limits as applying only to apps that target Android 15+, and
+offer a developer switch to force them on lower-targeting apps for testing, so by default they do not apply
+here. The Galaxy S25 is expected to ship with Android 15 (general knowledge; Michael's phone's version was
+not checked: Settings > About phone).

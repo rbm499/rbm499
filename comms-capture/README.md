@@ -39,7 +39,7 @@ uses a bearer token. `commscap tick` runs one maintenance pass if you prefer a s
 
 ## Before it touches real traffic
 
-1. Confirm Michael's phone is Android (see `ios/` if not) and that he agrees to install it — he sees everything it sends.
+1. Michael's phone is a Samsung Galaxy S25 (Android; Ryan, 2026-11-22). He must agree to install it — he sees everything it sends. Do `android/README.md` step 9 (Samsung battery/Auto Blocker) on the phone.
 2. Resolve the legal question in `docs/DESIGN.md` §5 (not retrieved this session).
 3. Build the APK in CI (`.github/workflows/comms-capture-android.yml`), sideload, grant permissions, turn RCS chats off.
 4. Run a day on test numbers first and read the 7 PM digest; check one transcript in a real job folder.
