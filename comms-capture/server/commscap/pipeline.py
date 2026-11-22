@@ -190,6 +190,7 @@ class Pipeline:
             if time.monotonic() > deadline:
                 break  # remaining stay 'received'; the tick loop finishes them
             self.process_message(uid)
+        self.export_feed()
         return {
             "ok": True, "accepted": accepted, "duplicates": dups, "rejected": rejected,
             "media_wanted": self._media_wanted(accepted + dups), "policy_version": self.policy().version,
@@ -267,6 +268,7 @@ class Pipeline:
             self._file(uid, assoc.job_no, f"automatic — {assoc.method} (score {assoc.confidence})", assoc.method, assoc.confidence, assoc.candidates)
         else:
             self.store.update_message(uid, state="queued", assoc_method=assoc.method, assoc_conf=assoc.confidence, assoc_json=assoc.candidates)
+        self._announce(uid)
 
     def _drop(self, m: Dict[str, Any], v: Verdict, role: str) -> None:
         uid, address, now = m["uid"], m["address"], self.now_ms()
@@ -485,6 +487,67 @@ class Pipeline:
     def jobs_view(self) -> List[Dict[str, Any]]:
         return [{"job_no": j.job_no, "site": j.site, "client": j.client, "stage": j.stage, "open": j.is_open} for j in self.reg.jobs]
 
+    def feed_view(self, since_ms: int = 0, max_threads: int = 30, per_thread: int = 12) -> Dict[str, Any]:
+        """The live dialogue: business texts in AND out, grouped by client, newest conversation first. Only messages
+        that passed screening appear (never dropped, held or unscreened ones); sensitive text is masked."""
+        rows = self.store.q(
+            "SELECT uid,direction,ts_ms,body,sensitive,media_json,job_no,assoc_method,state,received_ms,contact_name,role,address "
+            "FROM messages WHERE state IN ('filed','queued') ORDER BY ts_ms DESC LIMIT 600")
+        waiting: Dict[str, int] = {}
+        for sl in self.store.sla_open():
+            waiting[sl["address"]] = max(waiting.get(sl["address"], 0), self.now_ms() - sl["started_ms"])
+        threads: Dict[str, Dict[str, Any]] = {}
+        for r in rows:  # newest first
+            t = threads.get(r["address"])
+            if t is None:
+                if len(threads) >= max_threads:
+                    continue
+                t = threads[r["address"]] = {
+                    "address": r["address"], "masked": mask(r["address"]), "name": r["contact_name"] or "", "role": r["role"],
+                    "job_no": r["job_no"], "state": r["state"], "last_ts": r["ts_ms"], "last_dir": r["direction"],
+                    "waiting_ms": waiting.get(r["address"]), "messages": []}
+            if r["state"] == "queued":
+                t["state"] = "queued"
+            if len(t["messages"]) < per_thread:
+                t["messages"].append({
+                    "uid": r["uid"], "dir": r["direction"], "ts_ms": r["ts_ms"], "received_ms": r["received_ms"],
+                    "text": "[hidden: sensitive content — it is in the job file]" if r["sensitive"] else (r["body"] or ""),
+                    "media": len(json.loads(r["media_json"] or "[]")), "job_no": r["job_no"], "filed": r["state"] == "filed",
+                    "by": "office" if r["assoc_method"] in ("ryan", "ryan_assigned") else "auto"})
+        for t in threads.values():
+            t["messages"].reverse()  # oldest -> newest, as a conversation reads
+        return {"threads": list(threads.values()),
+                "new_count": sum(1 for r in rows if (r["received_ms"] or 0) > since_ms)}
+
+    def _announce(self, uid: str) -> None:
+        """Optional: one info alert per business text, in or out. Carries who/where/topic - never the text."""
+        if not self.s.alert_each_message:
+            return
+        r = self.store.get_message(uid)
+        if not r or r["state"] not in ("filed", "queued"):
+            return
+        name = r["contact_name"] or mask(r["address"])
+        where = f"filed to job {r['job_no']}" if r["state"] == "filed" and r["job_no"] else "waiting for a job number"
+        topics = json.loads(r["topics_json"] or "[]")
+        self.notifier.alert(f"msg:{uid[:16]}", "info",
+                            f"Client text {'from' if r['direction'] == 'in' else 'to'} {name}",
+                            f"{'Received' if r['direction'] == 'in' else 'Sent'} · {where}" + (f" · {topics[0].replace('_', ' ')}" if topics else ""))
+
+    def export_feed(self) -> None:
+        """Write the live feed as JSON (atomic) so another viewer - e.g. a pinned Claude page reading a Drive-synced
+        folder - can show it. Same content rules as the review page. Failure never breaks capture."""
+        path = self.s.feed_export_path
+        if not path:
+            return
+        try:
+            path = Path(path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_suffix(path.suffix + ".tmp")
+            tmp.write_text(json.dumps({"generated_ms": self.now_ms(), **self.feed_view()}, ensure_ascii=False), encoding="utf-8")
+            tmp.replace(path)
+        except OSError:
+            pass
+
     def health_view(self) -> Dict[str, Any]:
         now = self.now_ms()
         return {
@@ -512,6 +575,7 @@ class Pipeline:
             self._delete_media(r["media_json"])
             self.store.x("DELETE FROM messages WHERE uid=?", [r["uid"]])
         self.sla.tick(now, list(self.s.device_secrets.keys()) or None)
+        self.export_feed()
         self.health.check_all(now)
         self.health.digest(now)
         self.notifier.flush()

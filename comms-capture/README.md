@@ -33,8 +33,13 @@ export COMMSCAP_ALERT_EMAIL_TO="ryan@example.com" COMMSCAP_SMTP_HOST=... # alert
 commscap serve --host 127.0.0.1 --port 8787
 ```
 
+Optional: `COMMSCAP_ALERT_EACH_MESSAGE=on` raises one alert (who, which job, topic - never the text) for every business text in or out;
+`COMMSCAP_FEED_EXPORT=<path>\feed.json` also writes the live conversation feed to a file (e.g. in a Drive-synced folder) for another viewer.
+
 Put it behind HTTPS (reverse proxy or tunnel) — the phone talks to it over the internet and the review page
-uses a bearer token. `commscap tick` runs one maintenance pass if you prefer a scheduler to the built-in loop.
+uses a bearer token. The review page (`/ui`) opens on a **live conversation view** (business texts in and out, newest first, auto-refreshing, with an optional
+"alert me on this device" notification while the page is open). In Chrome on Android, menu > **Add to Home screen** gives it an app icon
+(not yet tried on the S25). `commscap tick` runs one maintenance pass if you prefer a scheduler to the built-in loop.
 `COMMSCAP_MODEL` defaults to `claude-opus-5-5`; a smaller model is a one-line change.
 
 ## Before it touches real traffic

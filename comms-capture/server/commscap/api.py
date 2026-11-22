@@ -128,11 +128,22 @@ def create_app(pipeline: Pipeline, settings: Settings, tick_seconds: Optional[fl
     async def ui_page():
         return FileResponse(UI_FILE, media_type="text/html")
 
+    @app.get("/ui/manifest.webmanifest")
+    async def ui_manifest():
+        return FileResponse(UI_FILE.parent / "manifest.webmanifest", media_type="application/manifest+json")
+
+    @app.get("/ui/icon-{size}.png")
+    async def ui_icon(size: int):
+        if size not in (192, 512):
+            raise HTTPException(status_code=404)
+        return FileResponse(UI_FILE.parent / f"icon-{size}.png", media_type="image/png")
+
     @app.get("/ui/api/state")
-    async def ui_state(request: Request):
+    async def ui_state(request: Request, since: int = 0):
         ui_auth(request)
         return {
-            "now_ms": pipeline.now_ms(), "queue": pipeline.queue_view(), "sla": pipeline.sla_view(),
+            "now_ms": pipeline.now_ms(), "feed": pipeline.feed_view(since_ms=since),
+            "queue": pipeline.queue_view(), "sla": pipeline.sla_view(),
             "filed": pipeline.filed_view(20), "health": pipeline.health_view(), "jobs": pipeline.jobs_view(),
         }
 

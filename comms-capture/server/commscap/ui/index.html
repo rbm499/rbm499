@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Text Review</title>
+<title>Client Texts</title>
+<link rel="manifest" href="/ui/manifest.webmanifest">
+<meta name="theme-color" content="#1d5fa8">
+<link rel="icon" href="/ui/icon-192.png">
 <style>
   :root { --bg:#f6f5f2; --card:#fff; --ink:#1c1b19; --mute:#6b675f; --line:#e3e0d8; --accent:#1d5fa8; --warn:#b26a00; --bad:#b3261e; --ok:#2e7d32; }
   @media (prefers-color-scheme: dark) { :root { --bg:#141413; --card:#1f1e1c; --ink:#ece9e2; --mute:#a29d92; --line:#34322e; --accent:#7ab2ec; --warn:#e8a33d; --bad:#f2837c; --ok:#7bc47f; } }
@@ -29,6 +32,17 @@
   .lvl1 { color:var(--warn); } .lvl2 { color:var(--warn); font-weight:600; } .lvl3, .critical { color:var(--bad); font-weight:600; }
   .warning { color:var(--warn); } .info { color:var(--mute); }
   .empty { color:var(--mute); padding:8px 0; }
+  .thread { padding:10px 12px; }
+  .thread-head { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:6px; }
+  .bubbles { display:flex; flex-direction:column; gap:6px; }
+  .bubble { max-width:86%; padding:8px 11px; border-radius:14px; white-space:pre-wrap; word-break:break-word; position:relative; }
+  .bubble.in { align-self:flex-start; background:var(--line); border-bottom-left-radius:4px; }
+  .bubble.out { align-self:flex-end; background:var(--accent); color:#fff; border-bottom-right-radius:4px; }
+  .bubble .meta { font-size:.75rem; opacity:.75; margin-top:2px; }
+  .bubble.fresh { outline:2px solid var(--warn); }
+  .newdot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--warn); margin-right:4px; }
+  .pill { font-size:.8rem; border-radius:10px; padding:1px 8px; border:1px solid var(--line); }
+  .pill.wait { color:var(--warn); border-color:var(--warn); } .pill.done { color:var(--ok); border-color:var(--ok); } .pill.nojob { color:var(--bad); border-color:var(--bad); }
   input { font:inherit; padding:8px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); width:100%; }
 </style>
 </head>
@@ -40,6 +54,13 @@
     <div class="row"><input id="tok" type="password" autocomplete="current-password" aria-label="Review token"><button class="primary" id="go">Open</button></div>
   </div>
   <div id="app" hidden>
+    <h2>Live conversations <span class="count" id="n-feed">0</span> <span class="mute" id="newbadge"></span></h2>
+    <div class="row" style="margin-bottom:8px">
+      <button id="seen">Mark all seen</button>
+      <button id="notif">Alert me on this device</button>
+      <span class="mute" id="notifnote"></span>
+    </div>
+    <div id="feed"></div>
     <h2>Replies due <span class="count" id="n-sla">0</span></h2><div id="sla"></div>
     <h2>Needs a job number <span class="count" id="n-queue">0</span></h2><div id="queue"></div>
     <h2>Capture health <span class="count" id="n-health">0</span></h2><div id="health"></div>
@@ -50,6 +71,9 @@
 const $ = (id) => document.getElementById(id);
 let TOKEN = ""; try { TOKEN = localStorage.getItem("commscap_token") || ""; } catch (e) {}
 let state = null, busy = false;
+let SEEN = 0; try { SEEN = parseInt(localStorage.getItem("commscap_seen") || "0", 10) || 0; } catch (e) {}
+let NOTIFY = false; try { NOTIFY = localStorage.getItem("commscap_notify") === "1"; } catch (e) {}
+let lastMax = null;
 
 function h(tag, attrs, ...kids) {           // DOM builder: text only, never innerHTML (message text is untrusted)
   const el = document.createElement(tag);
@@ -69,6 +93,40 @@ async function api(path, body) {
   return res.json();
 }
 async function act(path, body) { if (busy) return; busy = true; try { await api(path, body); await load(); } catch (e) { if (e.message !== "auth") alert("That did not work: " + e.message); } finally { busy = false; } }
+
+function renderFeed(s) {
+  const box = $("feed"); box.replaceChildren();
+  const f = s.feed; $("n-feed").textContent = f.threads.length;
+  $("newbadge").textContent = f.new_count ? `${f.new_count} new since you last looked` : "";
+  if (!f.threads.length) return box.append(h("div", { class: "empty" }, "No business texts yet. They appear here, in and out, as they are filed."));
+  for (const t of f.threads) {
+    const answered = t.last_dir === "out";
+    const chips = [
+      t.job_no ? h("span", { class: "pill" }, "job " + t.job_no) : h("span", { class: "pill nojob" }, "no job number yet"),
+      t.waiting_ms != null ? h("span", { class: "pill wait" }, "needs reply · waiting " + fmtWait(t.waiting_ms)) : (answered ? h("span", { class: "pill done" }, "answered") : null),
+    ];
+    box.append(h("div", { class: "card thread" },
+      h("div", { class: "thread-head" }, h("strong", {}, t.name || t.masked), h("span", { class: "mute" }, `${t.name ? t.masked + " · " : ""}${t.role}`), chips),
+      h("div", { class: "bubbles" }, t.messages.map((m) => {
+        const fresh = m.received_ms > SEEN;
+        return h("div", { class: `bubble ${m.dir}${fresh ? " fresh" : ""}` }, m.text || "(no text)",
+          h("div", { class: "meta" }, fresh ? h("span", { class: "newdot" }) : null,
+            `${fmtTime(m.ts_ms)} · ${m.dir === "in" ? "received" : "sent"}${m.media ? " · " + m.media + " attachment(s)" : ""}${m.filed ? " · filed" : " · waiting for a job"}`));
+      }))));
+  }
+}
+
+function notifyNew(s) {
+  const msgs = s.feed.threads.flatMap((t) => t.messages.map((m) => ({ t, m })));
+  const max = msgs.reduce((a, x) => Math.max(a, x.m.received_ms || 0), 0);
+  if (lastMax !== null && NOTIFY && "Notification" in window && Notification.permission === "granted") {
+    const fresh = msgs.filter((x) => x.m.received_ms > lastMax);
+    const seen = new Set();
+    for (const x of fresh) if (!seen.has(x.t.address)) { seen.add(x.t.address);
+      new Notification(x.m.dir === "in" ? "New client text" : "Text sent to client", { body: `${x.t.name || x.t.masked} — ${x.t.job_no ? "job " + x.t.job_no : "no job number yet"}` }); }
+  }
+  lastMax = Math.max(lastMax || 0, max);
+}
 
 function renderSla(s) {
   const box = $("sla"); box.replaceChildren();
@@ -130,15 +188,31 @@ function renderFiled(s) {
 
 async function load() {
   try {
-    state = await api("/ui/api/state");
+    state = await api("/ui/api/state" + (SEEN ? "?since=" + SEEN : ""));
+    if (!SEEN) { SEEN = state.now_ms; try { localStorage.setItem("commscap_seen", String(SEEN)); } catch (e) {} }
     $("login").hidden = true; $("app").hidden = false;
     $("stamp").textContent = "· updated " + fmtTime(state.now_ms);
-    renderSla(state); renderQueue(state); renderHealth(state); renderFiled(state);
+    renderFeed(state); notifyNew(state); renderSla(state); renderQueue(state); renderHealth(state); renderFiled(state);
   } catch (e) { /* login box shown by api() */ }
 }
 $("go").addEventListener("click", () => { TOKEN = $("tok").value.trim(); try { localStorage.setItem("commscap_token", TOKEN); } catch (e) {} load(); });
 if (TOKEN) load(); else $("login").hidden = false;
-setInterval(() => { if (!document.hidden && !busy && TOKEN) load(); }, 20000);
+$("seen").addEventListener("click", () => { SEEN = state ? state.now_ms : Date.now(); try { localStorage.setItem("commscap_seen", String(SEEN)); } catch (e) {} if (state) { state.feed.new_count = 0; renderFeed(state); } });
+async function syncNotifyButton() {
+  const b = $("notif"), note = $("notifnote");
+  if (!("Notification" in window)) { b.hidden = true; return; }
+  if (Notification.permission === "denied") { b.disabled = true; note.textContent = "Notifications are blocked for this site in the browser settings."; return; }
+  b.textContent = NOTIFY && Notification.permission === "granted" ? "Alerts on (tap to turn off)" : "Alert me on this device";
+  note.textContent = NOTIFY ? "Shows a notification when a client text arrives or is sent while this page is open." : "";
+}
+$("notif").addEventListener("click", async () => {
+  if (NOTIFY) NOTIFY = false;
+  else { const r = Notification.permission === "granted" ? "granted" : await Notification.requestPermission(); NOTIFY = r === "granted"; }
+  try { localStorage.setItem("commscap_notify", NOTIFY ? "1" : "0"); } catch (e) {}
+  syncNotifyButton();
+});
+syncNotifyButton();
+setInterval(() => { if (!document.hidden && !busy && TOKEN) load(); }, 10000);
 </script>
 </body>
 </html>

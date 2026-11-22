@@ -24,7 +24,7 @@ commscap = "commscap.cli:main"
 include = ["commscap*"]
 
 [tool.setuptools.package-data]
-commscap = ["ui/*.html"]
+commscap = ["ui/*.html", "ui/*.png", "ui/*.webmanifest"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
