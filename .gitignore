@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+comms-capture/server/data/
+comms-capture/data/
+comms-capture/android/.gradle/
+comms-capture/android/**/build/
+comms-capture/android/local.properties
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm

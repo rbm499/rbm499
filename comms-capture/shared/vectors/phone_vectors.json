@@ -1,0 +1,143 @@
+{
+  "classify": [
+    {
+      "input": "+12065550101",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "input": "(206) 555-0101",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "input": "206.555.0101",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "input": "206-555-0101",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "input": "1 206 555 0101",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "input": "12065550101",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "input": "+1 (206) 555-0101",
+      "kind": "phone",
+      "e164": "+12065550101"
+    },
+    {
+      "input": "+442071234567",
+      "kind": "phone",
+      "e164": "+442071234567"
+    },
+    {
+      "input": "227898",
+      "kind": "shortcode",
+      "e164": null
+    },
+    {
+      "input": "55555",
+      "kind": "shortcode",
+      "e164": null
+    },
+    {
+      "input": "CHASE",
+      "kind": "alpha",
+      "e164": null
+    },
+    {
+      "input": "Chase-Alerts",
+      "kind": "alpha",
+      "e164": null
+    },
+    {
+      "input": "john@example.com",
+      "kind": "email",
+      "e164": null
+    },
+    {
+      "input": "",
+      "kind": "unknown",
+      "e164": null
+    },
+    {
+      "input": "   ",
+      "kind": "unknown",
+      "e164": null
+    },
+    {
+      "input": "abc123",
+      "kind": "alpha",
+      "e164": null
+    },
+    {
+      "input": "123456789012",
+      "kind": "unknown",
+      "e164": null
+    },
+    {
+      "input": "+123",
+      "kind": "unknown",
+      "e164": null
+    },
+    {
+      "input": "5551234",
+      "kind": "shortcode",
+      "e164": null
+    }
+  ],
+  "extract": [
+    {
+      "input": "cell (206) 555-0101; office (206) 555-0102",
+      "numbers": [
+        "+12065550101",
+        "+12065550102"
+      ]
+    },
+    {
+      "input": "O (206) 555-0103, M (206) 555-0104",
+      "numbers": [
+        "+12065550103",
+        "+12065550104"
+      ]
+    },
+    {
+      "input": "Alex (206) 555-0105; main (206) 555-0106; Dan (206) 555-0107",
+      "numbers": [
+        "+12065550105",
+        "+12065550106",
+        "+12065550107"
+      ]
+    },
+    {
+      "input": "Sam (206) 555-0108; Manni: none on file",
+      "numbers": [
+        "+12065550108"
+      ]
+    },
+    {
+      "input": "(206) 555-0109 (L&I notice lists 206-555-0109)",
+      "numbers": [
+        "+12065550109"
+      ]
+    },
+    {
+      "input": "",
+      "numbers": []
+    },
+    {
+      "input": "no numbers here 12345",
+      "numbers": []
+    }
+  ]
+}
