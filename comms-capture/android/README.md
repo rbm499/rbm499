@@ -133,8 +133,10 @@ Step 7 (turn RCS chats off) must be done in whichever one is the default text ap
 - **Pause 1 hour** / **Pause until tomorrow** (6 am): nothing is read or sent during the pause, and texts from
   that time are never captured later, even after the pause ends. The office is told the phone is paused and
   gets an alert if the pause lasts more than 4 hours.
-- **This was private:** tap it on any sent text. Everything from that person is deleted from the office system
-  and from this phone's waiting list, and they are never captured again.
+- **This was private:** tap it on any sent text. Everything from that person is deleted from the office database
+  and from this phone's waiting list, and they are never captured again. **Text that was already written into a
+  job's file stays in that file** until the office removes it: the system does not edit filed records (a fix is on
+  the update list).
 - **Last 24 hours** shows how many texts were seen, sent to the office, and kept private on the phone. These
   are only numbers; the app stores nothing about texts it decided to keep private.
 

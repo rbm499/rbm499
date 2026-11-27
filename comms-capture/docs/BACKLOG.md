@@ -26,6 +26,14 @@ Status 2026-11-22: nothing here is built. Sizes are the builder's rough estimate
       this way; MMS photos need a per-file upload; texts deleted earlier are gone.
     - *Needs:* Michael's explicit OK for a one-time read of his 2026 messages; the fuller job list; a model/cost decision; whether RCS chats were on in 2026.
 
+25. **Beta safety kit** (needed before the first real beta): a **pilot-only mode** (`unknown_policy = "off"`: unsaved numbers that are not on the pilot list
+    never leave the phone; Python + Kotlin + shared vectors); a **shadow / dry-run mode** (screen and match but write only to a sandbox folder, nothing into real job
+    folders); a **sandbox switch** for `COMMSCAP_JOBS_ROOT`; an **integrity report** command (phone vs server counts, duplicates, each pilot text compared with its
+    filed copy, redaction-only differences listed); and a **rollback script** that removes only what the system created (`Communications/` folders and
+    `_COMMS_UNFILED`) (M).
+26. **Remove-on-private for filed text:** when a contact is marked private after filing, remove or tombstone those blocks in the job transcript (and say so in the
+    transcript), keeping the append-only guarantee for everything else. *Needs:* a policy decision (a filed record being edited at all) (S–M).
+
 ## B. Gaps found while building/testing
 4. Street-name matching: "the Phinney job" should be a strong hint toward that job (it is not matched today) (S).
 5. Run the server tests in CI (CI builds and tests only the Android side today) (S).
@@ -54,7 +62,7 @@ Status 2026-11-22: nothing here is built. Sizes are the builder's rough estimate
 
 ## E. Decisions only people can make
 Michael's agreement to install · the legal question (recording / texting) · Anthropic data-retention terms for this account · where the office program runs
-· the INFERRED defaults (business hours, reply minutes, match thresholds) · sensitive aside inside a business text: hide (default) or drop · unsaved numbers: screen all (default) or keyword-only · model and cost for screening a year of history.
+· the INFERRED defaults (business hours, reply minutes, match thresholds) · sensitive aside inside a business text: hide (default) or drop · unsaved numbers: screen all (default) or keyword-only · model and cost for screening a year of history · who is in the pilot (Ryan's own numbers plus any clients who agree) and whether a second phone is available.
 
 ## Parking lot (add yours below)
 -

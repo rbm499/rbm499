@@ -77,6 +77,9 @@ Site access information (gate/door codes) is deliberately **not** treated as a s
   not even a hash — only a counter.
 * The server stores a message only after it passes screening (or while waiting for screening). Private
   verdict → row deleted. Held unclear texts expire after 72 h without a trace.
+* **Known gap (found 2026-11-27 by audit):** a text that was already filed to a job's transcript is **not** removed when someone later marks that
+  contact private; the database row and any filed media are deleted, but the transcript is append-only. AI "private" verdicts are unaffected (they
+  happen before anything is filed). Policy and a fix (a tombstone line in the transcript) are on the backlog.
 * Alerts, digests and nudges never contain message text — only counts, masked numbers, contact names, job
   numbers and a topic label.
 * Michael sees what was sent on his phone, can mark any contact private, and can pause capture; a pause is
