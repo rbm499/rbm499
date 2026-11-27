@@ -34,6 +34,9 @@ Status 2026-11-22: nothing here is built. Sizes are the builder's rough estimate
 26. **Remove-on-private for filed text:** when a contact is marked private after filing, remove or tombstone those blocks in the job transcript (and say so in the
     transcript), keeping the append-only guarantee for everything else. *Needs:* a policy decision (a filed record being edited at all) (S–M).
 
+27. **Unscreened texts must not linger:** `pending_ai` rows never expire, so with the AI off (no key, or an outage) texts from unknown numbers stay in the database
+    unscreened. Add an expiry, an alert, and make the phone stop sending unknown-number texts while the AI is unavailable (found by the 2026-11-27 install smoke test) (S).
+
 ## B. Gaps found while building/testing
 4. Street-name matching: "the Phinney job" should be a strong hint toward that job (it is not matched today) (S).
 5. Run the server tests in CI (CI builds and tests only the Android side today) (S).
