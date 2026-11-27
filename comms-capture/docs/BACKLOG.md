@@ -10,6 +10,22 @@ Status 2026-11-22: nothing here is built. Sizes are the builder's rough estimate
 2. **Show the live feed on the Claude app's home screen.** Today: the review page is installable on a phone home screen (not yet tried on the S25). Option: a pinned Claude page that reads `feed.json` from Drive when opened (M, not live). *Needs:* is the home-screen icon enough?
 3. **Alerts that reach you when the page is closed.** Easiest: push to Ryan's phone through ntfy / Pushover / Slack (S). True browser push (M). *Needs:* which channel.
 
+24. **Backfill: use 2026 (Jan 1 to today) as the text backlog** (asked 2026-11-27). Today the phone app starts from "now" and never uploads history
+    (verified in the source), and the nightly check never looks before capture was switched on, so this is a separate, deliberate feature (L):
+    - *Phone:* an "Import 2026 history" button that walks the SMS/MMS store month by month (the scanner already has a read-only window reader), runs every
+      message through the same gate (saved contacts never leave; unsaved numbers are screened), and uploads them flagged `backfill`. Michael sees progress
+      and a summary, can cancel, and it is a one-time action that needs his explicit OK.
+    - *Server:* backfilled texts are screened and filed with their original dates, but never start the reply clock, never alert or nudge per message, and
+      never count as "new" in the live view. Bulk screening through the batch API (half price); the model choice is Ryan's.
+    - *Matching:* the register holds only open jobs as of 2026-10-21 (closed jobs are excluded by its own definition) and lacks the five newest. Needs a
+      fuller 2026 job list (the 9/18 jobs list plus the `Job sites` folder names) and "date overlap" evidence (a text dated inside a job's active window
+      points to that job).
+    - *Review:* a year of ambiguous multi-job clients means a large queue, so it needs bulk tools (assign a whole thread or date range to a job; "not
+      business" in bulk).
+    - *Expected gaps (INFERRED):* chat (RCS) conversations are not in the phone's SMS/MMS store, so any 2026 conversation held over RCS cannot be recovered
+      this way; MMS photos need a per-file upload; texts deleted earlier are gone.
+    - *Needs:* Michael's explicit OK for a one-time read of his 2026 messages; the fuller job list; a model/cost decision; whether RCS chats were on in 2026.
+
 ## B. Gaps found while building/testing
 4. Street-name matching: "the Phinney job" should be a strong hint toward that job (it is not matched today) (S).
 5. Run the server tests in CI (CI builds and tests only the Android side today) (S).
@@ -38,7 +54,7 @@ Status 2026-11-22: nothing here is built. Sizes are the builder's rough estimate
 
 ## E. Decisions only people can make
 Michael's agreement to install · the legal question (recording / texting) · Anthropic data-retention terms for this account · where the office program runs
-· the INFERRED defaults (business hours, reply minutes, match thresholds) · sensitive aside inside a business text: hide (default) or drop · unsaved numbers: screen all (default) or keyword-only.
+· the INFERRED defaults (business hours, reply minutes, match thresholds) · sensitive aside inside a business text: hide (default) or drop · unsaved numbers: screen all (default) or keyword-only · model and cost for screening a year of history.
 
 ## Parking lot (add yours below)
 -
